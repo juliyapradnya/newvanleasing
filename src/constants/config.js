@@ -27,15 +27,23 @@ export const firebaseConfig = {
   appId: "1:557576321564:web:bc2ce73477aff5c2197dd9"
 };
 
+// export const currentUser = {
+//   id: 1,
+//   title: 'Courtney Love',
+//   img: '/assets/img/profiles/l-1.jpg',
+//   date: 'Last seen today 15:24',
+//   role: UserRole.Admin
+// }
+
 export const currentUser = {
-  id: 1,
-  title: 'Courtney Love',
+  id: '2',
+  username: 'username',
   img: '/assets/img/profiles/l-1.jpg',
   date: 'Last seen today 15:24',
   role: UserRole.Admin
 }
 
-export const isAuthGuardActive = false;
+export const isAuthGuardActive = true;
 export const themeRadiusStorageKey = 'theme_radius'
 export const themeSelectedColorStorageKey = 'theme_selected_color'
 export const defaultColor = 'light.blueolympic'

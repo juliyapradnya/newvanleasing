@@ -10,7 +10,14 @@ const routes = [
   {
     path: "/",
     component: () => import(/* webpackChunkName: "home" */ "./views/home"),
-    // redirect: `${adminRoot}/dashboard`,
+    redirect: "login",
+    children: [
+      {
+        path: "login",
+        component: () =>
+          import(/* webpackChunkName: "home" */ "./views/home/Login")
+      }
+    ]
   },
   {
     path: adminRoot,
@@ -66,11 +73,11 @@ const routes = [
         component: () =>
           import(/* webpackChunkName: "end-contracts" */ "./views/app/contracts/EndContracts")
       },
-      {
-        path: "single",
-        component: () =>
-          import(/* webpackChunkName: "single" */ "./views/app/single")
-      }
+      // {
+      //   path: "single",
+      //   component: () =>
+      //     import(/* webpackChunkName: "single" */ "./views/app/single")
+      // }
     ]
   },
   {

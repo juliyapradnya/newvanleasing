@@ -163,7 +163,7 @@
           no-caret
         >
           <template slot="button-content">
-            <span class="name mr-1">{{currentUser.title}}</span>
+            <span class="name mr-1">{{currentUser.username}}</span>
             <span>
               <img :alt="currentUser.title" :src="currentUser.img" />
             </span>
@@ -251,7 +251,7 @@ export default {
     },
     logout() {
       this.signOut().then(() => {
-        this.$router.push("/user/login");
+        this.$router.push("/login");
       });
     },
 

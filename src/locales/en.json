@@ -299,6 +299,10 @@
     "sold": "Sold",
     "add-return": "New Rehiring Order",
     "edit-return": "Edit Rehiring Order",
+    "all-return": "All Return Contract",
+    "add-sold": "New Sold Order",
+    "edit-sold": "Edit Sold Order",
+    "all-sold": "All Sold Contract",
     "vehicle-registration": "Vehicle Registration Number",
     "customer-name": "Customer Name",
     "type": "Contract Type",
@@ -307,13 +311,15 @@
     "period": "Contract Period (Months)",
     "start-date": "Start Date",
     "return-date": "Return Date",
+    "sold-date": "Sold Date",
     "mileage": "Delivery Mileage",
     "doc-fee": "Documentation Fee",
     "initial-rental": "initial Rental (excl VAT)",
     "monthly-rental": "Monthly Rental (excl VAT)",
     "delivery-charge": "Delivery Charge (excl VAT)",
     "residual-value": "Residual Value Projection",
-    "assign-to": "Assigned to"
+    "assign-to": "Assigned to",
+    "sold-price": "Sold Price"
   },
   "chat": {
     "messages": "Messages",

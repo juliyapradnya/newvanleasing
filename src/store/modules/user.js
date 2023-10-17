@@ -1,3 +1,5 @@
+import axios from 'axios'
+import { apiUrl } from '../../constants/config';
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import { currentUser, isAuthGuardActive } from '../../constants/config'
@@ -58,12 +60,21 @@ export default {
     login({ commit }, payload) {
       commit('clearError')
       commit('setProcessing', true)
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(payload.email, payload.password)
+      axios
+        .post(apiUrl + "/login", {
+          username: payload.username,
+          password: payload.password
+        })
+        .then(res => res.data)
         .then(
           user => {
-            const item = { uid: user.user.uid, ...currentUser }
+            const item = { 
+              id: user.user.id,
+              uid: user.user.id,
+              username: user.user.username,
+              role: 1,
+              ...currentUser
+            }
             setCurrentUser(item)
             commit('setUser', item)
           },
@@ -75,6 +86,24 @@ export default {
             }, 3000)
           }
         )
+
+      // firebase
+      //   .auth()
+      //   .signInWithEmailAndPassword(payload.email, payload.password)
+      //   .then(
+      //     user => {
+      //       const item = { uid: user.user.uid, ...currentUser }
+      //       setCurrentUser(item)
+      //       commit('setUser', item)
+      //     },
+      //     err => {
+      //       setCurrentUser(null);
+      //       commit('setError', err.message)
+      //       setTimeout(() => {
+      //         commit('clearError')
+      //       }, 3000)
+      //     }
+      //   )
     },
     forgotPassword({ commit }, payload) {
       commit('clearError')
@@ -114,16 +143,17 @@ export default {
           }
         )
     },
-
-
     signOut({ commit }) {
-      firebase
-        .auth()
-        .signOut()
-        .then(() => {
-          setCurrentUser(null);
-          commit('setLogout')
-        }, _error => { })
+      setCurrentUser(null);
+      commit('setLogout')
+      
+      // firebase
+      //   .auth()
+      //   .signOut()
+      //   .then(() => {
+      //     setCurrentUser(null);
+      //     commit('setLogout')
+      //   }, _error => { })
     }
   }
 }

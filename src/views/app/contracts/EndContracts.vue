@@ -8,31 +8,54 @@
   >
     <b-tab>
       <template #title>
-        <p>{{ $t('contract.return') }} <b-badge variant="light"></b-badge></p>
+        <p>{{ $t('contract.return') }} <b-badge :variant="(tabIndex == 0)?'secondary':'light'" class="ml-2">{{ returnCount }}</b-badge></p>
       </template>
-      <tab-contract-return />
+      <tab-contract-return @mounted-return-tab="getReturnCount"/>
     </b-tab>
     <b-tab>
       <template #title>
-        <p>{{ $t('contract.sold') }} <b-badge variant="light"></b-badge></p>
+        <p>{{ $t('contract.sold') }} <b-badge :variant="(tabIndex == 1)?'secondary':'light'" class="ml-2">{{ soldCount }}</b-badge></p>
       </template>
-      <h3>Contract Sold</h3>
+      <tab-contract-sold @mounted-sold-tab="getSoldCount"/>
     </b-tab>
   </b-tabs>
 </template>
 <script>
 import TabContractReturn from "../../../containers/tabs/contract/TabContractReturn";
-// import DeleteItemModal from "../../../containers/pages/DeleteItemModal";
+import TabContractSold from "../../../containers/tabs/contract/TabContractSold";
 
 export default {
   props: ["title"],
   components: {
-    "tab-contract-return": TabContractReturn
+    "tab-contract-return": TabContractReturn,
+    "tab-contract-sold": TabContractSold
   },
   data() {
     return {
-      tabIndex: 0
+      tabIndex: 0,
+      returnCount: 0,
+      soldCount: 0
     };
+  },
+  methods: {
+    getReturnCount(val) {
+      this.returnCount = val
+    },
+    getSoldCount(val) {
+      this.soldCount = val
+    }
+  },
+  watch: {
+    returnCount(newId, oldId) {
+      if (newId) {
+        return newId;
+      }
+    },
+    soldCount(newId, oldId) {
+      if (newId) {
+        return newId;
+      }
+    }
   }
 };
 </script>

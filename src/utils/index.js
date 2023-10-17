@@ -154,6 +154,12 @@ export const getCurrentUser = () => {
 export const setCurrentUser = (user) => {
   try {
     if (user) {
+      // console.log(user)
+      localStorage.setItem('token', JSON.stringify(user.access_token))
+      // localStorage.setItem('id', JSON.stringify(user.id))
+      // localStorage.setItem('username', JSON.stringify(user.username))
+      // localStorage.setItem('position', JSON.stringify(user.position))
+      // localStorage.setItem('role', 1)
       localStorage.setItem('user', JSON.stringify(user))
     } else {
       localStorage.removeItem('user');

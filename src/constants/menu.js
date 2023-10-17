@@ -43,18 +43,18 @@ const data = [{
   label: "menu.end-contracts",
   to: `${adminRoot}/end-contracts`
 },
-{
-  id: "single",
-  icon: "iconsminds-three-arrow-fork",
-  label: "menu.single",
-  to: `${adminRoot}/single`,
-},
-{
-  id: "docs",
-  icon: "iconsminds-library",
-  label: "menu.docs",
-  to: "https://piaf-vue-docs.coloredstrategies.com/",
-  newWindow: true
-}
+// {
+//   id: "single",
+//   icon: "iconsminds-three-arrow-fork",
+//   label: "menu.single",
+//   to: `${adminRoot}/single`,
+// },
+// {
+//   id: "docs",
+//   icon: "iconsminds-library",
+//   label: "menu.docs",
+//   to: "https://piaf-vue-docs.coloredstrategies.com/",
+//   newWindow: true
+// }
 ];
 export default data;

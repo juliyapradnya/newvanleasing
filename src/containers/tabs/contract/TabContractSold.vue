@@ -1,11 +1,11 @@
 <template>
     <b-row>
-      <datatable-heading :title="$t('contract.all-return')" :changePageSize="changePageSize" :searchChange="searchChange"
+      <datatable-heading :title="$t('contract.all-sold')" :changePageSize="changePageSize" :searchChange="searchChange"
         :from="from" :to="to" :total="total" :perPage="perPage" :separator="false" :noBreadcrumbs="true">
         <div class="top-right-button-container">
-          <b-button v-b-modal.modalright variant="primary" size="lg" class="top-right-button text-uppercase">{{ $t('contract.add-return') }}</b-button>
+          <b-button v-b-modal.modalsold variant="primary" size="lg" class="top-right-button text-uppercase">{{ $t('contract.add-sold') }}</b-button>
         </div>
-        <add-return-contract @added-data-table="onAddedDataTable" :key="componentKey"/>
+        <add-sold-contract @added-data-table="onAddedDataTable" :key="componentKey"/>
       </datatable-heading>
       <b-colxx xxs="12">
         <b-card>
@@ -19,16 +19,16 @@
             </template> 
             <template slot="action" slot-scope="props">
               <div>
-                <b-button @click="openEditModal(props.rowData.id)" variant="outline-secondary" class="mr-1" size="sm"><i class="simple-icon-pencil" /></b-button>
-                <b-button @click="getSelectedItem(props.rowData.id)" v-b-modal.modalDeletion variant="outline-danger" size="sm">Delete <i class="simple-icon-trash" /></b-button>
+                <b-button @click="openEditModal(props.rowData)" variant="outline-secondary" class="mr-1" size="sm"><i class="simple-icon-pencil" /></b-button>
+                <b-button @click="getSelectedItem(props.rowData.id)" v-b-modal.deleteSold variant="outline-danger" size="sm">Delete <i class="simple-icon-trash" /></b-button>
               </div>
             </template>
           </vuetable>
         </b-card>
         <vuetable-pagination-bootstrap class="mt-4" ref="pagination" @vuetable-pagination:change-page="onChangePage" />
       </b-colxx>
-      <edit-return-contract ref="editForm" @added-data-table="onAddedDataTable" :key="componentKey"/>
-      <delete-item-modal :selectedItem="selectedItem" :endpoint="'/rehiringorder/'" @delete-modal-hide="updateTableRow" />
+      <edit-sold-contract ref="editForm" @added-data-table="onAddedDataTable" :key="componentKey"/>
+      <delete-sold-modal :selectedItem="selectedItem" :endpoint="'/vehiclesold/'" @delete-modal-hide="updateTableRow" />
     </b-row>
   </template>
   <script>
@@ -36,9 +36,9 @@
   import VuetablePaginationBootstrap from "../../../components/Common/VuetablePaginationBootstrap";
   import { apiUrl } from "../../../constants/config";
   import DatatableHeading from "../../datatable/DatatableHeading";
-  import AddReturnContract from "../../pages/AddReturnContract";
-  import EditReturnContract from "../../pages/EditReturnContract";
-  import DeleteItemModal from "../../pages/DeleteItemModal";
+  import AddSoldContract from "../../pages/AddSoldContract";
+  import EditSoldContract from "../../pages/EditSoldContract";
+  import DeleteSoldModal from "../../pages/DeleteSoldModal";
   
   export default {
     props: ["title"],
@@ -46,14 +46,14 @@
       vuetable: Vuetable,
       "vuetable-pagination-bootstrap": VuetablePaginationBootstrap,
       "datatable-heading": DatatableHeading,
-      "add-return-contract": AddReturnContract,
-      "edit-return-contract": EditReturnContract,
-      "delete-item-modal": DeleteItemModal
+      "add-sold-contract": AddSoldContract,
+      "edit-sold-contract": EditSoldContract,
+      "delete-sold-modal": DeleteSoldModal
     },
     data() {
       return {
         isLoad: false,
-        apiBase: apiUrl + "/rehiringorder",
+        apiBase: apiUrl + "/vehiclesold",
         sort: "",
         order: "",
         page: 1,
@@ -63,22 +63,14 @@
         to: 0,
         total: 0,
         lastPage: 0,
-        returnCount: "",
+        returnCount: 0,
         selectedItem: "",
         componentKey: 0,
         fields: [
           {
-            name: "new_sales_order_no",
-            sortField: "new_sales_order_no",
-            title: "Sales Order Number",
-            titleClass: "center aligned",
-            dataClass: "align-middle text-muted",
-            width: "15%"
-          },
-          {
-            name: "agreement_number",
-            sortField: "agreement_number",
-            title: "Agreement Number",
+            name: "id_sales_order",
+            sortField: "id_sales_order",
+            title: "Sales Order ID",
             titleClass: "center aligned",
             dataClass: "align-middle text-muted text-uppercase",
             width: "15%"
@@ -92,9 +84,17 @@
             width: "15%"
           },
           {
-            name: "vehicle_return_date",
-            sortField: "vehicle_return_date",
-            title: "Vehicle Return Date",
+            name: "sold_price",
+            sortField: "sold_price",
+            title: "Sold Price",
+            titleClass: "center aligned",
+            dataClass: "align-middle text-muted",
+            width: "15%"
+          },
+          {
+            name: "vehicle_sold_date",
+            sortField: "vehicle_sold_date",
+            title: "Vehicle Sold Date",
             titleClass: "center aligned",
             dataClass: "align-middle text-muted",
             width: "15%"
@@ -137,6 +137,7 @@
             sort: this.sortOrder[0].field,
             search: this.search
           };
+          
       },
       onPaginationData(paginationData) {
         this.from = paginationData.from;
@@ -145,7 +146,7 @@
         this.lastPage = paginationData.last_page;
         this.items = paginationData.data;
         this.itemsCount = this.items.length;
-        this.$emit("mounted-return-tab", this.itemsCount);
+        this.$emit("mounted-sold-tab", this.itemsCount);
         this.$refs.pagination.setPaginationData(paginationData);
       },
       onChangePage(page) {
@@ -159,8 +160,8 @@
         this.perPage = perPage;
         this.$refs.vuetable.refresh();
       },
-      openEditModal(id) {
-        this.$refs.editForm.getReturnData(id);
+      openEditModal(array) {
+        this.$refs.editForm.getReturnData(array);
       },
       getSelectedItem(id) {
         this.selectedItem = id;
