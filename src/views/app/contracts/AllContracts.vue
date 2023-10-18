@@ -16,9 +16,13 @@
           <b-badge pill :variant="(props.rowData.next_step_status_sales === 'Hired') ? 'primary' : 'light'">{{ props.rowData.next_step_status_sales }}</b-badge>
         </template>
         <template slot="actions" slot-scope="props">
-          <div>
-            <b-button :to="{ path: `${props.rowData.id}` }" variant="outline-secondary" class="mr-1" size="sm"><i class="simple-icon-pencil" /></b-button>
-            <b-button @click="showDelBox(props.rowData.id)" v-b-modal.modalDeletion variant="outline-danger" size="sm">Delete <i class="simple-icon-trash" /></b-button>
+          <div v-if="props.rowData.next_step_status_sales !== 'Innactive'">
+            <b-button :to="{ path: `${props.rowData.id}` }" variant="light" class="mr-1" size="sm"><i class="simple-icon-pencil" /></b-button>
+            <b-button @click="showDelBox(props.rowData.id)" v-b-modal.modalDeletion variant="danger" size="sm">Delete <i class="simple-icon-trash" /></b-button>
+          </div>
+          <div v-else>
+            <b-button variant="outline-dark" class="mr-1" size="sm" disabled><i class="simple-icon-pencil" /></b-button>
+            <b-button variant="outline-dark" size="sm" disabled>Delete <i class="simple-icon-trash" /></b-button>
           </div>
         </template>
       </vuetable>

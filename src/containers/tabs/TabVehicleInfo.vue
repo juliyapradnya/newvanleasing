@@ -92,14 +92,6 @@
                      </b-form-group>
                   </b-colxx>
                </b-form-row>
-               <b-form-group :label="$t('vehicle.service-maintenance')" class="has-float-label">
-                  <b-form-input
-                     type="text"
-                     v-model.trim="$v.vehicleForm.serviceMaintenance.$model"
-                     :state="!$v.vehicleForm.serviceMaintenance.$error"
-                  />
-                  <b-form-invalid-feedback v-if="!$v.vehicleForm.serviceMaintenance.required">This field is required!</b-form-invalid-feedback>
-               </b-form-group>
                <p class="mb-3">{{ $t('vehicle.due-date') }}</p>
                <div class="form-group has-float-label">
                   <datepicker
@@ -151,7 +143,15 @@
                         >Must be a number</div>
                      </b-form-group>
                   </b-colxx>
-               </b-form-row> 
+               </b-form-row>
+               <b-form-group :label="$t('vehicle.service-maintenance')" class="has-float-label">
+                  <b-form-input
+                     type="text"
+                     v-model.trim="$v.vehicleForm.serviceMaintenance.$model"
+                     :state="!$v.vehicleForm.serviceMaintenance.$error"
+                  />
+                  <b-form-invalid-feedback v-if="!$v.vehicleForm.serviceMaintenance.required">This field is required!</b-form-invalid-feedback>
+               </b-form-group>
                <b-form-row>
                   <b-colxx sm="12">
                      <p class="mb-3">{{ $t('vehicle.service-last') }}</p>
@@ -327,13 +327,13 @@ export default {
          otrPrice: { required },
          minContract10k: { required },
          minContract18k: { required },
-         serviceMaintenance: { required },
+         serviceMaintenance: {},
          rflDate: {},
          motDate: {},
-         serviceMiles: { required, numeric },
-         serviceYears: { required, numeric },
-         serviceMileage: { required, numeric },
-         serviceLast: { required }
+         serviceMiles: { numeric },
+         serviceYears: { numeric },
+         serviceMileage: { numeric },
+         serviceLast: {}
       },
       purchaseForm: {
          purchaseDate: { required },

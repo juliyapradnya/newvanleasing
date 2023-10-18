@@ -24,13 +24,13 @@
             <template slot="actions" slot-scope="props">
                <div>
                   <b-button :to="{ path: `${props.rowData.id}` }"
-                     variant="outline-secondary"
+                     variant="light"
                      class="mr-1"
                      size="sm"><i class="simple-icon-pencil" /></b-button>
                   <b-button
                      @click="showDelBox(props.rowData.id)"
                      v-b-modal.modalDeletion
-                     variant="outline-danger"
+                     variant="danger"
                      size="sm">Delete <i class="simple-icon-trash" /></b-button>
                </div>
             </template>

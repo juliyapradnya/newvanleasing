@@ -195,15 +195,6 @@ export default {
     formatDate(date) {
       return new Date(date).toISOString().substr(0, 10)
     },
-    objectToFormData(obj) {
-      const formData = new FormData();
-
-      Object.entries(obj).forEach(([key, value]) => {
-        formData.append(key, value);
-      });
-
-      return formData;
-    },
     fetchOptions(search, loading) {
       let url = apiUrl + "/rehiringorder?per_page=99&search=" + encodeURI(search);
       loading(true);
@@ -248,11 +239,6 @@ export default {
     },
     onAddContractSubmit() {
       let url = apiUrl + "/vehiclesold/" + this.editId;
-      let config = {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }
       let salesId = this.form.id_sales_order.id_sales_order;
       let purchaseId = this.form.id_purchase_order.id;
       const soldContract = {
@@ -266,7 +252,7 @@ export default {
       this.isProcessing = true;
       this.status = "processing";
       axios
-        .put(url, soldContract, config)
+        .put(url, soldContract)
         .then(r => r.data)
         .then(res => {
           this.isProcessing = false;

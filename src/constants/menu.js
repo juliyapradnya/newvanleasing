@@ -1,19 +1,20 @@
 import { adminRoot } from "./config";
 import { UserRole } from "../utils/auth.roles";
 
-const data = [{
-  id: "dashboard",
-  icon: "iconsminds-optimization",
-  label: "menu.dashboard",
-  to: `${adminRoot}/dashboard`,
-},
+const data = [
+// {
+//   id: "dashboard",
+//   icon: "simple-icon-screen-desktop",
+//   label: "menu.dashboard",
+//   to: `${adminRoot}/dashboard`,
+// },
 {
   id: "vehicles",
-  icon: "iconsminds-jeep",
+  icon: "iconsminds-car",
   label: "menu.vehicles",
   to: `${adminRoot}/vehicles`,
   subs: [{
-    icon: "iconsminds-jeep",
+    icon: "iconsminds-car",
     label: "menu.all-vehicles",
     to: `${adminRoot}/vehicles/all-vehicles`
   }, {
@@ -24,7 +25,7 @@ const data = [{
   },
 {
   id: "contracts",
-  icon: "iconsminds-box-with-folders",
+  icon: "simple-icon-printer",
   label: "menu.contracts",
   to: `${adminRoot}/contracts`,
   subs: [{
@@ -39,10 +40,22 @@ const data = [{
 },
 {
   id: "end-contracts",
-  icon: "iconsminds-sand-watch-2",
+  icon: "iconsminds-clock-back",
   label: "menu.end-contracts",
   to: `${adminRoot}/end-contracts`
 },
+{
+  id: "additional",
+  icon: "simple-icon-calculator",
+  label: "menu.additional",
+  to: `${adminRoot}/additional`
+},
+{
+  id: "performance",
+  icon: "simple-icon-rocket",
+  label: "menu.performance",
+  to: `${adminRoot}/performance`
+}
 // {
 //   id: "single",
 //   icon: "iconsminds-three-arrow-fork",

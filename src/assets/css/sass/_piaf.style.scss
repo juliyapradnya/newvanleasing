@@ -2175,6 +2175,7 @@ button {
 
     ul li {
       position: relative;
+      text-align: center;
 
       span {
         text-align: center;
@@ -7111,6 +7112,9 @@ i.large-icon {
           @include respond-below(sm) {
             right: 2px;
           }
+        }
+        a {
+          text-align: center;
         }
       }
     }

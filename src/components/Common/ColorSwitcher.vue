@@ -55,7 +55,7 @@
       </b-form-group>
     </div>
     <a href="#" class="theme-button" @click.prevent="toggle">
-      <i class="simple-icon-magic-wand"></i>
+      <i class="simple-icon-settings"></i>
     </a>
   </div>
 </template>

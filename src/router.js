@@ -22,7 +22,7 @@ const routes = [
   {
     path: adminRoot,
     component: () => import(/* webpackChunkName: "app" */ "./views/app"),
-    redirect: `${adminRoot}/dashboard`,
+    redirect: `${adminRoot}/vehicles`,
     meta: { loginRequired: true },
     /*
    define with Authorizaddation :
@@ -72,6 +72,16 @@ const routes = [
         path: "end-contracts",
         component: () =>
           import(/* webpackChunkName: "end-contracts" */ "./views/app/contracts/EndContracts")
+      },
+      {
+        path: "additional",
+        component: () =>
+          import(/* webpackChunkName: "additional" */ "./views/app/additional/Additional")
+      },
+      {
+        path: "performance",
+        component: () =>
+          import(/* webpackChunkName: "performance" */ "./views/app/performance/VehiclePerformance")
       },
       // {
       //   path: "single",

@@ -9,7 +9,7 @@
       </datatable-heading>
       <b-colxx xxs="12">
         <b-card>
-          <vuetable ref="vuetable" class="order-with-arrow" :api-url="apiBase" :query-params="makeQueryParams"
+          <vuetable ref="vuetable" class="order-with-arrow responsive-table" :api-url="apiBase" :query-params="makeQueryParams"
             :per-page="perPage" :reactive-api-url="true" :fields="fields" data-path="data.data" pagination-path="data"
             @vuetable:pagination-data="onPaginationData">
             <template slot="date" slot-scope="props">
@@ -19,8 +19,8 @@
             </template> 
             <template slot="action" slot-scope="props">
               <div>
-                <b-button @click="openEditModal(props.rowData.id)" variant="outline-secondary" class="mr-1" size="sm"><i class="simple-icon-pencil" /></b-button>
-                <b-button @click="getSelectedItem(props.rowData.id)" v-b-modal.modalDeletion variant="outline-danger" size="sm">Delete <i class="simple-icon-trash" /></b-button>
+                <b-button @click="openEditModal(props.rowData.id)" variant="light" class="mr-1" size="sm"><i class="simple-icon-pencil" /></b-button>
+                <b-button @click="getSelectedItem(props.rowData.id)" v-b-modal.modalDeletion variant="danger" size="sm">Delete <i class="simple-icon-trash" /></b-button>
               </div>
             </template>
           </vuetable>

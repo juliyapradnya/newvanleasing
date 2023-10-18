@@ -5,7 +5,7 @@
     
     <b-colxx xxs="12">
       <b-card>
-        <vuetable ref="vuetable" class="order-with-arrow" :api-url="apiBase" :query-params="makeQueryParams"
+        <vuetable ref="vuetable" class="order-with-arrow responsive-table" :api-url="apiBase" :query-params="makeQueryParams"
           :per-page="perPage" :reactive-api-url="true" :fields="fields" data-path="data.data" pagination-path="data"
           @vuetable:pagination-data="onPaginationData">
           <template slot="action" slot-scope="props">

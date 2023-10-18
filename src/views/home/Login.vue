@@ -83,7 +83,7 @@
                 form: {
                     email: "test@coloredstrategies.com",
                     username: "superadmin",
-                    password: ""
+                    password: "11111111"
                 },
             };
         },
