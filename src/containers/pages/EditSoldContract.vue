@@ -5,7 +5,7 @@
     :title="$t('contract.edit-sold')"
     modal-class="modal-right"
   >
-    <div v-if="isProcessing" class="bg-white pr-5 w-100 h-100 d-flex justify-content-center align-items-center position-absolute opacity-50 z-index-10">
+    <div v-if="isProcessing" class="bg-transparent pr-5 w-100 h-100 d-flex justify-content-center align-items-center position-absolute opacity-75 z-index-10">
       <b-spinner variant="black" label="Spinning" class="text-center"></b-spinner>
     </div>
    
@@ -16,65 +16,28 @@
       @submit.prevent="onAddContractSubmit"
       >
       <b-form-group :label="$t('contract.agreement-number')" class="has-top-label">
-        <v-select
-          label="id"
-          v-model="$v.form.id_sales_order.$model"
-          :filterable="false"
-          :options="optionData"
-          @search="fetchOptions"
-          :dir="direction"
-        >
-          <template slot="no-options">type to search Aggrement number..</template>
-          <template slot="option" slot-scope="option">
-            <div class="d-center">
-              {{ option.agreement_number }}
-            </div>
-          </template>
-          <template slot="selected-option" slot-scope="option">
-            <div class="selected d-center">
-              {{ itemReturn }}
-            </div>
-          </template>
-          <template slot="spinner" slot-scope="spinner">
-            <div class="spinner-border text-primary" v-show="spinner"></div>
-          </template>
-        </v-select>
-        <div v-if="!$v.form.id_sales_order.required"
-          :class="{ 'invalid-feedback': true, 'd-block': $v.form.id_sales_order.$error && !$v.form.id_sales_order.required }"
-        >This field is required</div>
+        <b-form-input
+          type="text"
+          v-model.trim="$v.form.id_sales_order.$model"
+          disabled
+          :state="!$v.form.id_sales_order.$error"
+        />
+        <b-form-invalid-feedback v-if="!$v.form.id_sales_order.required">Please enter agreement no</b-form-invalid-feedback>
       </b-form-group>
       <b-form-group :label="$t('contract.vehicle-registration')" class="has-top-label">
-        <v-select
-          label="id"
-          v-model="$v.form.id_purchase_order.$model"
-          :filterable="false"
-          :options="optionCars"
-          @search="fetchCars"
-          :dir="direction"
-        >
-          <template slot="no-options">type to search Vehicale registration number..</template>
-          <template slot="option" slot-scope="option">
-            <div class="d-center">
-              {{ option.vehicle_registration }}
-            </div>
-          </template>
-          <template slot="selected-option" slot-scope="option">
-            <div class="selected d-center">
-              {{ itemSold }}
-            </div>
-          </template>
-          <template slot="spinner" slot-scope="spinner">
-            <div class="spinner-border text-primary" v-show="spinner"></div>
-          </template>
-        </v-select>
-        <div v-if="!$v.form.id_purchase_order.required"
-          :class="{ 'invalid-feedback': true, 'd-block': $v.form.id_purchase_order.$error && !$v.form.id_purchase_order.required }"
-        >This field is required</div>
+        <b-form-input
+          type="text"
+          v-model.trim="$v.form.id_purchase_order.$model"
+          disabled
+          :state="!$v.form.id_purchase_order.$error"
+        />
+        <b-form-invalid-feedback v-if="!$v.form.id_purchase_order.required">Please enter agreement no</b-form-invalid-feedback>
       </b-form-group>
       <div class="form-group has-top-label">
         <datepicker
           :bootstrap-styling="true"
           v-model="$v.form.vehicle_sold_date.$model"
+          :disabled-dates="availableDate"
         ></datepicker>
         <span>{{ $t('contract.sold-date') }}</span>
         <div
@@ -159,7 +122,11 @@ export default {
       optionCars: [],
       vehiclesolds: [],
       direction: getDirection().direction,
-      
+      availableDate: {
+        to: new Date()
+      },
+      new_id_sales_order: "",
+      new_id_purchase_order: "",
       form: {
         id_sales_order: "",
         id_purchase_order: "",
@@ -167,9 +134,6 @@ export default {
         sold_price: ""
       },
       editId: "",
-      tempSalesOrder: "",
-      tempPurchaseOrder: "",
-      tempOrderNumber: "",
       money: {
         decimal: ',',
         thousands: '.',
@@ -195,55 +159,72 @@ export default {
     formatDate(date) {
       return new Date(date).toISOString().substr(0, 10)
     },
-    fetchOptions(search, loading) {
-      let url = apiUrl + "/rehiringorder?per_page=99&search=" + encodeURI(search);
-      loading(true);
-      setTimeout(() => {
-        axios
-          .get(url)
-          .then(r => r.data)
-          .then(res =>  {
-            this.optionData = res.data.data
-          }).catch(_error => {
-            console.log(_error)
-          }).finally(() => {
-            loading(false);
-          })
-      }, 1000);
-    },
-    fetchCars(search, loading) {
-      let url = apiUrl + "/showvehiclenumberexceptsold?per_page=99&search=" + encodeURI(search);
-      loading(true);
-      setTimeout(() => {
-        axios
-          .get(url)
-          .then(r => r.data)
-          .then(res =>  {
-            this.optionCars = res.data.data
-          }).catch(_error => {
-            console.log(_error)
-          }).finally(() => {
-            loading(false);
-          })
-      }, 1000);
-    },
-    getReturnData(array) {
+    // fetchOptions(search, loading) {
+    //   let url = apiUrl + "/rehiringorder?per_page=99&search=" + encodeURI(search);
+    //   loading(true);
+    //   setTimeout(() => {
+    //     axios
+    //       .get(url)
+    //       .then(r => r.data)
+    //       .then(res =>  {
+    //         this.optionData = res.data.data
+    //       }).catch(_error => {
+    //         console.log(_error)
+    //       }).finally(() => {
+    //         loading(false);
+    //       })
+    //   }, 1000);
+    // },
+    // fetchCars(search, loading) {
+    //   let url = apiUrl + "/showvehiclenumberexceptsold?per_page=99&search=" + encodeURI(search);
+    //   loading(true);
+    //   setTimeout(() => {
+    //     axios
+    //       .get(url)
+    //       .then(r => r.data)
+    //       .then(res =>  {
+    //         this.optionCars = res.data.data
+    //       }).catch(_error => {
+    //         console.log(_error)
+    //       }).finally(() => {
+    //         loading(false);
+    //       })
+    //   }, 1000);
+    // },
+    getReturnData(obj) {
+      let url = apiUrl + "/vehiclesold/" + obj.id;
+      axios
+        .get(url)
+        .then(r => r.data)
+        .then(res =>  {
+          this.editId = res.data.id
+          this.form.vehicle_sold_date = res.data.vehicle_sold_date
+          this.form.sold_price = res.data.sold_price
+          this.getMaskData(res.data.id_sales_order)
+        }).catch(_error => {
+          console.log(_error)
+        })
+      this.new_id_sales_order = obj.id_sales_order
+      this.new_id_purchase_order = obj.id_purchase_order
       this.$refs.modalEditSold.show()
-      this.editId = array.id
-      this.form.id_sales_order = array.agreement_number
-      this.form.id_purchase_order = array.vehicle_registration
-      this.form.vehicle_sold_date = array.vehicle_sold_date
-      this.form.sold_price = array.sold_price
-      this.tempSalesOrder = array.id_sales_order
-      this.tempPurchaseOrder = array.id_purchase_order
+    },
+    async getMaskData(id) {
+      let url = apiUrl + "/salesorder/" + id
+      axios
+        .get(url)
+        .then(r => r.data)
+        .then(res =>  {
+          console.log(res.data[0])
+          this.form.id_sales_order = res.data[0].agreement_number
+          this.form.id_purchase_order = res.data[0].vehicle_registration
+          this.availableDate.to = new Date(res.data[0].contract_start_date)
+        })
     },
     onAddContractSubmit() {
       let url = apiUrl + "/vehiclesold/" + this.editId;
-      let salesId = this.form.id_sales_order.id_sales_order;
-      let purchaseId = this.form.id_purchase_order.id;
       const soldContract = {
-        id_sales_order: (salesId == undefined) ? this.tempSalesOrder : salesId,
-        id_purchase_order: (purchaseId == undefined) ? this.tempPurchaseOrder : purchaseId,
+        id_sales_order: this.new_id_sales_order,
+        id_purchase_order: this.new_id_purchase_order,
         vehicle_sold_date: this.formatDate(this.form.vehicle_sold_date),
         sold_price: this.form.sold_price
       }

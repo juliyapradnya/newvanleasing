@@ -1,7 +1,7 @@
 <template>
   <div v-if="isLoading">
     <b-row class="app-row">
-      <page-header :title="$t('contract.edit')">
+      <page-header :title="$t('contract.edit-contract')">
         <div class="top-right-button-container">
           <b-button variant="primary" size="lg" class="top-right-button" @click.prevent="submitForm" :class="{
             'btn-multiple-state': true,
@@ -21,7 +21,7 @@
               <i class="simple-icon-exclamation"></i>
             </span>
             <span class="label">
-              {{ $t('pages.submit') }}
+              <i class="simple-icon-check mr-2" />{{ $t('vehicle.save') }}
             </span>
           </b-button>
         </div>

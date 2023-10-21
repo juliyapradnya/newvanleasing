@@ -27,7 +27,7 @@
                      <i class="simple-icon-exclamation"></i>
                   </span>
                   <span class="label">
-                     {{ $t('vehicle.save') }}
+                     <i class="simple-icon-check mr-2" />{{ $t('vehicle.save') }}
                   </span>
                   </b-button>
             </div>

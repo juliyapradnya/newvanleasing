@@ -269,9 +269,10 @@ export default {
       }, 1000);
     },
     onValitadeFormSubmit() {
-      this.$v.$touch();
+      this.$v.contractForm.$touch();
+      let purchaseId = this.contractForm.vehicleRegistration.id
       const newContract = {
-        id_purchase_order: (Number.isInteger(this.contractForm.vehicleRegistration)) ? this.contractForm.vehicleRegistration : this.contractForm.vehicleRegistration.id,
+        id_purchase_order: (purchaseId == undefined) ? this.contractForm.vehicleRegistration : purchaseId,
         cust_name: this.contractForm.customerName,
         agreement_number: this.contractForm.agreementNumber,
         type: this.contractForm.contractType,
@@ -287,7 +288,7 @@ export default {
       // console.log(newContract)
       let url = apiUrl + "/salesorder/" + this.items.id;
       this.$emit('update-contract', 'processing');
-      if (!this.$v.$invalid) {
+      if (!this.$v.contractForm.$invalid) {
         axios
           .put(url, newContract)
           .then(r => r.data)
@@ -307,10 +308,10 @@ export default {
   },
   computed: {
     registration() {
-      if (Number.isInteger(this.contractForm.vehicleRegistration)) {
-        return this.items.vehicle_registration
-      } else {
+      if(typeof this.contractForm.vehicleRegistration === 'object') {
         return this.contractForm.vehicleRegistration.vehicle_registration
+      } else {
+        return this.items.vehicle_registration
       }
     }
   }

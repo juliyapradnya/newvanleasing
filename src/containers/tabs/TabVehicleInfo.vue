@@ -6,7 +6,7 @@
                class="av-tooltip tooltip-right-bottom"
                label="Bottom Right"
             >
-               <b-form-group :label="$t('vehicle.registration')" class="has-float-label">
+               <b-form-group :label="$t('vehicle.registration')" class="has-top-label">
                   <b-form-input
                   v-model.trim="$v.vehicleForm.vehicleRegistration.$model"
                   :state="!$v.vehicleForm.vehicleRegistration.$error"
@@ -16,7 +16,7 @@
                      :class="{ 'invalid-feedback': true, 'd-block': $v.vehicleForm.vehicleRegistration.$error && !$v.vehicleForm.vehicleRegistration.required }"
                   >This field is required!</div>
                </b-form-group>
-               <b-form-group :label="$t('vehicle.manufacture')" class="has-float-label">
+               <b-form-group :label="$t('vehicle.manufacture')" class="has-top-label">
                   <b-form-input
                      type="text"
                      v-model.trim="$v.vehicleForm.manufacture.$model"
@@ -24,7 +24,7 @@
                   />
                   <b-form-invalid-feedback v-if="!$v.vehicleForm.manufacture.required">Vehicle manufacture required!</b-form-invalid-feedback>
                </b-form-group>
-               <b-form-group :label="$t('vehicle.model')" class="has-float-label">
+               <b-form-group :label="$t('vehicle.model')" class="has-top-label">
                   <b-form-input
                      type="text"
                      v-model.trim="$v.vehicleForm.model.$model"
@@ -32,7 +32,7 @@
                   />
                   <b-form-invalid-feedback v-if="!$v.vehicleForm.model.required">Model is required!</b-form-invalid-feedback>
                </b-form-group>
-               <b-form-group :label="$t('vehicle.variant')" class="has-float-label">
+               <b-form-group :label="$t('vehicle.variant')" class="has-top-label">
                   <b-form-input
                      type="text"
                      v-model.trim="$v.vehicleForm.variant.$model"
@@ -40,7 +40,7 @@
                   />
                   <b-form-invalid-feedback v-if="!$v.vehicleForm.variant.required">Variant is required!</b-form-invalid-feedback>
                </b-form-group>
-               <b-form-group :label="$t('vehicle.colour')"  class="has-float-label">
+               <b-form-group :label="$t('vehicle.colour')"  class="has-top-label">
                   <b-form-input
                      type="text"
                      v-model.trim="$v.vehicleForm.colour.$model"
@@ -50,7 +50,7 @@
                </b-form-group>
                <b-form-row>
                   <b-colxx sm="6">
-                     <b-form-group :label="$t('vehicle.list-price')" class="has-float-label">
+                     <b-form-group :label="$t('vehicle.list-price')" class="has-top-label">
                         <!-- <b-input-group append="£">
                            <b-form-input
                               type="text"
@@ -65,7 +65,7 @@
                      </b-form-group>
                   </b-colxx>
                   <b-colxx sm="6">
-                     <b-form-group :label="$t('vehicle.otr-price')" class="has-float-label">
+                     <b-form-group :label="$t('vehicle.otr-price')" class="has-top-label">
                         <money v-model="$v.vehicleForm.otrPrice.$model" v-bind="money" class="form-control" :state="!$v.vehicleForm.otrPrice.$error"></money>
                         <div
                            :class="{ 'invalid-feedback': true, 'd-block': $v.vehicleForm.otrPrice.$error && !$v.vehicleForm.otrPrice.required }"
@@ -76,7 +76,7 @@
                <p class="mb-3">{{ $t('vehicle.min-contract-price') }}</p>
                <b-form-row>
                   <b-colxx sm="6">
-                     <b-form-group :label="$t('vehicle.10k-desc')" class="has-float-label">
+                     <b-form-group :label="$t('vehicle.10k-desc')" class="has-top-label">
                         <money v-model="$v.vehicleForm.minContract10k.$model" v-bind="money" class="form-control" :state="!$v.vehicleForm.minContract10k.$error"></money>
                         <div v-if="!$v.vehicleForm.minContract10k.required"
                            :class="{ 'invalid-feedback': true, 'd-block': $v.vehicleForm.minContract10k.$error && !$v.vehicleForm.minContract10k.required }"
@@ -84,7 +84,7 @@
                      </b-form-group>
                   </b-colxx>
                   <b-colxx sm="6">
-                     <b-form-group :label="$t('vehicle.18k-desc')" class="has-float-label">
+                     <b-form-group :label="$t('vehicle.18k-desc')" class="has-top-label">
                         <money v-model="$v.vehicleForm.minContract18k.$model" v-bind="money" class="form-control" :state="!$v.vehicleForm.minContract18k.$error"></money>
                         <div v-if="!$v.vehicleForm.minContract18k.required"
                            :class="{ 'invalid-feedback': true, 'd-block': $v.vehicleForm.minContract18k.$error && !$v.vehicleForm.minContract18k.required }"
@@ -93,7 +93,7 @@
                   </b-colxx>
                </b-form-row>
                <p class="mb-3">{{ $t('vehicle.due-date') }}</p>
-               <div class="form-group has-float-label">
+               <div class="form-group has-top-label">
                   <datepicker
                      :bootstrap-styling="true"
                      placeholder="Choose a date"
@@ -101,7 +101,7 @@
                   ></datepicker>
                   <span>{{ $t('vehicle.mot-date') }}</span>
                </div>
-               <div class="form-group has-float-label">
+               <div class="form-group has-top-label">
                   <datepicker
                      :bootstrap-styling="true"
                      placeholder="Choose a date"
@@ -114,7 +114,7 @@
                      <p class="mb-3">{{ $t('vehicle.service-schedule') }}</p>
                   </b-colxx>
                   <b-colxx sm="6">
-                     <b-form-group :label="$t('vehicle.service-miles')" class="has-float-label">
+                     <b-form-group :label="$t('vehicle.service-miles')" class="has-top-label">
                         <b-form-input
                            type="text"
                            v-model.trim="$v.vehicleForm.serviceMiles.$model"
@@ -129,7 +129,7 @@
                      </b-form-group>
                   </b-colxx>
                   <b-colxx sm="6">
-                     <b-form-group :label="$t('vehicle.service-years')" class="has-float-label">
+                     <b-form-group :label="$t('vehicle.service-years')" class="has-top-label">
                         <b-form-input
                            type="text"
                            v-model.trim="$v.vehicleForm.serviceYears.$model"
@@ -144,7 +144,7 @@
                      </b-form-group>
                   </b-colxx>
                </b-form-row>
-               <b-form-group :label="$t('vehicle.service-maintenance')" class="has-float-label">
+               <b-form-group :label="$t('vehicle.service-maintenance')" class="has-top-label">
                   <b-form-input
                      type="text"
                      v-model.trim="$v.vehicleForm.serviceMaintenance.$model"
@@ -157,7 +157,7 @@
                      <p class="mb-3">{{ $t('vehicle.service-last') }}</p>
                   </b-colxx>
                   <b-colxx sm="12">
-                     <b-form-group :label="$t('vehicle.service-mileage')" class="has-float-label">
+                     <b-form-group :label="$t('vehicle.service-mileage')" class="has-top-label">
                         <b-form-input
                            type="text"
                            v-model.trim="$v.vehicleForm.serviceMileage.$model"
@@ -172,7 +172,7 @@
                      </b-form-group>
                   </b-colxx>
                   <b-colxx sm="12">
-                     <div class="form-group has-float-label">
+                     <div class="form-group has-top-label">
                         <datepicker
                            :bootstrap-styling="true"
                            placeholder="Choose a date"
@@ -201,7 +201,7 @@
                      :class="{ 'invalid-feedback': true, 'd-block': $v.purchaseForm.purchaseDate.$error && !$v.purchaseForm.purchaseDate.required }"
                   >Date required</div>
                </b-form-group>
-               <b-form-group :label="$t('vehicle.funding-methods')" class="has-float-label">
+               <b-form-group :label="$t('vehicle.funding-methods')" class="has-top-label">
                   <v-select v-model="$v.purchaseForm.fundingMethods.$model" :options="fundingMethodData" />
                   <div
                      :class="{ 'invalid-feedback': true, 'd-block': $v.purchaseForm.fundingMethods.$error && !$v.purchaseForm.fundingMethods.required }"
@@ -280,9 +280,9 @@ export default {
             serviceMaintenance: "",
             motDate: null,
             rflDate: null,
-            serviceMiles: "",
-            serviceYears: "",
-            serviceMileage: "",
+            serviceMiles: 0,
+            serviceYears: 0,
+            serviceMileage: 0,
             serviceLast: null
          },
          purchaseForm: {

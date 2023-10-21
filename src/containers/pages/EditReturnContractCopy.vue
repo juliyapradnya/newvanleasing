@@ -5,7 +5,7 @@
     :title="$t('contract.edit-return')"
     modal-class="modal-right"
   >
-    <div v-if="isProcessing" class="bg-white pr-5 w-100 h-100 d-flex justify-content-center align-items-center position-absolute opacity-50 z-index-10">
+    <div v-if="isProcessing" class="bg-transparent pr-5 w-100 h-100 d-flex justify-content-center align-items-center position-absolute opacity-75 z-index-10">
       <b-spinner variant="black" label="Spinning" class="text-center"></b-spinner>
     </div>
    

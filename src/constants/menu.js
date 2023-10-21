@@ -54,7 +54,7 @@ const data = [
   id: "performance",
   icon: "simple-icon-rocket",
   label: "menu.performance",
-  to: `${adminRoot}/performance`
+  to: `${adminRoot}/performance/all`
 }
 // {
 //   id: "single",

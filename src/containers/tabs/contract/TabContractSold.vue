@@ -3,7 +3,7 @@
       <datatable-heading :title="$t('contract.all-sold')" :changePageSize="changePageSize" :searchChange="searchChange"
         :from="from" :to="to" :total="total" :perPage="perPage" :separator="false" :noBreadcrumbs="true">
         <div class="top-right-button-container">
-          <b-button v-b-modal.modalsold variant="primary" size="lg" class="top-right-button text-uppercase">{{ $t('contract.add-sold') }}</b-button>
+          <b-button :disabled="noDefleet" v-b-modal.modalsold variant="primary" size="lg" class="top-right-button text-uppercase">{{ $t('contract.add-sold') }}</b-button>
         </div>
         <add-sold-contract @added-data-table="onAddedDataTable" :key="componentKey"/>
       </datatable-heading>
@@ -32,9 +32,10 @@
     </b-row>
   </template>
   <script>
+  import axios from "axios";
+  import { apiUrl } from "../../../constants/config";
   import Vuetable from "vuetable-2/src/components/Vuetable";
   import VuetablePaginationBootstrap from "../../../components/Common/VuetablePaginationBootstrap";
-  import { apiUrl } from "../../../constants/config";
   import DatatableHeading from "../../datatable/DatatableHeading";
   import AddSoldContract from "../../pages/AddSoldContract";
   import EditSoldContract from "../../pages/EditSoldContract";
@@ -53,6 +54,7 @@
     data() {
       return {
         isLoad: false,
+        noDefleet: false,
         apiBase: apiUrl + "/vehiclesold",
         sort: "",
         order: "",
@@ -67,14 +69,6 @@
         selectedItem: "",
         componentKey: 0,
         fields: [
-          {
-            name: "id_sales_order",
-            sortField: "id_sales_order",
-            title: "Sales Order ID",
-            titleClass: "center aligned",
-            dataClass: "align-middle text-muted text-uppercase",
-            width: "15%"
-          },
           {
             name: "vehicle_registration",
             sortField: "vehicle_registration",
@@ -116,6 +110,18 @@
       };
     },
     methods: {
+      fetchDefleet() {
+        let url = apiUrl + "/showagreementnumberinvehiclesold";
+        axios
+          .get(url)
+          .then(r => r.data)
+          .then(res =>  {
+            this.noDefleet = false
+          }).catch(_error => {
+            this.noDefleet = true
+            console.log("Can't add data!")
+          })
+      },
       makeQueryParams(sortOrder, currentPage, perPage) {
         this.isLoading = false;
         return sortOrder[0]
@@ -154,14 +160,15 @@
       },
       onAddedDataTable() {
         this.componentKey++;
+        this.fetchDefleet();
         this.$refs.vuetable.refresh();
       },
       changePageSize(perPage) {
         this.perPage = perPage;
         this.$refs.vuetable.refresh();
       },
-      openEditModal(array) {
-        this.$refs.editForm.getReturnData(array);
+      openEditModal(obj) {
+        this.$refs.editForm.getReturnData(obj);
       },
       getSelectedItem(id) {
         this.selectedItem = id;
@@ -173,6 +180,9 @@
       updateTableRow() {
         this.$refs.vuetable.refresh();
       }
+    },
+    mounted() {
+      this.fetchDefleet()
     }
   };
   </script>

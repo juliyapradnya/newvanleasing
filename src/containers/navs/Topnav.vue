@@ -66,7 +66,7 @@
         <b-tooltip target="tool-mode-switch" placement="left" title="Dark Mode"></b-tooltip>
       </div>
       <div class="header-icons d-inline-block align-middle">
-        <div class="position-relative d-none d-sm-inline-block">
+        <!-- <div class="position-relative d-none d-sm-inline-block">
           <b-dropdown
             variant="empty"
             size="sm"
@@ -105,7 +105,7 @@
               </router-link>
             </div>
           </b-dropdown>
-        </div>
+        </div> -->
 
         <div class="position-relative d-inline-block">
           <b-dropdown

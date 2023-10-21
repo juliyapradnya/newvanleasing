@@ -81,7 +81,16 @@ const routes = [
       {
         path: "performance",
         component: () =>
-          import(/* webpackChunkName: "performance" */ "./views/app/performance/VehiclePerformance")
+          import(/* webpackChunkName: "performance" */ "./views/app/performance"),
+        redirect: `${adminRoot}/performance/all`,
+        children: [
+          {
+            path: 'all', component: () => import(/* webpackChunkName: "contracts" */ './views/app/performance/VehiclePerformance')
+          },
+          {
+            path: ':id', component: () => import(/* webpackChunkName: "performance" */ './views/app/performance/PerformanceDetail')
+          }
+        ]
       },
       // {
       //   path: "single",

@@ -10,7 +10,7 @@
                   <span class="float-right">{{ items.sum_docdepoth > 0 ? 'Available' : 'Hired' }}</span>
                </li>
             </ul>
-            <p class="text-muted text-small mb-1">{{ $t('pages.overview') }}</p>
+            <!-- <p class="text-muted text-small mb-1">{{ $t('pages.overview') }}</p> -->
          </div>
       </vue-perfect-scrollbar>
    </application-menu>

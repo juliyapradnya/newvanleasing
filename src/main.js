@@ -28,6 +28,7 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import { getCurrentLanguage } from './utils'
 import VueTheMask from 'vue-the-mask'
+import VueAnime from 'vue-animejs'
 
 Vue.use(BootstrapVue);
 Vue.use(VueI18n);
@@ -46,6 +47,7 @@ Vue.use(VueLineClamp, {
   importCss: true
 });
 Vue.use(VueTheMask);
+Vue.use(VueAnime);
 
 Vue.component('piaf-breadcrumb', Breadcrumb);
 Vue.component('b-refresh-button', RefreshButton);

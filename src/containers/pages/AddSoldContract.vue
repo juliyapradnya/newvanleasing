@@ -5,7 +5,7 @@
     :title="$t('contract.add-sold')"
     modal-class="modal-right"
   >
-    <div v-if="isProcessing" class="bg-white pr-5 w-100 h-100 d-flex justify-content-center align-items-center position-absolute opacity-50 z-index-10">
+    <div v-if="isProcessing" class="bg-transparent pr-5 w-100 h-100 d-flex justify-content-center align-items-center position-absolute opacity-75 z-index-10">
       <b-spinner variant="black" label="Spinning" class="text-center"></b-spinner>
     </div>
    
@@ -44,6 +44,15 @@
         >This field is required</div>
       </b-form-group>
       <b-form-group :label="$t('contract.vehicle-registration')" class="has-top-label">
+        <b-form-input
+          type="text"
+          v-model.trim="$v.form.id_purchase_order.$model"
+          disabled
+          :state="!$v.form.id_purchase_order.$error"
+        />
+        <b-form-invalid-feedback v-if="!$v.form.id_purchase_order.required">Please enter agreement no</b-form-invalid-feedback>
+      </b-form-group>
+      <!-- <b-form-group :label="$t('contract.vehicle-registration')" class="has-top-label">
         <v-select
           label="id"
           v-model="$v.form.id_purchase_order.$model"
@@ -70,11 +79,12 @@
         <div v-if="!$v.form.id_purchase_order.required"
           :class="{ 'invalid-feedback': true, 'd-block': $v.form.id_purchase_order.$error && !$v.form.id_purchase_order.required }"
         >This field is required</div>
-      </b-form-group>
+      </b-form-group> -->
       <div class="form-group has-top-label">
         <datepicker
           :bootstrap-styling="true"
           v-model="$v.form.vehicle_sold_date.$model"
+          :disabled-dates="availableDate"
         ></datepicker>
         <span>{{ $t('contract.sold-date') }}</span>
         <div
@@ -158,7 +168,12 @@ export default {
       optionData: [],
       optionCars: [],
       vehiclesolds: [],
+      newSalesIdOrder: "",
+      newPurchaseIdOrder: "",
       direction: getDirection().direction,
+      availableDate: {
+        to: new Date()
+      },
       form: {
         id_sales_order: null,
         id_purchase_order: null,
@@ -200,21 +215,46 @@ export default {
       return formData;
     },
     fetchOptions(search, loading) {
-      let url = apiUrl + "/rehiringorder?per_page=99&search=" + encodeURI(search);
+      let url = apiUrl + "/showagreementnumberinvehiclesold";
       loading(true);
       setTimeout(() => {
         axios
           .get(url)
           .then(r => r.data)
           .then(res =>  {
-            // console.log(res.data.data)
-            this.optionData = res.data.data
+            let latestContract = res.data.filter(x =>
+              x.id == Math.max(...res.data.map(o => o.id))
+            )
+            this.optionData = latestContract
+            this.getSalesId(latestContract[0].agreement_number)
+            this.form.id_purchase_order = latestContract[0].vehicle_registration
           }).catch(_error => {
             console.log(_error)
           }).finally(() => {
             loading(false);
           })
       }, 1000);
+    },
+    async getSalesId(val) {
+      let url = apiUrl + "/salesorder?per_page=250"
+      axios
+        .get(url)
+        .then(r => r.data)
+        .then(res =>  {
+          let salesId = res.data.data.filter(x => x.agreement_number == val)
+          this.newSalesIdOrder = salesId[0].id
+          this.newPurchaseIdOrder = salesId[0].id_purchase_order
+          this.getMinDate(salesId[0].id_purchase_order)
+        })
+    },
+    async getMinDate(id) {
+      let url = apiUrl + "/purchaseorder/" + id
+      axios
+        .get(url)
+        .then(r => r.data)
+        .then(res =>  {
+          this.availableDate.to = new Date(res.data.tgl_available)
+        })
     },
     fetchCars(search, loading) {
       let url = apiUrl + "/showvehiclenumberexceptsold?per_page=99&search=" + encodeURI(search);
@@ -239,19 +279,19 @@ export default {
           'Content-Type': 'multipart/form-data'
         }
       }
-      this.$v.form.$touch();
+      // this.$v.form.$touch();
       // this.vehiclesolds.append("id_sales_order", this.form.id_sales_order.id);
       // this.vehiclesolds.append("id_purchase_order", this.form.id_purchase_order.id);
       // this.vehiclesolds.append("vehicle_sold_date", this.formatDate(this.form.vehicle_sold_date));
       // this.vehiclesolds.append("sold_price", this.form.sold_price);
       const soldContract = {
-        id_sales_order: this.form.id_sales_order.id_sales_order,
-        id_purchase_order: this.form.id_purchase_order.id,
+        id_sales_order: this.newSalesIdOrder,
+        id_purchase_order: this.newPurchaseIdOrder,
         vehicle_sold_date: this.formatDate(this.form.vehicle_sold_date),
         sold_price: this.form.sold_price
       }
       this.vehiclesolds = this.objectToFormData(soldContract);
-      // console.log("adding item : ", this.vehiclesolds);
+      // console.log("adding item : ", soldContract);
       this.isProcessing = true;
       this.status = "processing";
       axios

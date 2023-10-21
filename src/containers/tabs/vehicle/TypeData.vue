@@ -2,18 +2,18 @@
   <div>
     <b-form-group v-show="methodsType === 'hire' || methodsType === 'rent'"
     :label="$t('vehicle.funder')"
-    class="has-float-label">
+    class="has-top-label">
       <b-form-input
         type="text"
         v-model.trim="$v.methodsData.funder.$model"
       />
     </b-form-group>
     <b-form-group v-show="methodsType === 'hire'"
-    :label="$t('vehicle.interest-type')" class="has-float-label">
+    :label="$t('vehicle.interest-type')" class="has-top-label">
       <v-select v-model.trim="$v.methodsData.interestType.$model" :options="selectData" :dir="direction" />
     </b-form-group>
     <b-form-group v-show="methodsType === 'hire'"
-    :label="$t('vehicle.interest-rate')"  class="has-float-label">
+    :label="$t('vehicle.interest-rate')"  class="has-top-label">
       <!-- <b-form-input
         type="text"
         v-model.trim="$v.methodsData.interestRate.$model"
@@ -23,7 +23,7 @@
       <b-form-invalid-feedback v-if="!$v.methodsData.interestRate.numeric">Must be a number</b-form-invalid-feedback>
     </b-form-group>
     <b-form-group v-show="methodsType === 'hire' || methodsType === 'rent'"
-    :label="$t('vehicle.terms')"  class="has-float-label">
+    :label="$t('vehicle.terms')"  class="has-top-label">
       <b-form-input
         type="text"
         v-model.trim="$v.methodsData.terms.$model"
@@ -32,7 +32,7 @@
       <b-form-invalid-feedback v-if="!$v.methodsData.terms.numeric">Must be a number</b-form-invalid-feedback>
     </b-form-group>
     <b-form-group v-show="methodsType === 'hire'"
-    :label="$t('vehicle.deposit')"  class="has-float-label">
+    :label="$t('vehicle.deposit')"  class="has-top-label">
       <!-- <b-form-input
         type="text"
         v-model.trim="$v.methodsData.deposit.$model"
@@ -42,7 +42,7 @@
       <b-form-invalid-feedback v-if="!$v.methodsData.deposit.numeric">Must be a number</b-form-invalid-feedback>
     </b-form-group>
     <b-form-group v-show="methodsType === 'hire'"
-    :label="$t('vehicle.monthly-repayment')"  class="has-float-label">
+    :label="$t('vehicle.monthly-repayment')"  class="has-top-label">
       <!-- <b-form-input
         type="text"
         v-model.trim="$v.methodsData.monthlyRepay.$model"
@@ -52,7 +52,7 @@
       <b-form-invalid-feedback v-if="!$v.methodsData.monthlyRepay.decimal">Must be a number</b-form-invalid-feedback>
     </b-form-group>
     <b-form-group v-show="methodsType === 'hire' || methodsType === 'cash'"
-    :label="$t('vehicle.final-payment')"  class="has-float-label">
+    :label="$t('vehicle.final-payment')"  class="has-top-label">
       <!-- <b-form-input
         type="text"
         v-model.trim="$v.methodsData.finalPay.$model"
@@ -62,7 +62,7 @@
       <b-form-invalid-feedback v-if="!$v.methodsData.finalPay.decimal">Must be a number</b-form-invalid-feedback>
     </b-form-group>
     <b-form-group v-show="methodsType === 'hire' || methodsType === 'cash'"
-    :label="$t('vehicle.documentation-fee')"  class="has-float-label">
+    :label="$t('vehicle.documentation-fee')"  class="has-top-label">
       <!-- <b-form-input
         type="text"
         v-model.trim="$v.methodsData.docFee.$model"
@@ -72,7 +72,7 @@
       <b-form-invalid-feedback v-if="!$v.methodsData.docFee.decimal">Must be a number</b-form-invalid-feedback>
     </b-form-group>
     <b-form-group v-show="methodsType === 'hire' || methodsType === 'cash'"
-    :label="$t('vehicle.final-fee')"  class="has-float-label">
+    :label="$t('vehicle.final-fee')"  class="has-top-label">
       <!-- <b-form-input
         type="text"
         v-model.trim="$v.methodsData.finalFee.$model"
@@ -82,13 +82,13 @@
       <b-form-invalid-feedback v-if="!$v.methodsData.finalFee.decimal">Must be a number</b-form-invalid-feedback>
     </b-form-group>
     <b-form-group v-show="methodsType === 'hire' || methodsType === 'cash'"
-    :label="$t('vehicle.other-fee')"  class="has-float-label">
+    :label="$t('vehicle.other-fee')"  class="has-top-label">
       <!-- <b-form-input
         type="text"
         v-model.trim="$v.methodsData.otherFee.$model"
         :state="!$v.methodsData.otherFee.$error"
       /> -->
-      <money v-model="$v.methodsData.finalFee.$model" v-bind="money" class="form-control" :state="!$v.methodsData.finalFee.$error"></money>
+      <money v-model="$v.methodsData.otherFee.$model" v-bind="money" class="form-control" :state="!$v.methodsData.otherFee.$error"></money>
       <b-form-invalid-feedback v-if="!$v.methodsData.otherFee.decimal">Must be a number</b-form-invalid-feedback>
     </b-form-group>
   </div>

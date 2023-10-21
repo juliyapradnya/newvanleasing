@@ -16,11 +16,13 @@
           :progressText="`${ totalHiredVehicle }/${ items.length }`"
         />
       </b-colxx>
-      <b-colxx sm="12" lg="4" class="mb-4">
+      <b-colxx sm="12" lg="4" class="mb-3">
         <gradient-with-radial-progress-card
           icon="iconsminds-basket-coins"
-          :title="`£ 40000`"
+          :title="`£ 24.000`"
           :detail="$t('performance.card-2')"
+          :percent="4*100/10"
+          :progressText="`target`"
         />
       </b-colxx>
     </b-row>
@@ -32,18 +34,18 @@
         <hired-vehicle-chart-card></hired-vehicle-chart-card>
       </b-colxx>
       <b-colxx xxs="12" class="mb-4">
-        <b-card :title="$t('performance.list')">
+        <b-card :title="$t('performance.top-hired')">
           <vuetable ref="vuetable" class="responsive-table" :api-url="apiBase" :query-params="makeQueryParams"
             :per-page="perPage" :reactive-api-url="true" :fields="fields" data-path="data.data" pagination-path="data"
             @vuetable:pagination-data="onPaginationData">
             <template slot="action" slot-scope="props">
               <div>
-                <b-button @click="openEditModal(props.rowData)" variant="light" class="mr-1" size="sm">View details</b-button>
+                <b-button :to="{ path: `/app/performance/${props.rowData.id}` }" variant="light" class="mr-1" size="sm"><i class="simple-icon-magnifier mr-1" /> View details</b-button>
               </div>
             </template>
           </vuetable>
+          <vuetable-pagination-bootstrap class="mt-4" ref="pagination" @vuetable-pagination:change-page="onChangePage" />
         </b-card>
-        <vuetable-pagination-bootstrap class="mt-4" ref="pagination" @vuetable-pagination:change-page="onChangePage" />
       </b-colxx>
     </b-row>
   </div>
@@ -170,9 +172,6 @@ export default {
       this.to = paginationData.to;
       this.total = paginationData.total;
       this.lastPage = paginationData.last_page;
-      this.items = paginationData.data;
-      this.itemsCount = this.items.length;
-      // this.$emit("mounted-sold-tab", this.itemsCount);
       this.$refs.pagination.setPaginationData(paginationData);
     },
     onChangePage(page) {

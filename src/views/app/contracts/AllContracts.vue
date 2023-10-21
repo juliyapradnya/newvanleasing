@@ -3,7 +3,7 @@
     <datatable-heading :title="$t('menu.all-contracts')" :changePageSize="changePageSize" :searchChange="searchChange"
       :from="from" :to="to" :total="total" :perPage="perPage" :separator="true">
       <div class="top-right-button-container">
-        <b-button v-b-modal.modalright variant="primary" size="lg" class="top-right-button">{{ $t('pages.add-new')
+        <b-button v-b-modal.modalright variant="primary" size="lg" class="top-right-button text-uppercase">{{ $t('contract.add-new')
         }}</b-button>
       </div>
       <add-new-contract @added-data-table="onAddedDataTable" :key="componentKey"/>
@@ -16,18 +16,19 @@
           <b-badge pill :variant="(props.rowData.next_step_status_sales === 'Hired') ? 'primary' : 'light'">{{ props.rowData.next_step_status_sales }}</b-badge>
         </template>
         <template slot="actions" slot-scope="props">
-          <div v-if="props.rowData.next_step_status_sales !== 'Innactive'">
-            <b-button :to="{ path: `${props.rowData.id}` }" variant="light" class="mr-1" size="sm"><i class="simple-icon-pencil" /></b-button>
-            <b-button @click="showDelBox(props.rowData.id)" v-b-modal.modalDeletion variant="danger" size="sm">Delete <i class="simple-icon-trash" /></b-button>
+          <div v-if="props.rowData.next_step_status_sales !== 'Hired'" >
+            <b-button @click.prevent="showRehireModal(props.rowData.id)" variant="light" size="sm" class="mr-1"><i class="simple-icon-magnifier" /></b-button>
+            <b-button @click="showDelModal(props.rowData.id)" v-b-modal.modalDeletion variant="danger" size="sm"><i class="simple-icon-trash mr-1" />  Delete</b-button>
           </div>
           <div v-else>
-            <b-button variant="outline-dark" class="mr-1" size="sm" disabled><i class="simple-icon-pencil" /></b-button>
-            <b-button variant="outline-dark" size="sm" disabled>Delete <i class="simple-icon-trash" /></b-button>
+            <b-button :to="{ path: `${props.rowData.id}` }" variant="light" size="sm" class="mr-1"><i class="simple-icon-pencil" /></b-button>
+            <b-button @click="showDelModal(props.rowData.id)" v-b-modal.modalDeletion variant="danger" size="sm"><i class="simple-icon-trash mr-1" />  Delete</b-button>
           </div>
         </template>
       </vuetable>
       <vuetable-pagination-bootstrap class="mt-4" ref="pagination" @vuetable-pagination:change-page="onChangePage" />
       <delete-item-modal :selectedItem="selectedItem" :endpoint="'/salesorder/'" @delete-modal-hide="updateTableRow"></delete-item-modal>
+      <view-rehire-contract ref="rehireModal" @added-data-table="onAddedDataTable" :key="componentKey"/>
     </b-colxx>
   </b-row>
 </template>
@@ -37,6 +38,7 @@ import VuetablePaginationBootstrap from "../../../components/Common/VuetablePagi
 import { apiUrl } from "../../../constants/config";
 import DatatableHeading from "../../../containers/datatable/DatatableHeading";
 import AddNewContract from "../../../containers/pages/AddNewContract";
+import ViewRehireContract from "../../../containers/pages/ViewRehireContract";
 import DeleteItemModal from "../../../containers/pages/DeleteItemModal";
 
 export default {
@@ -46,6 +48,7 @@ export default {
     "vuetable-pagination-bootstrap": VuetablePaginationBootstrap,
     "datatable-heading": DatatableHeading,
     "add-new-contract": AddNewContract,
+    "view-rehire-contract": ViewRehireContract,
     "delete-item-modal": DeleteItemModal
   },
   data() {
@@ -90,27 +93,28 @@ export default {
           width: "15%"
         },
         {
-          name: "type",
-          sortField: "type",
-          title: "Contract Type",
-          titleClass: "center aligned",
-          dataClass: "text-muted",
-          width: "15%"
-        },
-        {
           name: "term_months",
           sortField: "term_months",
           title: "Contract Period (Months)",
           titleClass: "center aligned",
           dataClass: "text-muted",
-          width: "10%"
+          width: "12%"
+        },
+        {
+          name: "contract_start_date",
+          sortField: "contract_start_date",
+          title: "Start Date",
+          titleClass: "center aligned",
+          dataClass: "text-muted",
+          width: "12%"
         },
         {
           name: "__slot:status",
+          sortField: "next_step_status_sales",
           title: "Status",
           titleClass: "center aligned text-center",
           dataClass: "center aligned text-center",
-          width: "10%"
+          width: "12%"
         },
         {
           name: "__slot:actions",
@@ -123,6 +127,7 @@ export default {
       sortOrder: [
         {
           field: 'updated_at',
+          sortField: "updated_at",
           direction: 'desc'
         }
       ]
@@ -138,7 +143,7 @@ export default {
             ? sortOrder[0].direction
             : "",
           sort: sortOrder[0]
-            ? sortOrder[0].field
+            ? sortOrder[0].sortField
             : "",
           page: currentPage,
           per_page: this.perPage,
@@ -148,7 +153,7 @@ export default {
           page: currentPage,
           per_page: this.perPage,
           order: this.sortOrder[0].direction,
-          sort: this.sortOrder[0].field,
+          sort: this.sortOrder[0].sortField,
           search: this.search
         };
     },
@@ -183,7 +188,10 @@ export default {
       }
       return -1;
     },
-    showDelBox(id) {
+    showRehireModal(id) {
+      this.$refs.rehireModal.fetchData(id);
+    },
+    showDelModal(id) {
       this.selectedItem = id;
     },
     updateTableRow() {

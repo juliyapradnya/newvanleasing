@@ -5,7 +5,7 @@
     :title="$t('contract.add-return')"
     modal-class="modal-right"
   >
-    <div v-if="isProcessing" class="bg-white pr-5 w-100 h-100 d-flex justify-content-center align-items-center position-absolute opacity-50 z-index-10">
+    <div v-if="isProcessing" class="bg-transparent pr-5 w-100 h-100 d-flex justify-content-center align-items-center position-absolute opacity-75 z-index-10">
       <b-spinner variant="black" label="Spinning" class="text-center"></b-spinner>
     </div>
    
@@ -74,16 +74,17 @@
       <b-form-group :label="$t('contract.vehicle-registration')" class="has-top-label">
         <b-form-input
           type="text"
-          v-model.trim="$v.id_purchase_order.$model"
+          v-model.trim="$v.vehicle_registration.$model"
           disabled
-          :state="!$v.id_purchase_order.$error"
+          :state="!$v.vehicle_registration.$error"
         />
-        <b-form-invalid-feedback v-if="!$v.id_purchase_order.required">Please enter agreement no</b-form-invalid-feedback>
+        <b-form-invalid-feedback v-if="!$v.vehicle_registration.required">Please enter agreement no</b-form-invalid-feedback>
       </b-form-group>
       <div class="form-group has-top-label">
         <datepicker
           :bootstrap-styling="true"
           v-model="$v.vehicle_return_date.$model"
+          :disabled-dates="availableDate"
         ></datepicker>
         <span>{{ $t('contract.return-date') }}</span>
         <div
@@ -150,33 +151,36 @@ export default {
       status: "default",
       message: "",
       optionData: [],
+      availableDate: {
+        to: new Date()
+      },
       direction: getDirection().direction,
       id_sales_order: null,
-      id_purchase_order: "",
+      id_purchase_order: null,
+      vehicle_registration: "",
       vehicle_return_date: ""
     };
   },
   mixins: [validationMixin],
   validations: {
     id_sales_order: { required },
-    id_purchase_order: { required },
+    vehicle_registration: { required },
     vehicle_return_date: { required }
   },
   methods: {
     formatDate(date) {
-      // let newDate = new Date(date);
-      // return moment(newDate).format("Y-MM-DD");
       return new Date(date).toISOString().substr(0, 10)
     },
     fetchOptions(search, loading) {
-      let url = apiUrl + "/showactivesales?per_page=99&search=" + encodeURI(search);
+      let url = apiUrl + "/showagreementnumberinrehiring"
       loading(true);
       setTimeout(() => {
         axios
           .get(url)
           .then(r => r.data)
           .then(res =>  {
-            this.optionData = res.data.data
+            // console.log(res.data)
+            this.optionData = res.data
           }).catch(_error => {
             console.log(_error)
           }).finally(() => {
@@ -189,7 +193,7 @@ export default {
       this.$v.$touch();
       const soldContract = {
         id_sales_order: this.id_sales_order.id,
-        id_purchase_order: this.id_sales_order.id_purchase_order,
+        id_purchase_order: this.id_purchase_order,
         vehicle_return_date: this.formatDate(this.vehicle_return_date)
       }
       // console.log("adding item : ", soldContract);
@@ -216,7 +220,20 @@ export default {
         })
     },
     async getRegistration(obj) {
-      this.id_purchase_order = obj.vehicle_registration
+      let url = apiUrl + "/showactivesales?per_page=99"
+      axios
+        .get(url)
+        .then(r => r.data)
+        .then(res =>  {
+          let item = res.data.data.filter(x => x.agreement_number == obj.agreement_number)
+          this.vehicle_registration = item[0].vehicle_registration
+          this.id_purchase_order = item[0].id_purchase_order
+          this.availableDate = {
+            to: new Date(item[0].contract_start_date)
+          }
+        }).catch(_error => {
+          console.log(_error)
+        })
     },
     hideModal(refname) {
       this.status = "default"

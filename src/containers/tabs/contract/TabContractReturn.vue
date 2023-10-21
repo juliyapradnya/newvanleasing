@@ -3,7 +3,7 @@
       <datatable-heading :title="$t('contract.all-return')" :changePageSize="changePageSize" :searchChange="searchChange"
         :from="from" :to="to" :total="total" :perPage="perPage" :separator="false" :noBreadcrumbs="true">
         <div class="top-right-button-container">
-          <b-button v-b-modal.modalright variant="primary" size="lg" class="top-right-button text-uppercase">{{ $t('contract.add-return') }}</b-button>
+          <b-button :disabled="noReturn" v-b-modal.modalright variant="primary" size="lg" class="top-right-button text-uppercase">{{ $t('contract.add-return') }}</b-button>
         </div>
         <add-return-contract @added-data-table="onAddedDataTable" :key="componentKey"/>
       </datatable-heading>
@@ -19,7 +19,7 @@
             </template> 
             <template slot="action" slot-scope="props">
               <div>
-                <b-button @click="openEditModal(props.rowData.id)" variant="light" class="mr-1" size="sm"><i class="simple-icon-pencil" /></b-button>
+                <b-button @click="openEditModal(props.rowData)" variant="light" class="mr-1" size="sm"><i class="simple-icon-pencil" /></b-button>
                 <b-button @click="getSelectedItem(props.rowData.id)" v-b-modal.modalDeletion variant="danger" size="sm">Delete <i class="simple-icon-trash" /></b-button>
               </div>
             </template>
@@ -32,9 +32,10 @@
     </b-row>
   </template>
   <script>
+  import axios from "axios";
+  import { apiUrl } from "../../../constants/config";
   import Vuetable from "vuetable-2/src/components/Vuetable";
   import VuetablePaginationBootstrap from "../../../components/Common/VuetablePaginationBootstrap";
-  import { apiUrl } from "../../../constants/config";
   import DatatableHeading from "../../datatable/DatatableHeading";
   import AddReturnContract from "../../pages/AddReturnContract";
   import EditReturnContract from "../../pages/EditReturnContract";
@@ -53,6 +54,7 @@
     data() {
       return {
         isLoad: false,
+        noReturn: false,
         apiBase: apiUrl + "/rehiringorder",
         sort: "",
         order: "",
@@ -68,6 +70,14 @@
         componentKey: 0,
         fields: [
           {
+            name: "vehicle_registration",
+            sortField: "vehicle_registration",
+            title: "Vehicle Registration",
+            titleClass: "center aligned",
+            dataClass: "align-middle text-muted",
+            width: "15%"
+          },
+          {
             name: "new_sales_order_no",
             sortField: "new_sales_order_no",
             title: "Sales Order Number",
@@ -81,14 +91,6 @@
             title: "Agreement Number",
             titleClass: "center aligned",
             dataClass: "align-middle text-muted text-uppercase",
-            width: "15%"
-          },
-          {
-            name: "vehicle_registration",
-            sortField: "vehicle_registration",
-            title: "Vehicle Registration",
-            titleClass: "center aligned",
-            dataClass: "align-middle text-muted",
             width: "15%"
           },
           {
@@ -116,6 +118,18 @@
       };
     },
     methods: {
+      fetchRehiring() {
+        let url = apiUrl + "/showagreementnumberinrehiring";
+        axios
+          .get(url)
+          .then(r => r.data)
+          .then(res =>  {
+            this.noReturn = false
+          }).catch(_error => {
+            this.noReturn = true
+            console.log("Can't add data!")
+          })
+      },
       makeQueryParams(sortOrder, currentPage, perPage) {
         this.isLoading = false;
         return sortOrder[0]
@@ -159,8 +173,8 @@
         this.perPage = perPage;
         this.$refs.vuetable.refresh();
       },
-      openEditModal(id) {
-        this.$refs.editForm.getReturnData(id);
+      openEditModal(obj) {
+        this.$refs.editForm.getReturnData(obj);
       },
       getSelectedItem(id) {
         this.selectedItem = id;
@@ -172,6 +186,9 @@
       updateTableRow() {
         this.$refs.vuetable.refresh();
       }
+    },
+    mounted() {
+      this.fetchRehiring()
     }
   };
   </script>

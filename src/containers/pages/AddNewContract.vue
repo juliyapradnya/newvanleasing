@@ -5,7 +5,7 @@
     :title="$t('contract.add-new')"
     modal-class="modal-right"
   >
-    <div v-if="isProcessing" class="bg-white pr-5 w-100 h-100 d-flex justify-content-center align-items-center position-absolute opacity-50 z-index-10">
+    <div v-if="isProcessing" class="bg-transparent pr-5 w-100 h-100 d-flex justify-content-center align-items-center position-absolute opacity-75 z-index-10">
       <b-spinner variant="black" label="Spinning" class="text-center"></b-spinner>
     </div>
    
@@ -79,6 +79,7 @@
         <datepicker
           :bootstrap-styling="true"
           v-model="$v.contractForm.startDate.$model"
+          :disabled-dates="availableDate"
         ></datepicker>
         <span>{{ $t('contract.start-date') }}</span>
         <div
@@ -231,7 +232,7 @@ export default {
         contractType: null,
         contractPeriod: "",
         startDate: null,
-        annualMileage: "",
+        annualMileage: 0,
         docFee: "",
         initialRental: "",
         monthlyRental: "",
@@ -288,7 +289,7 @@ export default {
           .then(r => r.data)
           .then(res =>  {
             let allowed = res.data.data.filter(function (el) {
-              return el.status_next_step == "Available"
+              return el.status_next_step === "Available"
             });
             this.dynamicDataOptions = allowed
           }).catch(_error => {
@@ -296,13 +297,6 @@ export default {
           }).finally(() => {
             loading(false);
           })
-
-        // fetch(
-        //   url
-        // ).then(res => {
-        //   res.json().then(json => (this.dynamicDataOptions = json.data.data));
-        //   loading(false);
-        // });
       }, 1000);
     },
     onAddContractSubmit() {
@@ -351,6 +345,15 @@ export default {
       setTimeout(() => {
         this.$emit('added-data-table')
       }, 2000)
+    }
+  },
+  computed: {
+    availableDate() {
+      return (this.contractForm.vehicleRegistration) ? {
+        to: new Date(this.contractForm.vehicleRegistration.tgl_available)
+      } : {
+        to: new Date()
+      }
     }
   }
 };

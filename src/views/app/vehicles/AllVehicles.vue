@@ -31,7 +31,7 @@
                      @click="showDelBox(props.rowData.id)"
                      v-b-modal.modalDeletion
                      variant="danger"
-                     size="sm">Delete <i class="simple-icon-trash" /></b-button>
+                     size="sm"><i class="simple-icon-trash mr-1" />  Delete</b-button>
                </div>
             </template>
          </vuetable>
@@ -107,6 +107,7 @@ export default {
             },
             {
                name: "__slot:status",
+               sortField: "status_next_step",
                title: "Status",
                titleClass: "center aligned text-center",
                dataClass: "text-center",
@@ -123,6 +124,7 @@ export default {
          sortOrder: [
             {
                field: 'updated_at',
+               sortField: "updated_at",
                direction: 'desc'
             }
          ]
@@ -137,7 +139,7 @@ export default {
                   ? sortOrder[0].direction
                   : "",
                sort: sortOrder[0]
-                  ? sortOrder[0].field
+                  ? sortOrder[0].sortField
                   : "",
                page: currentPage,
                per_page: this.perPage,
@@ -147,7 +149,7 @@ export default {
                page: currentPage,
                per_page: this.perPage,
                order: this.sortOrder[0].direction,
-               sort: this.sortOrder[0].field,
+               sort: this.sortOrder[0].sortField,
                search: this.search
             };
       },

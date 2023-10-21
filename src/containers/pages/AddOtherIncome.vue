@@ -5,7 +5,7 @@
     :title="$t('additional.add-income')"
     modal-class="modal-right"
   >
-    <div v-if="isProcessing" class="bg-white pr-5 w-100 h-100 d-flex justify-content-center align-items-center position-absolute opacity-50 z-index-10">
+    <div v-if="isProcessing" class="bg-transparent pr-5 w-100 h-100 d-flex justify-content-center align-items-center position-absolute opacity-75 z-index-10">
       <b-spinner variant="black" label="Spinning" class="text-center"></b-spinner>
     </div>
    
@@ -219,10 +219,10 @@ export default {
         .post(url, this.addtionalIncomes, config)
         .then(r => r.data)
         .then(res => {
-          this.isProcessing = false;
-          this.status = "success";
-          this.message = "Your data was saved!";
           setTimeout(() => {
+            this.isProcessing = false;
+            this.message = "Your data was saved!";
+            this.status = "success";
             this.hideModal('modalotherincome');
           }, 1500)
         }).catch(_error => {
