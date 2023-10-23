@@ -8,20 +8,15 @@
                 <p class="text-small text-white">{{ detail }}</p>
             </div>
         </div>
-        <div v-show="percent" class="progress-bar-circle progress-bar-banner position-relative">
-            <radial-progress-bar :diameter="diameter" :strokeWidth="strokeWidth" :completed-steps="percent" :total-steps=100>{{progressText}}</radial-progress-bar>
-        </div>
+        <!-- <div v-show="percent" :class="`text-${intent}`" class="progress-bar-circle progress-bar-banner position-relative">
+            {{progressText}}
+        </div> -->
     </b-card-body>
 </b-card>
 </template>
-
 <script>
-import RadialProgressBar from 'vue-radial-progress'
 export default {
-    components: {
-        'radial-progress-bar': RadialProgressBar
-    },
-    props: ['icon', 'title', 'detail', 'percent', 'progressText', 'prefix', 'suffix'],
+    props: ['icon', 'title', 'detail', 'percent', 'intent', 'progressText', 'prefix', 'suffix'],
     data() {
         return {
             diameterDefault: 125,

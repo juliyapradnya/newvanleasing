@@ -28,7 +28,7 @@
       <span class="text-muted text-small font-weight-light mr-1">{{ $t("performance.start-date") }}
       </span>{{ report.contract_start_date | datetime }}
     </p>
-    <p class="font-weight-semibold mb-3">
+    <p v-show="report.vehicle_return_date !== null" class="font-weight-semibold mb-3">
       <span class="text-muted text-small font-weight-light mr-1">{{ $t("performance.end-date") }}
       </span>{{ report.vehicle_return_date | datetime }}
     </p>

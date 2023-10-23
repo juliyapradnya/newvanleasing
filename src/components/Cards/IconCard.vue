@@ -1,12 +1,10 @@
 <template>
-  <div class="icon-row-item">
-    <b-card class="mb-4 text-center">
-      <i :class="icon"/>
-      <p class="card-text mb-2">{{ title }}</p>
-      <p v-show="isComa" class="lead text-center">£ {{ count | addComa }}</p>
-      <p v-show="!isComa" class="lead text-center">£ {{ count }}</p>
-    </b-card>
-  </div>
+  <b-card class="mb-4 text-center">
+    <i :class="icon"/>
+    <p class="card-text mb-2">{{ title }}</p>
+    <p v-show="isComa" class="lead text-center">£ {{ count | addComa }}</p>
+    <p v-show="!isComa" class="lead text-center">£ {{ count }}</p>
+  </b-card>
 </template>
 <script>
 export default {

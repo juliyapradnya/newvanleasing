@@ -116,7 +116,12 @@
           .get(url)
           .then(r => r.data)
           .then(res =>  {
-            this.noDefleet = false
+            let defleet = res.data.filter(x => (x.status_next_step !== 'Hired'))
+            if(defleet.length > 1) {
+              this.noDefleet = false
+            } else {
+              this.noDefleet = true
+            }
           }).catch(_error => {
             this.noDefleet = true
             console.log("Can't add data!")

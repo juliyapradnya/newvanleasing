@@ -1,7 +1,6 @@
 <template>
   <div>
     <b-row>
-      {{ rentalIncome }}
       <b-colxx xxs="12">
         <piaf-breadcrumb :heading="$t('performance.header')" />
         <div class="d-flex justify-content-stretch align-items-center top-right-button-container">
@@ -25,18 +24,47 @@
       <b-colxx sm="12" lg="4" class="mb-4">
         <gradient-with-radial-progress-card
           icon="iconsminds-inbox-out"
-          :title="`${ totalHiredVehicle } ${$t('performance.vehicle-hired')}`"
+          :title="`${totalHiredVehicle}`"
           :detail="$t('performance.last-30days')"
-          :percent="`${ totalHiredVehicle }`*100/`${ cars.length }`"
-          :progressText="`${ totalHiredVehicle }/${ cars.length }`"
+          :suffix="`${$t('performance.vehicle-hired')}`"
+          :percent="`${totalHiredVehicle}`*100/`${cars.length}`"
+          :progressText="`${totalHiredVehicle}/${cars.length}`"
         />
       </b-colxx>
-      <b-colxx sm="12" lg="4" class="mb-3">
+      <b-colxx sm="12" lg="2" class="mb-3">
+        <gradient-with-growth-progress-card
+          icon="iconsminds-financial"
+          :title="`${theIncome}`"
+          :intent="theIntent"
+          :prefix="'£'"
+          :detail="$t('performance.total-income')"
+          :progressText="`target`"
+        />
+      </b-colxx>
+      <b-colxx sm="12" lg="2" class="mb-3">
         <gradient-with-radial-progress-card
           icon="iconsminds-basket-coins"
-          :title="`£ 24.000`"
-          :detail="$t('performance.card-2')"
-          :percent="4*100/10"
+          :title="`${rentalIncome}`"
+          :prefix="'£'"
+          :detail="$t('performance.monthly-rental-income')"
+          :progressText="`target`"
+        />
+      </b-colxx>
+      <b-colxx sm="12" lg="2" class="mb-3">
+        <gradient-with-radial-progress-card
+          icon="iconsminds-road-2"
+          :title="`${totalMileage}`"
+          :suffix="'miles'"
+          :detail="$t('performance.total-mileage')"
+          :progressText="`target`"
+        />
+      </b-colxx>
+      <b-colxx sm="12" lg="2" class="mb-3">
+        <gradient-with-radial-progress-card
+          icon="iconsminds-billing"
+          :title="`${totalCost}`"
+          :prefix="'£'"
+          :detail="$t('performance.total-cost')"
           :progressText="`target`"
         />
       </b-colxx>
@@ -71,6 +99,7 @@ import { apiUrl } from "../../../constants/config";
 import Vuetable from "vuetable-2/src/components/Vuetable";
 import VuetablePaginationBootstrap from "../../../components/Common/VuetablePaginationBootstrap";
 import GradientWithRadialProgressCard from "../../../components/Cards/GradientWithRadialProgressCard";
+import GradientWithGrowthProgressCard from "../../../components/Cards/GradientWithGrowthProgressCard";
 import SoldVehicleChartCard from "../../../containers/dashboards/SoldVehicleChartCard";
 import HiredVehicleChartCard from "../../../containers/dashboards/HiredVehicleChartCard";
 import Datepicker from "vuejs-datepicker";
@@ -80,12 +109,14 @@ export default {
     vuetable: Vuetable,
     "vuetable-pagination-bootstrap": VuetablePaginationBootstrap,
     "gradient-with-radial-progress-card": GradientWithRadialProgressCard,
+    "gradient-with-growth-progress-card": GradientWithGrowthProgressCard,
     "sold-vehicle-chart-card": SoldVehicleChartCard,
     "hired-vehicle-chart-card": HiredVehicleChartCard,
     "datepicker": Datepicker
   },
   data() {
     return {
+      initial: [],
       cars: [],
       items: [],
       apiBase: apiUrl + "/showvehiclenumberexceptsold",
@@ -156,7 +187,23 @@ export default {
     formatDate(date) {
       return new Date(date).toISOString().substr(0, 10)
     },
-    fetchCars() {
+    getSum(total, num) {
+      return total + Math.round(num);
+    },
+    fetchInitial() {
+      let date1 = this.formatDate(this.pastDate),
+      date2 = this.formatDate(this.endDate),
+      url = apiUrl + `/showdashboard/${date1},${date2}`;
+      axios
+        .get(url)
+        .then(r => r.data)
+        .then(res =>  {
+          this.initial = res.data
+        }).catch(_error => {
+          console.log(_error)
+        })
+    },
+    async fetchCars() {
       let url = apiUrl + "/purchaseorderall";
       axios
         .get(url)
@@ -244,13 +291,13 @@ export default {
       return this.items.filter(x => x.status_next_step == 'Hired').length
     },
     pastDate: {
-        get (val) {
-          let past = new Date();
-          return past.setDate(past.getDate() - 30)
-        },
-        set (val) {
-          this.startDate = val            
-        }
+      get (val) {
+        let past = new Date();
+        return past.setDate(past.getDate() - 30)
+      },
+      set (val) {
+        this.startDate = val            
+      }
     },
     availableDate() {
       let dates = {
@@ -258,10 +305,36 @@ export default {
       }
       return dates
     },
-   rentalIncome() {
-    let total = this.items.map(x => x.monthly_payment)
-    return total
-   }
+    rentalIncome() {
+      let income = this.items.map(x => x.monthly_payment)
+      return income.reduce(this.getSum, 0)
+    },
+    totalIncome() {
+      let total = this.items.map(x => x.total_income)
+      return total.reduce(this.getSum, 0)
+    },
+    otherIncome() {
+      let other = this.items.map(x => x.other_income)
+      return other.reduce(this.getSum, 0)
+    },
+    theIncome() {
+      return this.totalIncome + this.otherIncome
+    },
+    initialIncome() {
+      let old = this.initial.map(x => x.total_income)
+      return old.reduce(this.getSum, 0)
+    },
+    theIntent() {
+      return (this.initialIncome > this.theIncome) ? "danger" : "success"
+    },
+    totalMileage() {
+      let mileage = this.items.map(x => x.annual_mileage)
+      return mileage.reduce(this.getSum, 0)
+    },
+    totalCost() {
+      let total = this.items.map(x => x.total_cost)
+      return total.reduce(this.getSum, 0)
+    }
   },
   watch: {
     startDate(newId, oldId) {
@@ -276,6 +349,7 @@ export default {
     }
   },
   mounted() {
+    this.fetchInitial()
     this.fetchCars()
     this.fetchData()
   }
