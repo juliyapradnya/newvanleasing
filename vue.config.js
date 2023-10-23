@@ -5,8 +5,8 @@ module.exports = {
   pages: {
     index: {
       entry: 'src/index.js',
-      // template: 'public/index.html',
-      template: 'index.html',
+      template: 'public/index.html',
+      //template: 'index.html',
       filename: 'index.html'
     }
   },
