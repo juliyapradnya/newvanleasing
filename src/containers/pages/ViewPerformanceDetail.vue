@@ -13,7 +13,7 @@
       <li class="nav-item">
         <p class="d-inline-block list-heading text-uppercase mb-0">{{ report.cust_name }}</p>
         <span class="d-flex align-items-center text-muted text-small font-weight-light float-right">{{ $t("pages.status") }}
-          <b-badge v-if="report.next_step_status_sales == 'Available'" pill variant="success"
+          <b-badge v-if="report.next_step_status_sales == 'Hired'" pill variant="primary"
             class="font-weight-normal ml-2">{{ report.next_step_status_sales }}</b-badge>
           <b-badge v-else pill variant="light"
             class="font-weight-normal ml-2">{{ report.next_step_status_sales }}</b-badge>

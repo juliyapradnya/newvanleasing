@@ -83,13 +83,13 @@
               </b-form-group>
             </b-colxx>
           </b-form-row>
-          <b-form-group :label="$t('vehicle.service-maintenance')" class="has-top-label">
+          <b-form-group :label="$t('vehicle.service-intervals')" class="has-top-label">
             <b-form-input
               type="text"
               v-model.trim="$v.vehicleForm.serviceMaintenance.$model"
               :state="!$v.vehicleForm.serviceMaintenance.$error"
             />
-            <b-form-invalid-feedback v-if="!$v.vehicleForm.serviceMaintenance.required">This field is required!</b-form-invalid-feedback>
+            <b-form-invalid-feedback v-if="!$v.vehicleForm.serviceMaintenance.numeric">Must be number value</b-form-invalid-feedback>
           </b-form-group>
           <p class="mb-3">{{ $t('vehicle.due-date') }}</p>
           <div class="form-group has-top-label">
@@ -354,7 +354,7 @@ export default {
       otrPrice: { required },
       minContract10k: { required },
       minContract18k: { required },
-      serviceMaintenance: { },
+      serviceMaintenance: { numeric },
       rflDate: {},
       motDate: {},
       serviceMiles: { numeric },

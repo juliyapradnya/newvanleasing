@@ -21,7 +21,7 @@
           {{ $t('pages.display-options') }}
           <i class="simple-icon-arrow-down align-middle" />
         </b-button>
-        <b-collapse id="displayOptions" class="d-md-block">
+        <b-collapse id="displayOptions" class="d-md-flex justify-content-between">
           <span class="mr-3 d-inline-block float-md-left">
             <a
               :class="{'mr-2 view-icon':true,'active': displayMode==='list'}"

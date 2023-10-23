@@ -9,25 +9,24 @@
       :reactive-api-url="true"
       :per-page="20"
       data-path="data"
-      pagination-path
     >
       <template slot="customer" slot-scope="props">
-        <span @click.prevent="showPerformanceModal(props.rowData)" class="theader cursor-pointer">{{ props.rowData.cust_name }}</span>
+        <span v-show="props.rowData.cust_name" @click.prevent="showPerformanceModal(props.rowData)" class="theader cursor-pointer">{{ props.rowData.cust_name }}</span>
       </template>
       <template slot="status" slot-scope="props">
-        <b-badge :variant="(props.rowData.next_step_status_sales === 'Hired') ? 'primary' : 'light'">{{ props.rowData.next_step_status_sales }}</b-badge>
+        <b-badge v-show="props.rowData.next_step_status_sales" :variant="(props.rowData.next_step_status_sales === 'Hired') ? 'primary' : 'light'">{{ props.rowData.next_step_status_sales }}</b-badge>
       </template>
       <template slot="income" slot-scope="props">
-        <span>£ {{ props.rowData.total_income | withcoma }}</span>
+        <span v-show="props.rowData.total_income">£ {{ props.rowData.total_income | withcoma }}</span>
       </template>
       <template slot="term" slot-scope="props">
-        <span>{{ props.rowData.term_months }} months</span>
+        <span v-show="props.rowData.term_months">{{ props.rowData.term_months }} months</span>
       </template>
       <template slot="mileage" slot-scope="props">
-        <span>{{ props.rowData.annual_mileage }} miles</span>
+        <span v-show="props.rowData.annual_mileage">{{ props.rowData.annual_mileage }} miles</span>
       </template>
       <template slot="date" slot-scope="props">
-        <span>{{ props.rowData.contract_start_date | datetime }}</span>
+        <span v-show="props.rowData.contract_start_date">{{ props.rowData.contract_start_date | datetime }}</span>
       </template>
     </vuetable>
     <view-performance-details ref="performanceDetail"/>

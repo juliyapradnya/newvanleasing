@@ -6,6 +6,8 @@
         <span class="d-flex align-items-center text-muted text-small font-weight-light float-right">{{ $t("pages.status") }}
           <b-badge v-if="vehicle.status_next_step == 'Available'" pill variant="success"
             class="font-weight-normal ml-2">{{ vehicle.status_next_step }}</b-badge>
+          <b-badge v-else-if="vehicle.status_next_step == 'Hired'" pill variant="primary"
+            class="font-weight-normal ml-2">{{ vehicle.status_next_step }}</b-badge>
           <b-badge v-else pill variant="light"
             class="font-weight-normal ml-2">{{ vehicle.status_next_step }}</b-badge>
         </span>

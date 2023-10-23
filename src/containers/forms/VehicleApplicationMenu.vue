@@ -2,15 +2,17 @@
    <application-menu>
       <vue-perfect-scrollbar :settings="{ suppressScrollX: true, wheelPropagation: false }">
          <div class="p-4">
-            <p class="text-muted text-small mb-3">{{ $t('pages.status') }}</p>
-            <ul class="list-unstyled mb-4">
+            <!-- <p class="text-muted text-small mb-3">{{ $t('pages.status') }}</p> -->
+            <ul class="list-unstyled my-4">
                <li class="nav-item">
-                  <i :class="items.sum_docdepoth > 0 ? 'simple-icon-check text-success' : 'iconsminds-remove text-primary'" />
+                  <i :class="items.status_next_step == 'Available' ? 'simple-icon-check text-success center aligned' : 'iconsminds-remove text-muted center aligned'" />
                   <span class="d-inline-block">{{ $t('pages.availability') }}</span>
-                  <span class="float-right">{{ items.sum_docdepoth > 0 ? 'Available' : 'Hired' }}</span>
+                  <span class="float-right">{{ items.status_next_step }}</span>
                </li>
             </ul>
-            <!-- <p class="text-muted text-small mb-1">{{ $t('pages.overview') }}</p> -->
+            <b-button :to="{ path: `/app/performance/${items.id}` }" block
+               variant="success"
+               size="sm"><i class="iconsminds-bar-chart-4 mr-2" />View Full Report</b-button>
          </div>
       </vue-perfect-scrollbar>
    </application-menu>

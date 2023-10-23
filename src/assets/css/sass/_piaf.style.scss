@@ -393,7 +393,7 @@ hr {
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 2px;
-  max-width: 200px;
+  // max-width: 200px;
 }
 
 .truncate {
@@ -1990,7 +1990,7 @@ button {
         font-size: 17px;
         width: 30px;
         height: 30px;
-        bottom: -3px;
+        bottom: -5px;
         right: 0;
         color: inherit;
       }
@@ -2631,7 +2631,8 @@ body.default-transition .sidebar .main-menu {
         font-size: 1.2em;
         margin-right: 10px;
         color: $secondary-color;
-        vertical-align: unset;
+        // vertical-align: unset;
+        vertical-align: middle;
 
         @include respond-below(sm) {
           font-size: 20px;

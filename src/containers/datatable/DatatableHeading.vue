@@ -12,13 +12,13 @@
         {{ $t('pages.display-options') }}
         <i class="simple-icon-arrow-down align-middle" />
       </b-button>
-      <b-collapse id="displayOptions" class="d-md-block">
-        <div class="d-block d-md-inline-block pt-1">
+      <b-collapse id="displayOptions" class="d-md-flex justify-content-between">
+        <div class="d-inline-block pt-1">
           <div class="search-sm d-inline-block float-md-left mr-1 align-top">
             <b-input :placeholder="$t('menu.search')"  @input="(val) => searchChange(val)" />
           </div>
         </div>
-        <div class="float-md-right pt-1">
+        <div class="float-right pt-1">
           <span class="text-muted text-small mr-1 mb-2">{{from}}-{{to}} of {{ total }}</span>
           <b-dropdown
             id="ddown2"

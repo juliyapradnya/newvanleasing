@@ -1,8 +1,23 @@
 <template>
   <div>
     <b-row>
+      {{ rentalIncome }}
       <b-colxx xxs="12">
         <piaf-breadcrumb :heading="$t('performance.header')" />
+        <div class="d-flex justify-content-stretch align-items-center top-right-button-container">
+          <i class="h5 simple-icon-calendar mb-0 mr-2" />
+          <datepicker
+            :bootstrap-styling="true"
+            class="mr-2"
+            v-model="pastDate"
+          ></datepicker>
+          <datepicker
+            :bootstrap-styling="true"
+            :disabled-dates="availableDate"
+            calendar-class="r-0"
+            v-model="endDate"
+          ></datepicker>
+        </div>
         <div class="separator mb-5"></div>
       </b-colxx>
     </b-row>
@@ -12,8 +27,8 @@
           icon="iconsminds-inbox-out"
           :title="`${ totalHiredVehicle } ${$t('performance.vehicle-hired')}`"
           :detail="$t('performance.last-30days')"
-          :percent="`${ totalHiredVehicle }`*100/12"
-          :progressText="`${ totalHiredVehicle }/${ items.length }`"
+          :percent="`${ totalHiredVehicle }`*100/`${ cars.length }`"
+          :progressText="`${ totalHiredVehicle }/${ cars.length }`"
         />
       </b-colxx>
       <b-colxx sm="12" lg="4" class="mb-3">
@@ -58,6 +73,7 @@ import VuetablePaginationBootstrap from "../../../components/Common/VuetablePagi
 import GradientWithRadialProgressCard from "../../../components/Cards/GradientWithRadialProgressCard";
 import SoldVehicleChartCard from "../../../containers/dashboards/SoldVehicleChartCard";
 import HiredVehicleChartCard from "../../../containers/dashboards/HiredVehicleChartCard";
+import Datepicker from "vuejs-datepicker";
 
 export default {
   components: {
@@ -65,10 +81,12 @@ export default {
     "vuetable-pagination-bootstrap": VuetablePaginationBootstrap,
     "gradient-with-radial-progress-card": GradientWithRadialProgressCard,
     "sold-vehicle-chart-card": SoldVehicleChartCard,
-    "hired-vehicle-chart-card": HiredVehicleChartCard
+    "hired-vehicle-chart-card": HiredVehicleChartCard,
+    "datepicker": Datepicker
   },
   data() {
     return {
+      cars: [],
       items: [],
       apiBase: apiUrl + "/showvehiclenumberexceptsold",
       sort: "",
@@ -83,6 +101,8 @@ export default {
       returnCount: 0,
       selectedItem: "",
       componentKey: 0,
+      startDate: null,
+      endDate: new Date,
       fields: [
         {
           name: "vehicle_registration",
@@ -133,14 +153,55 @@ export default {
     }
   },
   methods: {
-    fetchData() {
-      let url = apiUrl + "/showvehiclenumberexceptsold?per_page=99"
+    formatDate(date) {
+      return new Date(date).toISOString().substr(0, 10)
+    },
+    fetchCars() {
+      let url = apiUrl + "/purchaseorderall";
       axios
         .get(url)
         .then(r => r.data)
         .then(res =>  {
-          // console.log(res.data.data)
-          this.items = res.data.data
+          this.cars = res.data.data
+        }).catch(_error => {
+          console.log(_error)
+        })
+    },
+    async fetchData() {
+      let date1 = this.formatDate(this.pastDate),
+      date2 = this.formatDate(this.endDate),
+      url = apiUrl + `/showdashboard/${date1},${date2}`;
+      axios
+        .get(url)
+        .then(r => r.data)
+        .then(res =>  {
+          this.items = res.data
+        }).catch(_error => {
+          console.log(_error)
+        })
+    },
+    async onStartChange(date1) {
+      let newDate1 = this.formatDate(date1),
+      date2 = this.formatDate(this.endDate),
+      url = apiUrl + `/showdashboard/${newDate1},${date2}`;
+      axios
+        .get(url)
+        .then(r => r.data)
+        .then(res =>  {
+          this.items = res.data
+        }).catch(_error => {
+          console.log(_error)
+        })
+    },
+    async onEndChange(date2) {
+      let date1 = this.formatDate(this.pastDate),
+      newDate2 = this.formatDate(date2),
+      url = apiUrl + `/showdashboard/${date1},${newDate2}`;
+      axios
+        .get(url)
+        .then(r => r.data)
+        .then(res =>  {
+          this.items = res.data
         }).catch(_error => {
           console.log(_error)
         })
@@ -181,9 +242,41 @@ export default {
   computed: {
     totalHiredVehicle() {
       return this.items.filter(x => x.status_next_step == 'Hired').length
+    },
+    pastDate: {
+        get (val) {
+          let past = new Date();
+          return past.setDate(past.getDate() - 30)
+        },
+        set (val) {
+          this.startDate = val            
+        }
+    },
+    availableDate() {
+      let dates = {
+        to: new Date(this.startDate)
+      }
+      return dates
+    },
+   rentalIncome() {
+    let total = this.items.map(x => x.monthly_payment)
+    return total
+   }
+  },
+  watch: {
+    startDate(newId, oldId) {
+      if(newId) {
+        this.onStartChange(newId)
+      }
+    },
+    endDate(newId, oldId) {
+      if(newId) {
+        this.onEndChange(newId)
+      }
     }
   },
   mounted() {
+    this.fetchCars()
     this.fetchData()
   }
 }
