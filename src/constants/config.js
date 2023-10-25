@@ -35,13 +35,13 @@ export const firebaseConfig = {
 //   role: UserRole.Admin
 // }
 
-export const currentUser = {
-  id: '2',
-  username: 'username',
-  img: '/assets/img/profiles/l-1.jpg',
-  date: 'Last seen today 15:24',
-  role: UserRole.Admin
-}
+// export const currentUser = {
+//   id: '2',
+//   username: 'username',
+//   img: '/assets/img/profiles/l-1.jpg',
+//   date: 'Last seen today 15:24',
+//   role: UserRole.Admin
+// }
 
 export const isAuthGuardActive = true;
 export const themeRadiusStorageKey = 'theme_radius'

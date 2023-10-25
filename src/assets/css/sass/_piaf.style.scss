@@ -2870,6 +2870,10 @@ body.default-transition .sidebar .main-menu {
   margin-right: 5px;
   line-height: inherit;
   vertical-align: middle;
+
+  &.baseline {
+    vertical-align: baseline;
+  }
 }
 
 .todo-details {
@@ -4841,6 +4845,14 @@ input:-webkit-autofill {
     @include respond-below(lg) {
       font-size: 2rem;
       margin-bottom: 0.2rem;
+    }
+
+    &.icon-no-change {
+      font-size: 1.5rem;
+      &::before {
+        margin-left: 0;
+        margin-right: 0;
+      }
     }
   }
 

@@ -165,7 +165,8 @@
           <template slot="button-content">
             <span class="name mr-1">{{currentUser.username}}</span>
             <span>
-              <img :alt="currentUser.title" :src="currentUser.img" />
+              <img v-if="currentUser.img" :alt="currentUser.title" :src="currentUser.img" />
+              <img v-else alt="Profile picture" src="/assets/img/profiles/no-picture.jpg" />
             </span>
           </template>
           <b-dropdown-item>Account</b-dropdown-item>
