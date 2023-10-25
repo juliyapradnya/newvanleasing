@@ -117,15 +117,15 @@ export default {
         "Fixed"
       ],
       money: {
-        decimal: ',',
-        thousands: '.',
+        decimal: '.',
+        thousands: ',',
         prefix: '£ ',
         precision: 2,
         masked: false
       },
       percent: {
-        decimal: ',',
-        thousands: '.',
+        decimal: '.',
+        thousands: ',',
         suffix: ' %',
         precision: 2,
         masked: false

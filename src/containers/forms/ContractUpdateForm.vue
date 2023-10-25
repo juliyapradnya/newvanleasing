@@ -75,6 +75,7 @@
             <datepicker
               :bootstrap-styling="true"
               v-model="$v.contractForm.startDate.$model"
+              :disabled-dates="availableDate"
             ></datepicker>
             <span>{{ $t('contract.start-date') }}</span>
             <div
@@ -85,11 +86,12 @@
             <b-colxx sm="6">
               <b-form-group :label="$t('contract.mileage')">
                 <b-input-group>
-                  <b-form-input
+                  <money v-model="$v.contractForm.annualMileage.$model" v-bind="miles" class="form-control" :state="!$v.contractForm.annualMileage.$error"></money>
+                  <!-- <b-form-input
                     type="text"
                     v-model.trim="$v.contractForm.annualMileage.$model"
                     :state="!$v.contractForm.annualMileage.$error"
-                  />
+                  /> -->
                 </b-input-group>
                 <div v-if="!$v.contractForm.annualMileage.required"
                   :class="{ 'invalid-feedback': true, 'd-block': $v.contractForm.annualMileage.$error && !$v.contractForm.annualMileage.required }"
@@ -111,7 +113,7 @@
             </b-colxx>
           </b-form-row>
           <b-form-row>
-            <b-colxx sm="6">
+            <b-colxx sm="4">
               <b-form-group :label="$t('contract.initial-rental')">
                 <b-input-group>
                   <money v-model="$v.contractForm.initialRental.$model" v-bind="money" class="form-control" :state="!$v.contractForm.initialRental.$error"></money>
@@ -121,7 +123,7 @@
                 >This field is required!</div>
               </b-form-group>
             </b-colxx>
-            <b-colxx sm="6">
+            <b-colxx sm="4">
               <b-form-group :label="$t('contract.monthly-rental')">
                 <b-input-group>
                   <money v-model="$v.contractForm.monthlyRental.$model" v-bind="money" class="form-control" :state="!$v.contractForm.monthlyRental.$error"></money>
@@ -131,25 +133,13 @@
                 >This field is required!</div>
               </b-form-group>
             </b-colxx>
-          </b-form-row>
-          <b-form-row>
-            <b-colxx sm="6">
+            <b-colxx sm="4">
               <b-form-group :label="$t('contract.delivery-charge')">
                 <b-input-group>
                   <money v-model="$v.contractForm.otherIncome.$model" v-bind="money" class="form-control" :state="!$v.contractForm.otherIncome.$error"></money>
                 </b-input-group>
                 <div v-if="!$v.contractForm.otherIncome.required"
                   :class="{ 'invalid-feedback': true, 'd-block': $v.contractForm.otherIncome.$error && !$v.contractForm.otherIncome.required }"
-                >This field is required!</div>
-              </b-form-group>
-            </b-colxx>
-            <b-colxx sm="6">
-              <b-form-group :label="$t('contract.residual-value')">
-                <b-input-group>
-                  <money v-model="$v.contractForm.residualValue.$model" v-bind="money" class="form-control"  :state="!$v.contractForm.residualValue.$error"></money>
-                </b-input-group>
-                <div v-if="!$v.contractForm.residualValue.required"
-                  :class="{ 'invalid-feedback': true, 'd-block': $v.contractForm.residualValue.$error && !$v.contractForm.residualValue.required }"
                 >This field is required!</div>
               </b-form-group>
             </b-colxx>
@@ -185,7 +175,7 @@ export default {
     "datepicker": Datepicker,
     "money": Money
   },
-  props: ["items"],
+  props: ["items", "minDate"],
   data() {
     return {
       direction: getDirection().direction,
@@ -201,23 +191,29 @@ export default {
         docFee: this.items.documentation_fees,
         initialRental: this.items.initial_rental,
         monthlyRental: this.items.monthly_rental,
-        otherIncome: this.items.other_income,
-        residualValue: this.items.residual_value
+        otherIncome: this.items.other_income
       },
       selectData: [
         "Contract Hire (Unregulated)",
         "Hire (Unregulated)"
       ],
       money: {
-        decimal: ',',
-        thousands: '.',
+        decimal: '.',
+        thousands: ',',
         prefix: '£ ',
         precision: 2,
         masked: false
       },
+      miles: {
+        decimal: '.',
+        thousands: ',',
+        suffix: ' km',
+        precision: 0,
+        masked: false
+      },
       percent: {
-        decimal: ',',
-        thousands: '.',
+        decimal: '.',
+        thousands: ',',
         suffix: ' %',
         precision: 2,
         masked: false
@@ -241,13 +237,15 @@ export default {
       docFee: { required },
       initialRental: { required },
       monthlyRental: { required },
-      otherIncome: { required },
-      residualValue: { required }
+      otherIncome: { required }
     }
   },
   methods: {
     formatDate(date) {
       return new Date(date).toISOString().substr(0, 10)
+    },
+    addNotification(type, title, message) {
+      this.$notify(type, title, message, { duration: 2000, permanent: false });
     },
     fetchOptions(search, loading) {
       let url = apiUrl + "/purchaseorderall?search=" + encodeURI(search);
@@ -282,8 +280,7 @@ export default {
         documentation_fees: this.contractForm.docFee,
         initial_rental: this.contractForm.initialRental,
         monthly_rental: this.contractForm.monthlyRental,
-        other_income: this.contractForm.otherIncome,
-        residual_value: this.contractForm.residualValue
+        other_income: this.contractForm.otherIncome
       }
       // console.log(newContract)
       let url = apiUrl + "/salesorder/" + this.items.id;
@@ -297,6 +294,8 @@ export default {
               this.$emit('update-contract', 'success');
             }, 1500)
           }).catch(_error => {
+            let message = "The agreement number has already been taken, please use different number";
+            // this.addNotification("error filled", "Oppss!", message);
             console.log(_error)
           })
       } else {
@@ -312,6 +311,13 @@ export default {
         return this.contractForm.vehicleRegistration.vehicle_registration
       } else {
         return this.items.vehicle_registration
+      }
+    },
+    availableDate() {
+      return (this.minDate !== null) ? {
+        to: new Date(this.minDate )
+      } : {
+        to: new Date()
       }
     }
   }

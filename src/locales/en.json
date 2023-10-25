@@ -278,7 +278,7 @@
     "service-intervals": "Service Intervals",
     "service-schedule": "Service Schedule",
     "service-due": "Service Due",
-    "service-miles": "in Miles",
+    "service-miles": "in Kilometers",
     "service-years": "in Years",
     "service-last": "Last Service",
     "service-mileage": "Mileage",
@@ -296,7 +296,8 @@
     "documentation-fee": "Documentation Fee",
     "final-fee": "Final Fee",
     "other-fee": "Other Fee",
-    "summary": "Summary"
+    "summary": "Summary",
+    "residual-value": "Residual Value Projection"
   },
   "contract": {
     "add-new": "New Contract",
@@ -324,12 +325,11 @@
     "start-date": "Start Date",
     "return-date": "Return Date",
     "sold-date": "Sold Date",
-    "mileage": "Delivery Mileage",
+    "mileage": "Annual Mileage",
     "doc-fee": "Documentation Fee",
     "initial-rental": "initial Rental (excl VAT)",
     "monthly-rental": "Monthly Rental (excl VAT)",
     "delivery-charge": "Delivery Charge (excl VAT)",
-    "residual-value": "Residual Value Projection",
     "assign-to": "Assigned to",
     "sold-price": "Sold Price"
   },
@@ -384,7 +384,10 @@
     "start-date": "Start Date",
     "end-date": "End Date",
     "term-period": "Term Period ",
-    "annual-mileage": "Annual Mileage"
+    "annual-mileage": "Annual Mileage",
+    "annum-payment": "Annum Payment",
+    "loan-outstanding": "Loan Outstanding",
+    "potential-income": "Potential Income"
 
   },
   "chat": {

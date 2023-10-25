@@ -135,8 +135,8 @@ export default {
       },
       editId: "",
       money: {
-        decimal: ',',
-        thousands: '.',
+        decimal: '.',
+        thousands: ',',
         prefix: '£ ',
         precision: 2,
         masked: false

@@ -38,7 +38,7 @@
     </p>
     <p class="font-weight-semibold mb-3">
       <span class="text-muted text-small font-weight-light mr-1">{{ $t("performance.annual-mileage") }}
-      </span>{{ report.annual_mileage | withcoma }} miles
+      </span>{{ report.annual_mileage | withcoma }} km
     </p>
     <p class="font-weight-semibold mb-3">
       <span class="text-muted text-small font-weight-light mr-1">{{ $t("performance.monthly-rental-income") }}

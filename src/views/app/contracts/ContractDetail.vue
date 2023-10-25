@@ -27,8 +27,8 @@
         </div>
       </page-header>
     </b-row>
-    <contract-update-form :items="items" ref="updateForm" @update-contract="vehicleContract"></contract-update-form>
-    <contract-application-menu v-if="isLoading" :items="items" :key="componentKey" />
+    <contract-update-form :items="items" :minDate="vehicle.tgl_available" ref="updateForm" @update-contract="vehicleContract"></contract-update-form>
+    <contract-application-menu v-if="isLoading" :vehicle="vehicle" :key="componentKey" />
   </div>
   <div v-else class="loading" key="itemLoading"></div>
 </template>
@@ -53,17 +53,19 @@ export default {
       title: "",
       status: "",
       items: [],
+      vehicle: [],
       componentKey: 0
     }
   },
   methods: {
     fetchContract(id) {
-      var url = apiUrl + "/salesorder/" + id;
+      let url = apiUrl + "/salesorder/" + id;
       axios
         .get(url)
         .then(r => r.data)
         .then(res => {
           this.items = res.data[0];
+          this.getAvailableDate(this.items.id_purchase_order)
           // this.message = res.message;
         })
         .catch(err => {
@@ -72,6 +74,19 @@ export default {
         .finally(() => {
           this.isLoading = true;
         });
+    },
+    async getAvailableDate(id) {
+      let url = apiUrl + "/purchaseorder/" + id;
+      axios
+        .get(url)
+        .then(r => r.data)
+        .then(res => {
+          this.vehicle = res.data;
+          // this.message = res.message;
+        })
+        .catch(err => {
+          console.log(err.message)
+        })
     },
     addNotification(type, title, message) {
       this.$notify(type, title, message, { duration: 2000, permanent: false });
@@ -101,7 +116,7 @@ export default {
     }
   },
   mounted() {
-    this.fetchContract(this.$route.params.id);
+    this.fetchContract(this.$route.params.id)
   }
 }
 </script>

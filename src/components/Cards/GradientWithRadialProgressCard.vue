@@ -4,7 +4,8 @@
         <div>
             <i :class="`${icon} mr-2 text-white align-text-bottom d-inline-block`" />
             <div>
-                <p class="lead text-white">{{ prefix }} {{ title | withcoma }} {{ suffix }}</p>
+                <p v-if="title > 100000" class="lead text-white">{{ prefix }} {{ theNumber | withcoma }}K {{ suffix }}</p>
+                <p v-else class="lead text-white">{{ prefix }} {{ title | withcoma }} {{ suffix }}</p>
                 <p class="text-small text-white">{{ detail }}</p>
             </div>
         </div>
@@ -38,6 +39,11 @@ export default {
     mounted() {
         window.addEventListener('resize', this.handleWindowResize)
         this.handleWindowResize()
+    },
+    computed: {
+        theNumber() {
+            return Math.abs(this.title / 1000).toFixed(1)
+        }
     },
     methods: {
         handleWindowResize(event) {

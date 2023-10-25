@@ -148,11 +148,11 @@ export default {
       amount_oi: "",
       payment_profile: "",
       money: {
-        decimal: ',',
-        thousands: '.',
+        decimal: '.',
+        thousands: ',',
         prefix: '£ ',
         precision: 2,
-        masked: false /* doesn't work with directive */
+        masked: false
       }
     };
   },

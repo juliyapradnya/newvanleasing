@@ -81,8 +81,8 @@
         data() {
             return {
                 form: {
-                    email: "test@coloredstrategies.com",
-                    username: "superadmin",
+                    // email: "test@coloredstrategies.com",
+                    username: "",
                     password: "11111111"
                 },
             };
@@ -98,11 +98,11 @@
                     maxLength: maxLength(16),
                     minLength: minLength(4)
                 },
-                email: {
-                    required,
-                    email,
-                    minLength: minLength(4)
-                }
+                // email: {
+                //     required,
+                //     email,
+                //     minLength: minLength(4)
+                // }
             }
         },
         computed: {

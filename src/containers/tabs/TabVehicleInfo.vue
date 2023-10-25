@@ -115,15 +115,8 @@
                   </b-colxx>
                   <b-colxx sm="6">
                      <b-form-group :label="$t('vehicle.service-miles')" class="has-top-label">
-                        <b-form-input
-                           type="text"
-                           v-model.trim="$v.vehicleForm.serviceMiles.$model"
-                           :state="!$v.vehicleForm.serviceMiles.$error"
-                        />
-                        <div v-if="!$v.vehicleForm.serviceMiles.required"
-                           :class="{ 'invalid-feedback': true, 'd-block': $v.vehicleForm.serviceMiles.$error && !$v.vehicleForm.serviceMiles.required }"
-                        >This field is required!</div>
-                        <div v-else-if="!$v.vehicleForm.serviceMiles.numeric"
+                        <money v-model="$v.vehicleForm.serviceMiles.$model" v-bind="locale" class="form-control" :state="!$v.vehicleForm.serviceMiles.$error"></money>
+                        <div v-if="!$v.vehicleForm.serviceMiles.numeric"
                            :class="{ 'invalid-feedback': true, 'd-block': $v.vehicleForm.serviceMiles.$error && !$v.vehicleForm.serviceMiles.numeric }"
                         >Must be a number</div>
                      </b-form-group>
@@ -145,12 +138,10 @@
                   </b-colxx>
                </b-form-row>
                <b-form-group :label="$t('vehicle.service-intervals')" class="has-top-label">
-                  <b-form-input
-                     type="text"
-                     v-model.trim="$v.vehicleForm.serviceMaintenance.$model"
-                     :state="!$v.vehicleForm.serviceMaintenance.$error"
-                  />
-                  <b-form-invalid-feedback v-if="!$v.vehicleForm.serviceMaintenance.numeric">Must be number value</b-form-invalid-feedback>
+                  <money v-model="$v.vehicleForm.serviceMaintenance.$model" v-bind="locale" class="form-control" :state="!$v.vehicleForm.serviceMaintenance.$error"></money>
+                  <div v-if="!$v.vehicleForm.serviceMaintenance.numeric"
+                     :class="{ 'invalid-feedback': true, 'd-block': $v.vehicleForm.serviceMaintenance.$error && !$v.vehicleForm.serviceMaintenance.numeric }"
+                  >Must be a number</div>
                </b-form-group>
                <b-form-row>
                   <b-colxx sm="12">
@@ -158,15 +149,8 @@
                   </b-colxx>
                   <b-colxx sm="12">
                      <b-form-group :label="$t('vehicle.service-mileage')" class="has-top-label">
-                        <b-form-input
-                           type="text"
-                           v-model.trim="$v.vehicleForm.serviceMileage.$model"
-                           :state="!$v.vehicleForm.serviceMileage.$error"
-                        />
-                        <div v-if="!$v.vehicleForm.serviceMileage.required"
-                           :class="{ 'invalid-feedback': true, 'd-block': $v.vehicleForm.serviceMileage.$error && !$v.vehicleForm.serviceMileage.required }"
-                        >This field is required!</div>
-                        <div v-else-if="!$v.vehicleForm.serviceMileage.numeric"
+                        <money v-model="$v.vehicleForm.serviceMileage.$model" v-bind="locale" class="form-control" :state="!$v.vehicleForm.serviceMileage.$error"></money>
+                        <div v-if="!$v.vehicleForm.serviceMileage.numeric"
                            :class="{ 'invalid-feedback': true, 'd-block': $v.vehicleForm.serviceMileage.$error && !$v.vehicleForm.serviceMileage.numeric }"
                         >Must be a number</div>
                      </b-form-group>
@@ -200,6 +184,14 @@
                   <div
                      :class="{ 'invalid-feedback': true, 'd-block': $v.purchaseForm.purchaseDate.$error && !$v.purchaseForm.purchaseDate.required }"
                   >Date required</div>
+               </b-form-group>
+               <b-form-group :label="$t('vehicle.residual-value')" class="has-top-label">
+                  <b-input-group>
+                  <money v-model="$v.purchaseForm.residualValue.$model" v-bind="money" class="form-control"  :state="!$v.purchaseForm.residualValue.$error"></money>
+                  </b-input-group>
+                  <div v-if="!$v.purchaseForm.residualValue.required"
+                  :class="{ 'invalid-feedback': true, 'd-block': $v.purchaseForm.residualValue.$error && !$v.purchaseForm.residualValue.required }"
+                  >This field is required!</div>
                </b-form-group>
                <b-form-group :label="$t('vehicle.funding-methods')" class="has-top-label">
                   <v-select v-model="$v.purchaseForm.fundingMethods.$model" :options="fundingMethodData" />
@@ -287,7 +279,8 @@ export default {
          },
          purchaseForm: {
             purchaseDate: null,
-            fundingMethods: null
+            fundingMethods: null,
+            residualValue: ""
          },
          methodsData: {
             funder: "",
@@ -307,12 +300,18 @@ export default {
             { label: "Rent/Return", value: "rent" }
          ],
          money: {
-            decimal: ',',
-            thousands: '.',
+            decimal: '.',
+            thousands: ',',
             prefix: '£ ',
             precision: 2,
             masked: false
-         }
+         },
+         locale: {
+            decimal: '.',
+            thousands: ',',
+            precision: 0,
+            masked: false
+         },
       };
    },
    mixins: [validationMixin],
@@ -337,7 +336,8 @@ export default {
       },
       purchaseForm: {
          purchaseDate: { required },
-         fundingMethods: { required }
+         fundingMethods: { required },
+         residualValue: { required }
       },
       methodsData: {
          funder: {},
@@ -395,6 +395,7 @@ export default {
             last_service_date: this.formatDate(this.vehicleForm.serviceLast),
             hire_purchase_starting_date: this.formatDate(this.purchaseForm.purchaseDate),
             purchase_method: this.purchaseForm.fundingMethods.label,
+            residual_value: this.purchaseForm.residualValue,
             hp_finance_provider: this.methodsData.funder,
             hp_interest_type: (this.methodsData.interestType !== null) ? this.methodsData.interestType : null,
             hp_interest_per_annum: this.methodsData.interestRate,

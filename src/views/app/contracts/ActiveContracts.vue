@@ -7,7 +7,6 @@
       <b-card>
         <vuetable ref="vuetable" class="order-with-arrow responsive-table" :api-url="apiBase" :query-params="makeQueryParams"
           :per-page="perPage" :reactive-api-url="true" :fields="fields" data-path="data.data" pagination-path="data"
-          no-data-template="Oops, there is no data to be displayed yet.."
           @vuetable:pagination-data="onPaginationData">
           <template slot="action" slot-scope="props">
             <b-button :to="{ path: `${props.rowData.id}` }"

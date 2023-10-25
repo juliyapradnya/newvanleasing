@@ -137,28 +137,14 @@
           </b-form-group>
         </b-colxx>
       </b-form-row>
-      <b-form-row>
-        <b-colxx sm="6">
-          <b-form-group :label="$t('contract.delivery-charge')" class="has-top-label">
-            <b-input-group>
-              <money v-model="$v.contractForm.otherIncome.$model" v-bind="money" class="form-control" :state="!$v.contractForm.otherIncome.$error"></money>
-            </b-input-group>
-            <div v-if="!$v.contractForm.otherIncome.required"
-              :class="{ 'invalid-feedback': true, 'd-block': $v.contractForm.otherIncome.$error && !$v.contractForm.otherIncome.required }"
-            >This field is required!</div>
-          </b-form-group>
-        </b-colxx>
-        <b-colxx sm="6">
-          <b-form-group :label="$t('contract.residual-value')" class="has-top-label">
-            <b-input-group>
-              <money v-model="$v.contractForm.residualValue.$model" v-bind="money" class="form-control"  :state="!$v.contractForm.residualValue.$error"></money>
-            </b-input-group>
-            <div v-if="!$v.contractForm.residualValue.required"
-              :class="{ 'invalid-feedback': true, 'd-block': $v.contractForm.residualValue.$error && !$v.contractForm.residualValue.required }"
-            >This field is required!</div>
-          </b-form-group>
-        </b-colxx>
-      </b-form-row>
+      <b-form-group :label="$t('contract.delivery-charge')" class="has-top-label">
+        <b-input-group>
+          <money v-model="$v.contractForm.otherIncome.$model" v-bind="money" class="form-control" :state="!$v.contractForm.otherIncome.$error"></money>
+        </b-input-group>
+        <div v-if="!$v.contractForm.otherIncome.required"
+          :class="{ 'invalid-feedback': true, 'd-block': $v.contractForm.otherIncome.$error && !$v.contractForm.otherIncome.required }"
+        >This field is required!</div>
+      </b-form-group>
     </b-form>
 
     <template slot="modal-footer">
@@ -237,7 +223,6 @@ export default {
         initialRental: "",
         monthlyRental: "",
         otherIncome: "",
-        residualValue: ""
       },
       direction: getDirection().direction,
       selectData: [
@@ -245,11 +230,11 @@ export default {
         "Hire (Unregulated)"
       ],
       money: {
-        decimal: ',',
-        thousands: '.',
+        decimal: '.',
+        thousands: ',',
         prefix: '£ ',
         precision: 2,
-        masked: false /* doesn't work with directive */
+        masked: false
       }
     };
   },
@@ -270,8 +255,7 @@ export default {
       docFee: { required },
       initialRental: { required },
       monthlyRental: { required },
-      otherIncome: { required },
-      residualValue: { required }
+      otherIncome: { required }
     }
   },
   methods: {
@@ -279,6 +263,9 @@ export default {
       // let newDate = new Date(date);
       // return moment(newDate).format("Y-MM-DD");
       return new Date(date).toISOString().substr(0, 10)
+    },
+    addNotification(type, title, message) {
+      this.$notify(type, title, message, { duration: 2000, permanent: false });
     },
     fetchOptions(search, loading) {
       let url = apiUrl + "/purchaseorderall?&search=" + encodeURI(search);
@@ -313,8 +300,7 @@ export default {
         documentation_fees: this.contractForm.docFee,
         initial_rental: this.contractForm.initialRental,
         monthly_rental: this.contractForm.monthlyRental,
-        other_income: this.contractForm.otherIncome,
-        residual_value: this.contractForm.residualValue
+        other_income: this.contractForm.otherIncome
       }
       // console.log("adding item : ", newContract);
       this.isProcessing = true;
@@ -331,7 +317,8 @@ export default {
           }, 2000)
         }).catch(_error => {
           this.status = "fail";
-          this.message = "An error occured while saving the data. Please try again later.";
+          this.message = "The agreement number has already been taken, please use different number";
+          this.addNotification("error filled", "Oppss!", this.message);
           setTimeout(() => {
             this.isProcessing = false;
             this.status = "default";

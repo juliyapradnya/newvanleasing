@@ -3,6 +3,9 @@
   <div v-else>
     <b-row>
       <b-colxx xxs="12">
+        <b-link @click.prevent="$router.go(-1)" class="heading-icon baseline">
+          <i class="simple-icon-arrow-left" />
+        </b-link>
         <piaf-breadcrumb :heading="vehicle.vehicle_registration" />
         <div class="separator mb-5"></div>
       </b-colxx>

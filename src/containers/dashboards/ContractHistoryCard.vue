@@ -10,8 +10,11 @@
       :per-page="20"
       data-path="data"
     >
+      <template slot="agreement" slot-scope="props">
+        <span v-show="props.rowData.agreement_number" @click.prevent="showPerformanceModal(props.rowData)" class="cursor-pointer">{{ props.rowData.agreement_number }}</span>
+      </template>
       <template slot="customer" slot-scope="props">
-        <span v-show="props.rowData.cust_name" @click.prevent="showPerformanceModal(props.rowData)" class="theader cursor-pointer">{{ props.rowData.cust_name }}</span>
+        <span v-show="props.rowData.cust_name" @click.prevent="showPerformanceModal(props.rowData)" class="cursor-pointer">{{ props.rowData.cust_name }}</span>
       </template>
       <template slot="status" slot-scope="props">
         <b-badge v-show="props.rowData.next_step_status_sales" :variant="(props.rowData.next_step_status_sales === 'Hired') ? 'primary' : 'light'">{{ props.rowData.next_step_status_sales }}</b-badge>
@@ -23,7 +26,7 @@
         <span v-show="props.rowData.term_months">{{ props.rowData.term_months }} months</span>
       </template>
       <template slot="mileage" slot-scope="props">
-        <span v-show="props.rowData.annual_mileage">{{ props.rowData.annual_mileage }} miles</span>
+        <span v-show="props.rowData.annual_mileage">{{ props.rowData.annual_mileage }} km</span>
       </template>
       <template slot="date" slot-scope="props">
         <span v-show="props.rowData.contract_start_date">{{ props.rowData.contract_start_date | datetime }}</span>
@@ -58,10 +61,16 @@ export default {
       selected: [],
       fields: [
         {
+          name: "__slot:agreement",
+          title: "Agreement No",
+          titleClass: "center aligned",
+          dataClass: "enter aligned font-weight-semibold",
+        },
+        {
           name: "__slot:customer",
           title: "Customer",
           titleClass: "center aligned",
-          dataClass: "enter aligned font-weight-semibold",
+          dataClass: "enter aligned",
         },
         {
           name: "__slot:status",
@@ -81,12 +90,12 @@ export default {
           titleClass: "center aligned",
           dataClass: "text-muted",
         },
-        {
-          name: "__slot:mileage",
-          title: "Mileage",
-          titleClass: "center aligned",
-          dataClass: "text-muted",
-        },
+        // {
+        //   name: "__slot:mileage",
+        //   title: "Mileage",
+        //   titleClass: "center aligned",
+        //   dataClass: "text-muted",
+        // },
         {
           name: "__slot:date",
           title: "End Date",

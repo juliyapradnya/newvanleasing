@@ -35,27 +35,9 @@
         <gradient-with-growth-progress-card
           icon="iconsminds-financial"
           :title="`${theIncome}`"
-          :intent="theIntent"
+          :status="checkStatus"
           :prefix="'£'"
           :detail="$t('performance.total-income')"
-          :progressText="`target`"
-        />
-      </b-colxx>
-      <b-colxx sm="12" lg="2" class="mb-3">
-        <gradient-with-radial-progress-card
-          icon="iconsminds-basket-coins"
-          :title="`${rentalIncome}`"
-          :prefix="'£'"
-          :detail="$t('performance.monthly-rental-income')"
-          :progressText="`target`"
-        />
-      </b-colxx>
-      <b-colxx sm="12" lg="2" class="mb-3">
-        <gradient-with-radial-progress-card
-          icon="iconsminds-road-2"
-          :title="`${totalMileage}`"
-          :suffix="'miles'"
-          :detail="$t('performance.total-mileage')"
           :progressText="`target`"
         />
       </b-colxx>
@@ -65,6 +47,23 @@
           :title="`${totalCost}`"
           :prefix="'£'"
           :detail="$t('performance.total-cost')"
+          :progressText="`target`"
+        />
+      </b-colxx>
+      <b-colxx sm="12" lg="2" class="mb-3">
+        <gradient-with-radial-progress-card
+          icon="iconsminds-basket-coins"
+          :title="`${potentialIncome}`"
+          :prefix="'£'"
+          :detail="$t('performance.potential-income')"
+        />
+      </b-colxx>
+      <b-colxx sm="12" lg="2" class="mb-3">
+        <gradient-with-radial-progress-card
+          icon="iconsminds-letter-open"
+          :title="`${loanOutstanding}`"
+          :prefix="'£'"
+          :detail="$t('performance.loan-outstanding')"
           :progressText="`target`"
         />
       </b-colxx>
@@ -116,7 +115,6 @@ export default {
   },
   data() {
     return {
-      initial: [],
       cars: [],
       items: [],
       apiBase: apiUrl + "/showvehiclenumberexceptsold",
@@ -134,6 +132,7 @@ export default {
       componentKey: 0,
       startDate: null,
       endDate: new Date,
+      checkStatus: "",
       fields: [
         {
           name: "vehicle_registration",
@@ -190,18 +189,20 @@ export default {
     getSum(total, num) {
       return total + Math.round(num);
     },
-    fetchInitial() {
-      let date1 = this.formatDate(this.pastDate),
-      date2 = this.formatDate(this.endDate),
-      url = apiUrl + `/showdashboard/${date1},${date2}`;
-      axios
-        .get(url)
-        .then(r => r.data)
-        .then(res =>  {
-          this.initial = res.data
-        }).catch(_error => {
-          console.log(_error)
-        })
+    getMonthDifference(startDate, endDate) {
+      if(endDate > this.endDate) {
+        return (
+          endDate.getMonth() -
+          startDate.getMonth() +
+          12 * (endDate.getFullYear() - startDate.getFullYear())
+        );
+      } else {
+        return (
+          this.endDate.getMonth() -
+          startDate.getMonth() +
+          12 * (this.endDate.getFullYear() - startDate.getFullYear())
+        );
+      }
     },
     async fetchCars() {
       let url = apiUrl + "/purchaseorderall";
@@ -324,16 +325,19 @@ export default {
       let old = this.initial.map(x => x.total_income)
       return old.reduce(this.getSum, 0)
     },
-    theIntent() {
-      return (this.initialIncome > this.theIncome) ? "danger" : "success"
-    },
-    totalMileage() {
-      let mileage = this.items.map(x => x.annual_mileage)
-      return mileage.reduce(this.getSum, 0)
-    },
     totalCost() {
       let total = this.items.map(x => x.total_cost)
       return total.reduce(this.getSum, 0)
+    },
+    potentialIncome() {
+      var arr = this.items.map(x => (
+        this.getMonthDifference(new Date(x.contract_start_date), new Date(x.tgl_available)) * x.monthly_payment));
+      return arr.reduce(this.getSum, 0)
+    },
+    loanOutstanding() {
+      var arr = this.items.map(x => (
+        this.getMonthDifference(new Date(x.contract_start_date), new Date(x.tgl_available)) * x.regular_monthly_payment));
+      return arr.reduce(this.getSum, 0)
     }
   },
   watch: {
@@ -346,10 +350,18 @@ export default {
       if(newId) {
         this.onEndChange(newId)
       }
+    },
+    theIncome(newVal, oldVal) {
+      if(oldVal > 0 && newVal > oldVal) {
+        this.checkStatus = "up"
+      } else if (newVal < oldVal) {
+        this.checkStatus = "down"
+      } else {
+        this.checkStatus = null
+      }
     }
   },
   mounted() {
-    this.fetchInitial()
     this.fetchCars()
     this.fetchData()
   }
