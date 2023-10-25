@@ -19,7 +19,7 @@
       </b-dropdown>
     </b-card-body>
     <div class="chart card-body pt-0">
-      <area-chart :data="conversionChartData" container-class="chart" shadow />
+      <area-chart :data="conversionChartData" container-class="chart" />
     </div>
   </b-card>
 </template>

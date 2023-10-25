@@ -31,40 +31,39 @@
           :progressText="`${totalHiredVehicle}/${cars.length}`"
         />
       </b-colxx>
-      <b-colxx sm="12" lg="2" class="mb-3">
+      <b-colxx xs="6" lg="2" class="mb-3">
         <gradient-with-growth-progress-card
           icon="iconsminds-financial"
           :title="`${theIncome}`"
           :status="checkStatus"
           :prefix="'£'"
           :detail="$t('performance.total-income')"
-          :progressText="`target`"
         />
       </b-colxx>
-      <b-colxx sm="12" lg="2" class="mb-3">
+      <b-colxx xs="6" lg="2" class="mb-3">
         <gradient-with-radial-progress-card
           icon="iconsminds-billing"
           :title="`${totalCost}`"
           :prefix="'£'"
           :detail="$t('performance.total-cost')"
-          :progressText="`target`"
         />
       </b-colxx>
-      <b-colxx sm="12" lg="2" class="mb-3">
-        <gradient-with-radial-progress-card
+      <b-colxx xs="6" lg="2" class="mb-3">
+        <gradient-with-growth-progress-card
           icon="iconsminds-basket-coins"
           :title="`${potentialIncome}`"
+          :status="incomeStatus"
           :prefix="'£'"
           :detail="$t('performance.potential-income')"
         />
       </b-colxx>
-      <b-colxx sm="12" lg="2" class="mb-3">
-        <gradient-with-radial-progress-card
+      <b-colxx xs="6" lg="2" class="mb-3">
+        <gradient-with-growth-progress-card
           icon="iconsminds-letter-open"
           :title="`${loanOutstanding}`"
+          :status="outstandingStatus"
           :prefix="'£'"
           :detail="$t('performance.loan-outstanding')"
-          :progressText="`target`"
         />
       </b-colxx>
     </b-row>
@@ -133,6 +132,8 @@ export default {
       startDate: null,
       endDate: new Date,
       checkStatus: "",
+      outstandingStatus: "",
+      incomeStatus: "",
       fields: [
         {
           name: "vehicle_registration",
@@ -189,20 +190,11 @@ export default {
     getSum(total, num) {
       return total + Math.round(num);
     },
-    getMonthDifference(startDate, endDate) {
-      if(endDate > this.endDate) {
-        return (
-          endDate.getMonth() -
+    getMonthDifference(startDate, endDate, term) {
+      let outstanding = endDate.getMonth() -
           startDate.getMonth() +
-          12 * (endDate.getFullYear() - startDate.getFullYear())
-        );
-      } else {
-        return (
-          this.endDate.getMonth() -
-          startDate.getMonth() +
-          12 * (this.endDate.getFullYear() - startDate.getFullYear())
-        );
-      }
+          12 * (endDate.getFullYear() - startDate.getFullYear());
+      return (term >= outstanding && outstanding > 0) ? outstanding : 0
     },
     async fetchCars() {
       let url = apiUrl + "/purchaseorderall";
@@ -331,13 +323,19 @@ export default {
     },
     potentialIncome() {
       var arr = this.items.map(x => (
-        this.getMonthDifference(new Date(x.contract_start_date), new Date(x.tgl_available)) * x.monthly_payment));
+        this.getMonthDifference(new Date(x.contract_start_date), this.endDate, x.hp_term) * x.monthly_payment));
       return arr.reduce(this.getSum, 0)
     },
     loanOutstanding() {
-      var arr = this.items.map(x => (
-        this.getMonthDifference(new Date(x.contract_start_date), new Date(x.tgl_available)) * x.regular_monthly_payment));
+      var arr = this.items.map((x) => {
+        const remaining = this.getMonthDifference(new Date(x.contract_start_date), this.endDate, x.term_months)
+
+        return (remaining > 0) ? (x.term_months - remaining) * x.regular_monthly_payment : 0
+      })
       return arr.reduce(this.getSum, 0)
+      // var arr = this.items.map(x => (
+      //   this.getMonthDifference(new Date(x.contract_start_date), this.endDate, x.term_months) * x.regular_monthly_payment));
+      // return arr.reduce(this.getSum, 0)
     }
   },
   watch: {
@@ -358,6 +356,24 @@ export default {
         this.checkStatus = "down"
       } else {
         this.checkStatus = null
+      }
+    },
+    potentialIncome(newVal, oldVal) {
+      if(newVal > oldVal && oldVal > 0) {
+        this.incomeStatus = "up"
+      } else if (newVal < oldVal && newVal > 0) {
+        this.incomeStatus = "down"
+      } else {
+        this.incomeStatus = null
+      }
+    },
+    loanOutstanding(newVal, oldVal) {
+      if(newVal > oldVal && oldVal > 0) {
+        this.outstandingStatus = "up"
+      } else if (newVal < oldVal && newVal > 0) {
+        this.outstandingStatus = "down"
+      } else {
+        this.outstandingStatus = null
       }
     }
   },
