@@ -28,7 +28,7 @@
           :detail="$t('performance.last-30days')"
           :suffix="`${$t('performance.vehicle-hired')}`"
           :percent="`${totalHiredVehicle}`*100/`${cars.length}`"
-          :progressText="`${totalHiredVehicle}/${cars.length}`"
+          :progressText="`${hirePercentage} %`"
         />
       </b-colxx>
       <b-colxx xs="6" lg="2" class="mb-3">
@@ -41,9 +41,10 @@
         />
       </b-colxx>
       <b-colxx xs="6" lg="2" class="mb-3">
-        <gradient-with-radial-progress-card
+        <gradient-with-growth-progress-card
           icon="iconsminds-billing"
           :title="`${totalCost}`"
+          :status="costStatus"
           :prefix="'£'"
           :detail="$t('performance.total-cost')"
         />
@@ -281,7 +282,11 @@ export default {
   },
   computed: {
     totalHiredVehicle() {
-      return this.items.filter(x => x.status_next_step == 'Hired').length
+      let num = this.items.filter(x => x.status_next_step == 'Hired').length
+      return Number(num)
+    },
+    hirePercentage() {
+      return Math.round(this.totalHiredVehicle*100/this.cars.length)
     },
     pastDate: {
       get (val) {
@@ -347,6 +352,15 @@ export default {
     endDate(newId, oldId) {
       if(newId) {
         this.onEndChange(newId)
+      }
+    },
+    totalCost(newVal, oldVal) {
+      if(oldVal > 0 && newVal > oldVal) {
+        this.costStatus = "up"
+      } else if (newVal < oldVal) {
+        this.costStatus = "down"
+      } else {
+        this.costStatus = null
       }
     },
     theIncome(newVal, oldVal) {

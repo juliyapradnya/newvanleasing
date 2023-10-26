@@ -91,16 +91,25 @@ export default {
       let A = (p * r * t) / 100
       return Math.ceil(A)
     },
+    // getOtherCost(id) {
+    //   let url = apiUrl + "/othercost?per_page=500"
+    //   axios
+    //   .get(url)
+    //     .then(r => r.data)
+    //     .then(res => {
+    //       let costs = res.data.data.filter(x => x.id_purchase_order == id).map(x => x.amount_oc);
+    //       (costs.length > 0) ? this.otherCost = costs.reduce((a, b) => {
+    //         return a + b
+    //       },0) : 0
+    //     })
+    // }
     getOtherCost(id) {
-      let url = apiUrl + "/othercost?per_page=500"
+      let url = apiUrl + "/listothercost/" + id
       axios
       .get(url)
         .then(r => r.data)
         .then(res => {
-          let costs = res.data.data.filter(x => x.id_purchase_order == id).map(x => x.amount_oc);
-          (costs.length > 0) ? this.otherCost = costs.reduce((a, b) => {
-            return a + b
-          },0) : 0
+          this.otherCost = res.data.sum_other_cost
         })
     }
   },
@@ -112,7 +121,7 @@ export default {
       return (this.vehicle.hp_finance_provider !== null) ? this.vehicle.hp_finance_provider : "n/a"
     },
     theCost() {
-      return (this.otherCost > 0) ? Math.round(this.otherCost + this.vehicle.total_cost)
+      return (this.otherCost > 0) ? Math.abs(Number(this.otherCost) + Number(this.vehicle.total_cost))
       : this.vehicle.total_cost
     }
   },

@@ -143,15 +143,15 @@ export default {
   },
   computed: {
     theIncome() {
-      return (this.otherIncome !== null) ? Math.abs(this.totalIncome + this.otherIncome)
+      return (this.otherIncome !== null) ? Math.abs(Number(this.totalIncome) + Number(this.otherIncome))
       : this.totalIncome
     },
     theCost() {
-      return (this.otherCost !== null) ? Math.abs(this.totalCost + this.otherCost)
+      return (this.otherCost !== null) ? Math.abs(Number(this.totalCost) + Number(this.otherCost))
       : this.totalCost
     },
     theMargin() {
-      return this.theIncome - this.theCost
+      return Number(this.theIncome) - Number(this.theCost)
     }
   },
   mounted() {
