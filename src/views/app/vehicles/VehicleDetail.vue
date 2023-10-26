@@ -14,7 +14,8 @@
                      'show-success': status === 'success',
                      'show-fail': status === 'fail'
                   }"
-                  :disabled="isProcessing != false">
+                  :disabled="isProcessing != false"
+                  v-observe-visibility="visibilityChanged">
                   <span class="spinner d-inline-block">
                      <span class="bounce1"></span>
                      <span class="bounce2"></span>
@@ -29,7 +30,7 @@
                   <span class="label">
                      <i class="simple-icon-check mr-2" />{{ $t('vehicle.save') }}
                   </span>
-                  </b-button>
+               </b-button>
             </div>
          </page-header>
       </b-row>
@@ -37,7 +38,35 @@
       <vehicle-application-menu
          v-if="isLoading"
          :items="items"
-         ></vehicle-application-menu>
+      ></vehicle-application-menu>
+      <b-card class="float-save-button mx-auto z-index-10" :class="(!isVisible)?'show':''">
+         <b-button
+            variant="primary default"
+            size="lg"
+            @click.prevent="submitForm"
+            :class="{
+               'btn-multiple-state': true,
+               'show-spinner': status === 'processing',
+               'show-success': status === 'success',
+               'show-fail': status === 'fail'
+            }"
+            :disabled="isProcessing != false">
+            <span class="spinner d-inline-block">
+               <span class="bounce1"></span>
+               <span class="bounce2"></span>
+               <span class="bounce3"></span>
+            </span>
+            <span class="icon success">
+               <i class="simple-icon-check"></i>
+            </span>
+            <span class="icon fail">
+               <i class="simple-icon-exclamation"></i>
+            </span>
+            <span class="label">
+               <i class="simple-icon-check mr-2" />{{ $t('vehicle.save') }}
+            </span>
+         </b-button>
+      </b-card>
    </div>
    <div v-else class="loading" key="itemLoading"></div>
 </template>
@@ -59,6 +88,7 @@ export default {
       return {
          isProcessing: false,
          isLoading: false,
+         isVisible: false,
          title: "",
          status: "",
          items: []
@@ -83,6 +113,9 @@ export default {
       },
       submitForm() {
          this.$refs.updateForm.onValitadeFormSubmit();
+      },
+      visibilityChanged(isVisible, entry) {
+         this.isVisible = isVisible
       },
       vehicleUpdate(status) {
          this.isProcessing = true

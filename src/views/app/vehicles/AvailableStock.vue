@@ -24,6 +24,14 @@
                         <span>{{ $t('pages.details') }}</span>
                      </b-button> -->
                   </template>
+                  <template slot="action" slot-scope="props">
+                     <b-button :to="{ path: `${props.rowData.id}` }"
+                     variant="light"
+                     size="sm"
+                     >
+                     <i class="simple-icon-magnifier mr-1" />  {{ $t('contract.detail') }}
+                     </b-button>
+                  </template>
                </vuetable>
             </b-card>
             <vuetable-pagination-bootstrap class="mt-4" ref="pagination" @vuetable-pagination:change-page="onChangePage" />
@@ -71,39 +79,41 @@ export default {
                sortField: "vehicle_registration",
                title: "Vehicle Registration",
                titleClass: "center aligned",
-               dataClass: "text-muted text-uppercase",
-               width: "15%"
+               dataClass: "text-muted text-uppercase"
             },
             {
                name: "vehicle_manufactur",
                sortField: "vehicle_manufactur",
                title: "Manufacture",
                titleClass: "center aligned",
-               dataClass: "text-muted",
-               width: "13%"
+               dataClass: "text-muted"
             },
             {
                name: "vehicle_model",
                sortField: "vehicle_model",
                title: "Model",
                titleClass: "center aligned",
-               dataClass: "text-muted",
-               width: "13%"
+               dataClass: "text-muted"
             },
             {
                name: "vehicle_variant",
                sortField: "vehicle_variant",
                title: "Variant",
                titleClass: "center aligned",
-               dataClass: "text-muted",
-               width: "13%"
+               dataClass: "text-muted"
             },
             {
                name: "__slot:date",
+               sortField: "tgl_available",
                title: "Available Date",
                titleClass: "center aligned",
-               dataClass: "",
-               width: "14%"
+               dataClass: ""
+            },
+            {
+               name: "__slot:action",
+               title: "",
+               titleClass: "",
+               dataClass: "center aligned align-text-top text-right"
             }
          ],
          sortOrder: [

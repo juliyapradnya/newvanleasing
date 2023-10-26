@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-row>
+    <b-row v-if="items">
       <b-colxx xxs="12">
         <piaf-breadcrumb :heading="$t('performance.header')" />
         <div class="d-flex justify-content-stretch align-items-center top-right-button-container">
@@ -25,8 +25,8 @@
         <gradient-with-radial-progress-card
           icon="iconsminds-inbox-out"
           :title="`${totalHiredVehicle}`"
-          :detail="$t('performance.last-30days')"
-          :suffix="`${$t('performance.vehicle-hired')}`"
+          :detail="`Out of ${cars.length} vehicles`"
+          :suffix="'Hired'"
           :percent="`${totalHiredVehicle}`*100/`${cars.length}`"
           :progressText="`${hirePercentage} %`"
         />
@@ -73,7 +73,7 @@
         <sold-vehicle-chart-card></sold-vehicle-chart-card>
       </b-colxx>
       <b-colxx sm="12" md="6" class="mb-4">
-        <hired-vehicle-chart-card></hired-vehicle-chart-card>
+        <hired-vehicle-chart-card :data="items"></hired-vehicle-chart-card>
       </b-colxx>
       <b-colxx xxs="12" class="mb-4">
         <b-card :title="$t('performance.top-hired')">
@@ -133,6 +133,7 @@ export default {
       startDate: null,
       endDate: new Date,
       checkStatus: "",
+      costStatus: "",
       outstandingStatus: "",
       incomeStatus: "",
       fields: [
@@ -197,18 +198,7 @@ export default {
           12 * (endDate.getFullYear() - startDate.getFullYear());
       return (term >= outstanding && outstanding > 0) ? outstanding : 0
     },
-    async fetchCars() {
-      let url = apiUrl + "/purchaseorderall";
-      axios
-        .get(url)
-        .then(r => r.data)
-        .then(res =>  {
-          this.cars = res.data.data
-        }).catch(_error => {
-          console.log(_error)
-        })
-    },
-    async fetchData() {
+    fetchData() {
       let date1 = this.formatDate(this.pastDate),
       date2 = this.formatDate(this.endDate),
       url = apiUrl + `/showdashboard/${date1},${date2}`;
@@ -217,6 +207,17 @@ export default {
         .then(r => r.data)
         .then(res =>  {
           this.items = res.data
+        }).catch(_error => {
+          console.log(_error)
+        })
+    },
+    async fetchCars() {
+      let url = apiUrl + "/purchaseorderall";
+      axios
+        .get(url)
+        .then(r => r.data)
+        .then(res =>  {
+          this.cars = res.data.data
         }).catch(_error => {
           console.log(_error)
         })
@@ -327,14 +328,16 @@ export default {
       return total.reduce(this.getSum, 0)
     },
     potentialIncome() {
-      var arr = this.items.map(x => (
-        this.getMonthDifference(new Date(x.contract_start_date), this.endDate, x.hp_term) * x.monthly_payment));
+      var arr = this.items.map((x) => {
+        const remaining = this.getMonthDifference(new Date(x.contract_start_date), this.endDate, x.hp_term)
+        return (remaining > 0) ? (x.hp_term - remaining) * x.monthly_rental : 0
+        // this.getMonthDifference(new Date(x.contract_start_date), this.endDate, x.hp_term) * x.monthly_payment));
+      })
       return arr.reduce(this.getSum, 0)
     },
     loanOutstanding() {
       var arr = this.items.map((x) => {
         const remaining = this.getMonthDifference(new Date(x.contract_start_date), this.endDate, x.term_months)
-
         return (remaining > 0) ? (x.term_months - remaining) * x.regular_monthly_payment : 0
       })
       return arr.reduce(this.getSum, 0)

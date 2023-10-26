@@ -8,7 +8,13 @@
             'show-spinner': status === 'processing',
             'show-success': status === 'success',
             'show-fail': status === 'fail'
-          }" :disabled="isProcessing != false">
+          }" :disabled="isProcessing != false"
+          v-observe-visibility="{
+            callback: visibilityChanged,
+            intersection: {
+              threshold: 0.5,
+            },
+          }">
             <span class="spinner d-inline-block">
               <span class="bounce1"></span>
               <span class="bounce2"></span>
@@ -29,6 +35,34 @@
     </b-row>
     <contract-update-form :items="items" :minDate="vehicle.tgl_available" ref="updateForm" @update-contract="vehicleContract"></contract-update-form>
     <contract-application-menu v-if="isLoading" :vehicle="vehicle" :key="componentKey" />
+    <b-card class="float-save-button mx-auto z-index-10" :class="(!isVisible)?'show':''">
+      <b-button
+        variant="primary default"
+        size="lg"
+        @click.prevent="submitForm"
+        :class="{
+            'btn-multiple-state': true,
+            'show-spinner': status === 'processing',
+            'show-success': status === 'success',
+            'show-fail': status === 'fail'
+        }"
+        :disabled="isProcessing != false">
+        <span class="spinner d-inline-block">
+            <span class="bounce1"></span>
+            <span class="bounce2"></span>
+            <span class="bounce3"></span>
+        </span>
+        <span class="icon success">
+            <i class="simple-icon-check"></i>
+        </span>
+        <span class="icon fail">
+            <i class="simple-icon-exclamation"></i>
+        </span>
+        <span class="label">
+            <i class="simple-icon-check mr-2" />{{ $t('vehicle.save') }}
+        </span>
+      </b-button>
+    </b-card>
   </div>
   <div v-else class="loading" key="itemLoading"></div>
 </template>
@@ -50,6 +84,7 @@ export default {
     return {
       isProcessing: false,
       isLoading: false,
+      isVisible: false,
       title: "",
       status: "",
       items: [],
@@ -87,6 +122,9 @@ export default {
         .catch(err => {
           console.log(err.message)
         })
+    },
+    visibilityChanged(isVisible, entry) {
+      this.isVisible = isVisible
     },
     addNotification(type, title, message) {
       this.$notify(type, title, message, { duration: 2000, permanent: false });
