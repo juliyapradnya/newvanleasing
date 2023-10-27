@@ -24,17 +24,69 @@
   </b-card>
 </template>
 <script>
-import AreaChart from "../../components/Charts/Area";
-import { areaChartData } from "../../data/charts";
+import axios from 'axios'
+import { apiUrl } from "../../constants/config";
+import moment from 'moment'
+import AreaChart from "../../components/Charts/Area"
+import { areaChartData } from "../../data/charts"
+import { ThemeColors } from '../../utils'
+const colors = ThemeColors()
 
 export default {
+  props: ["data"],
   components: {
     "area-chart": AreaChart
   },
   data() {
     return {
-      areaChartData
+      areaChartData,
+      cars: []
     };
+  },
+  methods: {
+    formatDate(date) {
+      return moment(new Date(date)).format('MMM YY')
+    },
+    fetchCars() {
+      let url = apiUrl + "/purchaseorderall";
+      axios
+        .get(url)
+        .then(r => r.data)
+        .then(res =>  {
+          this.cars = res.data.data
+        }).catch(_error => {
+          console.log(_error)
+        })
+    }
+  },
+  computed: {
+    charData() {
+      const dataRental = this.data.map(x => (Number(x.rental_income))),
+      dataLabel = this.data.map(x => (this.formatDate(x.hire_purchase_starting_date))),
+      hired = {
+        labels: ['jun', 'jul', 'aug', 'sep'],
+        datasets: [
+          {
+            label: '',
+            data: this.cars.map(x => (Number(x.rental_income))),
+            borderColor: colors.themeColor1,
+            pointBorderColor: colors.themeColor1,
+            pointHoverBackgroundColor: colors.themeColor1,
+            pointHoverBorderColor: colors.themeColor1,
+            pointRadius: 2,
+            pointBorderWidth: 3,
+            pointHoverRadius: 2,
+            fill: true,
+            borderWidth: 3,
+            backgroundColor: colors.themeColor2_10
+          }
+        ]
+      };
+      return hired
+    }
+  },
+  mounted() {
+    // this.fetchCars()
   }
 };
 </script>

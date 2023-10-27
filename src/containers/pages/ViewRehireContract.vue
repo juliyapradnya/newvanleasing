@@ -66,11 +66,7 @@
         <b-colxx sm="6">
           <b-form-group :label="$t('contract.mileage')" class="has-top-label">
             <b-input-group>
-              <b-form-input
-                type="text"
-                v-model.trim="hireannualMileage"
-                disabled
-              />
+              <money v-model="hireannualMileage" v-bind="distance" class="form-control" disabled></money>
             </b-input-group>
           </b-form-group>
         </b-colxx>
@@ -148,6 +144,13 @@ export default {
         thousands: ',',
         prefix: '£ ',
         precision: 2,
+        masked: false
+      },
+      distance: {
+        decimal: '.',
+        thousands: ',',
+        suffix: ' km',
+        precision: 0,
         masked: false
       }
     };

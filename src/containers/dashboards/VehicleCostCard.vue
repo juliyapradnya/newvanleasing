@@ -6,7 +6,7 @@
       </span>£ {{ vehicle.price_otr | withcoma }}
     </p>
     <p class="font-weight-semibold">
-      <span class="text-muted text-small font-weight-light mr-1">{{ $t("performance.interest-cost") }}
+      <span class="text-muted text-small font-weight-light mr-1">{{ $t("performance.installment") }}
       </span>£ {{ vehicle.total_cost | withcoma }}
       <!-- </span><i id="other-cost" >£ {{ getInterest(vehicle.price_otr, vehicle.hp_interest_per_annum, period) | withcoma }}</i>
       <b-tooltip target="other-cost" placement="left" :title="$t('performance.tooltip-cost')">

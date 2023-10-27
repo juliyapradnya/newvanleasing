@@ -90,24 +90,17 @@
         <b-colxx sm="6">
           <b-form-group :label="$t('contract.mileage')" class="has-top-label">
             <b-input-group>
-              <b-form-input
-                type="text"
-                v-model.trim="$v.contractForm.annualMileage.$model"
-                :state="!$v.contractForm.annualMileage.$error"
-              />
+              <money v-model="$v.contractForm.annualMileage.$model" v-bind="miles" class="form-control" :state="!$v.contractForm.annualMileage.$error"></money>
             </b-input-group>
             <div v-if="!$v.contractForm.annualMileage.required"
               :class="{ 'invalid-feedback': true, 'd-block': $v.contractForm.annualMileage.$error && !$v.contractForm.annualMileage.required }"
             >This field is required!</div>
-            <div v-else-if="!$v.contractForm.annualMileage.numeric"
-              :class="{ 'invalid-feedback': true, 'd-block': $v.contractForm.annualMileage.$error && !$v.contractForm.annualMileage.numeric }"
-            >Must be a number</div>
           </b-form-group>
         </b-colxx>
         <b-colxx sm="6">
           <b-form-group :label="$t('contract.doc-fee')" class="has-top-label">
             <b-input-group>
-              <money v-model="$v.contractForm.docFee.$model" v-bind="money" class="form-control" :state="!$v.contractForm.docFee.$error"></money>
+              <currency-field v-model="$v.contractForm.docFee.$model" :options="{ currency: 'GBP'}" :state="!$v.contractForm.docFee.$error" />
             </b-input-group>
             <div v-if="!$v.contractForm.docFee.required"
               :class="{ 'invalid-feedback': true, 'd-block': $v.contractForm.docFee.$error && !$v.contractForm.docFee.required }"
@@ -119,7 +112,7 @@
         <b-colxx sm="6">
           <b-form-group :label="$t('contract.initial-rental')" class="has-top-label">
             <b-input-group>
-              <money v-model="$v.contractForm.initialRental.$model" v-bind="money" class="form-control" :state="!$v.contractForm.initialRental.$error"></money>
+              <currency-field v-model="$v.contractForm.initialRental.$model" :options="{ currency: 'GBP'}" :state="!$v.contractForm.initialRental.$error" />
             </b-input-group>
             <div v-if="!$v.contractForm.initialRental.required"
               :class="{ 'invalid-feedback': true, 'd-block': $v.contractForm.initialRental.$error && !$v.contractForm.initialRental.required }"
@@ -129,7 +122,7 @@
         <b-colxx sm="6">
           <b-form-group :label="$t('contract.monthly-rental')" class="has-top-label">
             <b-input-group>
-              <money v-model="$v.contractForm.monthlyRental.$model" v-bind="money" class="form-control" :state="!$v.contractForm.monthlyRental.$error"></money>
+              <currency-field v-model="$v.contractForm.monthlyRental.$model" :options="{ currency: 'GBP'}" :state="!$v.contractForm.monthlyRental.$error" />
             </b-input-group>
             <div v-if="!$v.contractForm.monthlyRental.required"
               :class="{ 'invalid-feedback': true, 'd-block': $v.contractForm.monthlyRental.$error && !$v.contractForm.monthlyRental.required }"
@@ -139,7 +132,7 @@
       </b-form-row>
       <b-form-group :label="$t('contract.delivery-charge')" class="has-top-label">
         <b-input-group>
-          <money v-model="$v.contractForm.otherIncome.$model" v-bind="money" class="form-control" :state="!$v.contractForm.otherIncome.$error"></money>
+          <currency-field v-model="$v.contractForm.otherIncome.$model" :options="{ currency: 'GBP'}" :state="!$v.contractForm.otherIncome.$error" />
         </b-input-group>
         <div v-if="!$v.contractForm.otherIncome.required"
           :class="{ 'invalid-feedback': true, 'd-block': $v.contractForm.otherIncome.$error && !$v.contractForm.otherIncome.required }"
@@ -182,10 +175,11 @@
 <script>
 import axios from 'axios'
 import { apiUrl } from "../../constants/config";
-import { Money } from 'v-money';
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 import { getDirection } from "../../utils";
+import { Money } from 'v-money';
+import CurrencyField from "../../components/Common/CurrencyField";
 import Datepicker from "vuejs-datepicker";
 import {
   validationMixin
@@ -201,7 +195,8 @@ export default {
   components: {
     "v-select": vSelect,
     "datepicker": Datepicker,
-    "money": Money
+    "money": Money,
+    "currency-field": CurrencyField
   },
   props: ["categories", "statuses"],
   data() {
@@ -210,6 +205,7 @@ export default {
       isProcessing: false,
       status: "default",
       message: "",
+      salesorders: [],
       dynamicDataOptions: [],
       contractForm: {
         vehicleRegistration: null,
@@ -229,11 +225,11 @@ export default {
         "Contract Hire (Unregulated)",
         "Hire (Unregulated)"
       ],
-      money: {
+      miles: {
         decimal: '.',
         thousands: ',',
-        prefix: '£ ',
-        precision: 2,
+        suffix: ' km',
+        precision: 0,
         masked: false
       }
     };
@@ -263,6 +259,15 @@ export default {
       // let newDate = new Date(date);
       // return moment(newDate).format("Y-MM-DD");
       return new Date(date).toISOString().substr(0, 10)
+    },
+    objectToFormData(obj) {
+      const formData = new FormData();
+
+      Object.entries(obj).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
+
+      return formData;
     },
     addNotification(type, title, message) {
       this.$notify(type, title, message, { duration: 2000, permanent: false });
@@ -303,10 +308,11 @@ export default {
         other_income: this.contractForm.otherIncome
       }
       // console.log("adding item : ", newContract);
+      this.salesorders = this.objectToFormData(newContract);
       this.isProcessing = true;
       this.status = "processing";
       axios
-        .post(url, newContract)
+        .post(url, this.salesorders)
         .then(r => r.data)
         .then(res => {
           this.isProcessing = false;

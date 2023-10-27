@@ -96,15 +96,12 @@
                 <div v-if="!$v.contractForm.annualMileage.required"
                   :class="{ 'invalid-feedback': true, 'd-block': $v.contractForm.annualMileage.$error && !$v.contractForm.annualMileage.required }"
                 >This field is required!</div>
-                <div v-else-if="!$v.contractForm.annualMileage.numeric"
-                  :class="{ 'invalid-feedback': true, 'd-block': $v.contractForm.annualMileage.$error && !$v.contractForm.annualMileage.numeric }"
-                >Must be a number</div>
               </b-form-group>
             </b-colxx>
             <b-colxx sm="6">
               <b-form-group :label="$t('contract.doc-fee')">
                 <b-input-group>
-                  <money v-model="$v.contractForm.docFee.$model" v-bind="money" class="form-control" :state="!$v.contractForm.docFee.$error"></money>
+                  <currency-field v-model="$v.contractForm.docFee.$model" :options="{ currency: 'GBP'}" :state="!$v.contractForm.docFee.$error" />
                 </b-input-group>
                 <div v-if="!$v.contractForm.docFee.required"
                   :class="{ 'invalid-feedback': true, 'd-block': $v.contractForm.docFee.$error && !$v.contractForm.docFee.required }"
@@ -116,7 +113,7 @@
             <b-colxx sm="4">
               <b-form-group :label="$t('contract.initial-rental')">
                 <b-input-group>
-                  <money v-model="$v.contractForm.initialRental.$model" v-bind="money" class="form-control" :state="!$v.contractForm.initialRental.$error"></money>
+                  <currency-field v-model="$v.contractForm.initialRental.$model" :options="{ currency: 'GBP'}" :state="!$v.contractForm.initialRental.$error" />
                 </b-input-group>
                 <div v-if="!$v.contractForm.initialRental.required"
                   :class="{ 'invalid-feedback': true, 'd-block': $v.contractForm.initialRental.$error && !$v.contractForm.initialRental.required }"
@@ -126,7 +123,7 @@
             <b-colxx sm="4">
               <b-form-group :label="$t('contract.monthly-rental')">
                 <b-input-group>
-                  <money v-model="$v.contractForm.monthlyRental.$model" v-bind="money" class="form-control" :state="!$v.contractForm.monthlyRental.$error"></money>
+                  <currency-field v-model="$v.contractForm.monthlyRental.$model" :options="{ currency: 'GBP'}" :state="!$v.contractForm.monthlyRental.$error" />
                 </b-input-group>
                 <div v-if="!$v.contractForm.monthlyRental.required"
                   :class="{ 'invalid-feedback': true, 'd-block': $v.contractForm.monthlyRental.$error && !$v.contractForm.monthlyRental.required }"
@@ -136,7 +133,7 @@
             <b-colxx sm="4">
               <b-form-group :label="$t('contract.delivery-charge')">
                 <b-input-group>
-                  <money v-model="$v.contractForm.otherIncome.$model" v-bind="money" class="form-control" :state="!$v.contractForm.otherIncome.$error"></money>
+                  <currency-field v-model="$v.contractForm.otherIncome.$model" :options="{ currency: 'GBP'}" :state="!$v.contractForm.otherIncome.$error" />
                 </b-input-group>
                 <div v-if="!$v.contractForm.otherIncome.required"
                   :class="{ 'invalid-feedback': true, 'd-block': $v.contractForm.otherIncome.$error && !$v.contractForm.otherIncome.required }"
@@ -158,6 +155,7 @@ import "vue-select/dist/vue-select.css";
 import { getDirection } from "../../utils";
 import { Money } from 'v-money';
 import Datepicker from "vuejs-datepicker";
+import CurrencyField from '../../components/Common/CurrencyField.vue';
 import {
   validationMixin
 } from "vuelidate";
@@ -173,7 +171,8 @@ export default {
   components: {
     "v-select": vSelect,
     "datepicker": Datepicker,
-    "money": Money
+    "money": Money,
+    "currency-field": CurrencyField
   },
   props: ["items", "minDate"],
   data() {
@@ -197,13 +196,6 @@ export default {
         "Contract Hire (Unregulated)",
         "Hire (Unregulated)"
       ],
-      money: {
-        decimal: '.',
-        thousands: ',',
-        prefix: '£ ',
-        precision: 2,
-        masked: false
-      },
       miles: {
         decimal: '.',
         thousands: ',',

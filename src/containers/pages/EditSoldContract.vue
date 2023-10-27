@@ -46,7 +46,7 @@
       </div>
       <b-form-group :label="$t('contract.sold-price')" class="has-top-label">
         <b-input-group>
-          <money v-model="$v.form.sold_price.$model" v-bind="money" class="form-control" :state="!$v.form.sold_price.$error"></money>
+          <currency-field v-model="$v.form.sold_price.$model" :options="{ currency: 'GBP'}" :state="!$v.form.sold_price.$error" />
         </b-input-group>
         <div v-if="!$v.form.sold_price.required"
           :class="{ 'invalid-feedback': true, 'd-block': $v.form.sold_price.$error && !$v.form.sold_price.required }"
@@ -95,7 +95,7 @@ import { apiUrl } from "../../constants/config";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 import { getDirection } from "../../utils";
-import { Money } from 'v-money';
+import CurrencyField from "../../components/Common/CurrencyField";
 import Datepicker from "vuejs-datepicker";
 import {
   validationMixin
@@ -109,7 +109,7 @@ export default {
   components: {
     "v-select": vSelect,
     "datepicker": Datepicker,
-    "money": Money
+    "currency-field": CurrencyField
   },
   props: ["selectedItem"],
   data() {
@@ -133,14 +133,7 @@ export default {
         vehicle_return_date: "",
         sold_price: ""
       },
-      editId: "",
-      money: {
-        decimal: '.',
-        thousands: ',',
-        prefix: '£ ',
-        precision: 2,
-        masked: false
-      }
+      editId: ""
     };
   },
   mixins: [validationMixin],

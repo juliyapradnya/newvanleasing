@@ -51,14 +51,7 @@
                <b-form-row>
                   <b-colxx sm="6">
                      <b-form-group :label="$t('vehicle.list-price')" class="has-top-label">
-                        <!-- <b-input-group append="£">
-                           <b-form-input
-                              type="text"
-                              v-model.trim="$v.vehicleForm.listPrice.$model"
-                              :state="!$v.vehicleForm.listPrice.$error"
-                           />
-                        </b-input-group> -->
-                        <money v-model="$v.vehicleForm.listPrice.$model" v-bind="money" class="form-control" :state="!$v.vehicleForm.listPrice.$error"></money>
+                        <currency-field v-model="$v.vehicleForm.listPrice.$model" :options="{ currency: 'GBP'}" :state="!$v.vehicleForm.listPrice.$error" />
                         <div
                            :class="{ 'invalid-feedback': true, 'd-block': $v.vehicleForm.listPrice.$error && !$v.vehicleForm.listPrice.required }"
                         >This field is required!</div>
@@ -66,7 +59,7 @@
                   </b-colxx>
                   <b-colxx sm="6">
                      <b-form-group :label="$t('vehicle.otr-price')" class="has-top-label">
-                        <money v-model="$v.vehicleForm.otrPrice.$model" v-bind="money" class="form-control" :state="!$v.vehicleForm.otrPrice.$error"></money>
+                        <currency-field v-model="$v.vehicleForm.otrPrice.$model" :options="{ currency: 'GBP'}" :state="!$v.vehicleForm.otrPrice.$error" />
                         <div
                            :class="{ 'invalid-feedback': true, 'd-block': $v.vehicleForm.otrPrice.$error && !$v.vehicleForm.otrPrice.required }"
                         >This field is required!</div>
@@ -77,7 +70,7 @@
                <b-form-row>
                   <b-colxx sm="6">
                      <b-form-group :label="$t('vehicle.10k-desc')" class="has-top-label">
-                        <money v-model="$v.vehicleForm.minContract10k.$model" v-bind="money" class="form-control" :state="!$v.vehicleForm.minContract10k.$error"></money>
+                        <currency-field v-model="$v.vehicleForm.minContract10k.$model" :options="{ currency: 'GBP'}" :state="!$v.vehicleForm.minContract10k.$error" />
                         <div v-if="!$v.vehicleForm.minContract10k.required"
                            :class="{ 'invalid-feedback': true, 'd-block': $v.vehicleForm.minContract10k.$error && !$v.vehicleForm.minContract10k.required }"
                         >This field is required!</div>
@@ -85,7 +78,7 @@
                   </b-colxx>
                   <b-colxx sm="6">
                      <b-form-group :label="$t('vehicle.18k-desc')" class="has-top-label">
-                        <money v-model="$v.vehicleForm.minContract18k.$model" v-bind="money" class="form-control" :state="!$v.vehicleForm.minContract18k.$error"></money>
+                        <currency-field v-model="$v.vehicleForm.minContract18k.$model" :options="{ currency: 'GBP'}" :state="!$v.vehicleForm.minContract18k.$error" />
                         <div v-if="!$v.vehicleForm.minContract18k.required"
                            :class="{ 'invalid-feedback': true, 'd-block': $v.vehicleForm.minContract18k.$error && !$v.vehicleForm.minContract18k.required }"
                         >This field is required!</div>
@@ -187,7 +180,7 @@
                </b-form-group>
                <b-form-group :label="$t('vehicle.residual-value')" class="has-top-label">
                   <b-input-group>
-                  <money v-model="$v.purchaseForm.residualValue.$model" v-bind="money" class="form-control"  :state="!$v.purchaseForm.residualValue.$error"></money>
+                     <currency-field v-model="$v.purchaseForm.residualValue.$model" :options="{ currency: 'GBP'}" :state="!$v.purchaseForm.residualValue.$error" />
                   </b-input-group>
                   <div v-if="!$v.purchaseForm.residualValue.required"
                   :class="{ 'invalid-feedback': true, 'd-block': $v.purchaseForm.residualValue.$error && !$v.purchaseForm.residualValue.required }"
@@ -226,6 +219,7 @@ import { apiUrl } from "../../constants/config";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 import { Money } from 'v-money';
+import CurrencyField from "../../components/Common/CurrencyField";
 import moment from "moment";
 import Datepicker from "vuejs-datepicker";
 import FormWizard from "../../components/Form/Wizard/FormWizard";
@@ -247,7 +241,8 @@ export default {
       "form-wizard": FormWizard,
       "tab": Tab,
       "type-data": TypeData,
-      "money": Money
+      "money": Money,
+      "currency-field": CurrencyField
    },
    provide() {
       return {
@@ -299,16 +294,10 @@ export default {
             { label: "Cash", value: "cash" },
             { label: "Rent/Return", value: "rent" }
          ],
-         money: {
-            decimal: '.',
-            thousands: ',',
-            prefix: '£ ',
-            precision: 2,
-            masked: false
-         },
          locale: {
             decimal: '.',
             thousands: ',',
+            suffix: ' km',
             precision: 0,
             masked: false
          },
@@ -419,7 +408,6 @@ export default {
                this.message = "Your data was saved!";
                setTimeout(() => {
                   this.isProcessing = false;
-                  // console.log("form submitting : ", form);
                   this.$emit('add-modal-hide');
                }, 2000)
             }).catch(_error => {

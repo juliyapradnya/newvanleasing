@@ -51,7 +51,7 @@
           <b-form-row>
             <b-colxx sm="6">
               <b-form-group :label="$t('vehicle.list-price')" class="has-top-label">
-                <money v-model="$v.vehicleForm.listPrice.$model" v-bind="money" class="form-control" :state="!$v.vehicleForm.listPrice.$error"></money>
+                <currency-field v-model="$v.vehicleForm.listPrice.$model" :options="{ currency: 'GBP'}" :state="!$v.vehicleForm.listPrice.$error" />
                 <div
                   :class="{ 'invalid-feedback': true, 'd-block': $v.vehicleForm.listPrice.$error && !$v.vehicleForm.listPrice.required }"
                 >This field is required!</div>
@@ -59,7 +59,7 @@
             </b-colxx>
             <b-colxx sm="6">
               <b-form-group :label="$t('vehicle.otr-price')" class="has-top-label">
-                <money v-model="$v.vehicleForm.otrPrice.$model" v-bind="money" class="form-control" :state="!$v.vehicleForm.otrPrice.$error"></money>
+                <currency-field v-model="$v.vehicleForm.otrPrice.$model" :options="{ currency: 'GBP'}" :state="!$v.vehicleForm.otrPrice.$error" />
                 <div
                   :class="{ 'invalid-feedback': true, 'd-block': $v.vehicleForm.otrPrice.$error && !$v.vehicleForm.otrPrice.required }"
                 >This field is required!</div>
@@ -70,21 +70,21 @@
           <b-form-row>
             <b-colxx sm="6">
               <b-form-group :label="$t('vehicle.10k-desc')" class="has-top-label">
-                <money v-model="$v.vehicleForm.minContract10k.$model" v-bind="money" class="form-control" :state="!$v.vehicleForm.minContract10k.$error"></money>
+                <currency-field v-model="$v.vehicleForm.minContract10k.$model" :options="{ currency: 'GBP'}" :state="!$v.vehicleForm.minContract10k.$error" />
                 <div :class="{ 'invalid-feedback': true, 'd-block': $v.vehicleForm.minContract10k.$error && !$v.vehicleForm.minContract10k.required }"
                 >This field is required!</div>
               </b-form-group>
             </b-colxx>
             <b-colxx sm="6">
               <b-form-group :label="$t('vehicle.18k-desc')" class="has-top-label">
-                <money v-model="$v.vehicleForm.minContract18k.$model" v-bind="money" class="form-control" :state="!$v.vehicleForm.minContract18k.$error"></money>
+                <currency-field v-model="$v.vehicleForm.minContract18k.$model" :options="{ currency: 'GBP'}" :state="!$v.vehicleForm.minContract18k.$error" />
                 <div :class="{ 'invalid-feedback': true, 'd-block': $v.vehicleForm.minContract18k.$error && !$v.vehicleForm.minContract18k.required }"
                 >This field is required!</div>
               </b-form-group>
             </b-colxx>
           </b-form-row>
           <b-form-group :label="$t('vehicle.service-intervals')" class="has-top-label">
-            <money v-model="$v.vehicleForm.serviceMaintenance.$model" v-bind="locale" class="form-control" :state="!$v.vehicleForm.serviceMaintenance.$error"></money>
+            <money v-model="$v.vehicleForm.serviceMaintenance.$model" v-bind="distance" class="form-control" :state="!$v.vehicleForm.serviceMaintenance.$error"></money>
             <div v-if="!$v.vehicleForm.serviceMaintenance.numeric"
                 :class="{ 'invalid-feedback': true, 'd-block': $v.vehicleForm.serviceMaintenance.$error && !$v.vehicleForm.serviceMaintenance.numeric }"
             >Must be a number</div>
@@ -112,7 +112,7 @@
             </b-colxx>
             <b-colxx sm="6">
               <b-form-group :label="$t('vehicle.service-miles')" class="has-top-label">
-                <money v-model="$v.vehicleForm.serviceMiles.$model" v-bind="locale" class="form-control" :state="!$v.vehicleForm.serviceMiles.$error"></money>
+                <money v-model="$v.vehicleForm.serviceMiles.$model" v-bind="distance" class="form-control" :state="!$v.vehicleForm.serviceMiles.$error"></money>
                 <div v-if="!$v.vehicleForm.serviceMiles.numeric"
                     :class="{ 'invalid-feedback': true, 'd-block': $v.vehicleForm.serviceMiles.$error && !$v.vehicleForm.serviceMiles.numeric }"
                 >Must be a number</div>
@@ -140,7 +140,7 @@
             </b-colxx>
             <b-colxx sm="12">
               <b-form-group :label="$t('vehicle.service-mileage')" class="has-top-label">
-                <money v-model="$v.vehicleForm.serviceMileage.$model" v-bind="locale" class="form-control" :state="!$v.vehicleForm.serviceMileage.$error"></money>
+                <money v-model="$v.vehicleForm.serviceMileage.$model" v-bind="distance" class="form-control" :state="!$v.vehicleForm.serviceMileage.$error"></money>
                 <div v-if="!$v.vehicleForm.serviceMileage.numeric"
                     :class="{ 'invalid-feedback': true, 'd-block': $v.vehicleForm.serviceMileage.$error && !$v.vehicleForm.serviceMileage.numeric }"
                 >Must be a number</div>
@@ -178,7 +178,7 @@
           </b-form-group>
           <b-form-group :label="$t('vehicle.residual-value')" class="has-top-label">
             <b-input-group>
-              <money v-model="$v.vehicleForm.residualValue.$model" v-bind="money" class="form-control"  :state="!$v.vehicleForm.residualValue.$error"></money>
+              <currency-field v-model="$v.vehicleForm.residualValue.$model" :options="{ currency: 'GBP'}" :state="!$v.vehicleForm.residualValue.$error" />
             </b-input-group>
             <div v-if="!$v.vehicleForm.residualValue.required"
               :class="{ 'invalid-feedback': true, 'd-block': $v.vehicleForm.residualValue.$error && !$v.vehicleForm.residualValue.required }"
@@ -216,32 +216,32 @@
           </b-form-group>
           <b-form-group v-show="methodsType === 'Hire Purchase'"
           :label="$t('vehicle.deposit')"  class="has-top-label">
-            <money v-model="$v.vehicleForm.deposit.$model" v-bind="money" class="form-control" :state="!$v.vehicleForm.deposit.$error"></money>
+            <currency-field v-model="$v.vehicleForm.deposit.$model" :options="{ currency: 'GBP'}" :state="!$v.vehicleForm.deposit.$error" />
             <b-form-invalid-feedback v-if="!$v.vehicleForm.deposit.numeric">Must be a number</b-form-invalid-feedback>
           </b-form-group>
           <b-form-group v-show="methodsType === 'Hire Purchase'"
           :label="$t('vehicle.monthly-repayment')"  class="has-top-label">
-            <money v-model="$v.vehicleForm.monthlyRepay.$model" v-bind="money" class="form-control" :state="!$v.vehicleForm.monthlyRepay.$error"></money>
+            <currency-field v-model="$v.vehicleForm.monthlyRepay.$model" :options="{ currency: 'GBP'}" :state="!$v.vehicleForm.monthlyRepay.$error" />
             <b-form-invalid-feedback v-if="!$v.vehicleForm.monthlyRepay.numeric">Must be a number</b-form-invalid-feedback>
           </b-form-group>
           <b-form-group v-show="methodsType === 'Hire Purchase' || methodsType === 'Cash'"
           :label="$t('vehicle.final-payment')"  class="has-top-label">
-            <money v-model="$v.vehicleForm.finalPay.$model" v-bind="money" class="form-control" :state="!$v.vehicleForm.finalPay.$error"></money>
+            <currency-field v-model="$v.vehicleForm.finalPay.$model" :options="{ currency: 'GBP'}" :state="!$v.vehicleForm.finalPay.$error" />
             <b-form-invalid-feedback v-if="!$v.vehicleForm.finalPay.numeric">Must be a number</b-form-invalid-feedback>
           </b-form-group>
           <b-form-group v-show="methodsType === 'Hire Purchase' || methodsType === 'Cash'"
           :label="$t('vehicle.documentation-fee')"  class="has-top-label">
-            <money v-model="$v.vehicleForm.docFee.$model" v-bind="money" class="form-control" :state="!$v.vehicleForm.docFee.$error"></money>
+            <currency-field v-model="$v.vehicleForm.docFee.$model" :options="{ currency: 'GBP'}" :state="!$v.vehicleForm.docFee.$error" />
             <b-form-invalid-feedback v-if="!$v.vehicleForm.docFee.numeric">Must be a number</b-form-invalid-feedback>
           </b-form-group>
           <b-form-group v-show="methodsType === 'Hire Purchase' || methodsType === 'Cash'"
           :label="$t('vehicle.final-fee')"  class="has-top-label">
-            <money v-model="$v.vehicleForm.finalFee.$model" v-bind="money" class="form-control" :state="!$v.vehicleForm.finalFee.$error"></money>
+            <currency-field v-model="$v.vehicleForm.finalFee.$model" :options="{ currency: 'GBP'}" :state="!$v.vehicleForm.finalFee.$error" />
             <b-form-invalid-feedback v-if="!$v.vehicleForm.finalFee.numeric">Must be a number</b-form-invalid-feedback>
           </b-form-group>
           <b-form-group v-show="methodsType === 'Hire Purchase' || methodsType === 'Cash'"
           :label="$t('vehicle.other-fee')"  class="has-top-label">
-            <money v-model="$v.vehicleForm.otherFee.$model" v-bind="money" class="form-control" :state="!$v.vehicleForm.otherFee.$error"></money>
+            <currency-field v-model="$v.vehicleForm.otherFee.$model" :options="{ currency: 'GBP'}" :state="!$v.vehicleForm.otherFee.$error" />
             <b-form-invalid-feedback v-if="!$v.vehicleForm.otherFee.numeric">Must be a number</b-form-invalid-feedback>
           </b-form-group>
         </b-form>
@@ -256,6 +256,7 @@ import { apiUrl } from "../../constants/config";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 import { Money } from 'v-money';
+import CurrencyField from "../../components/Common/CurrencyField"
 import Datepicker from "vuejs-datepicker";
 import {
   validationMixin
@@ -271,7 +272,8 @@ export default {
   components: {
     "v-select": vSelect,
     "datepicker": Datepicker,
-    "money": Money
+    "money": Money,
+    "currency-field": CurrencyField
   },
   props: ["items"],
   data() {
@@ -319,16 +321,10 @@ export default {
         "Non HP",
         "Fixed"
       ],
-      money: {
+      distance: {
         decimal: '.',
         thousands: ',',
-        prefix: '£ ',
-        precision: 2,
-        masked: false
-      },
-      locale: {
-        decimal: '.',
-        thousands: ',',
+        suffix: ' km',
         precision: 0,
         masked: false
       },

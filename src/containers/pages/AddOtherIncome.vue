@@ -67,7 +67,7 @@
       </b-form-group>
       <b-form-group :label="$t('additional.amount')" class="has-top-label">
         <b-input-group>
-          <money v-model="$v.amount_oi.$model" v-bind="money" class="form-control" :state="!$v.amount_oi.$error"></money>
+          <currency-field v-model="$v.amount_oi.$model" :options="{ currency: 'GBP'}" :state="!$v.amount_oi.$error" />
         </b-input-group>
         <div v-if="!$v.amount_oi.required"
           :class="{ 'invalid-feedback': true, 'd-block': $v.amount_oi.$error && !$v.amount_oi.required }"
@@ -115,7 +115,7 @@ import { apiUrl } from "../../constants/config";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 import { getDirection } from "../../utils";
-import { Money } from 'v-money';
+import CurrencyField from "../../components/Common/CurrencyField";
 import Datepicker from "vuejs-datepicker";
 import {
   validationMixin
@@ -130,7 +130,7 @@ export default {
   components: {
     "v-select": vSelect,
     "datepicker": Datepicker,
-    "money": Money
+    "currency-field": CurrencyField
   },
   props: ["categories", "statuses"],
   data() {
@@ -146,14 +146,7 @@ export default {
       id_purchase_order: "",
       description_income: "",
       amount_oi: "",
-      payment_profile: "",
-      money: {
-        decimal: '.',
-        thousands: ',',
-        prefix: '£ ',
-        precision: 2,
-        masked: false
-      }
+      payment_profile: ""
     };
   },
   mixins: [validationMixin],

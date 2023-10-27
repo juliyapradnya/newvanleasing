@@ -4,7 +4,7 @@ export const defaultMenuType = 'menu-sub-hidden' // 'menu-default', 'menu-sub-hi
 export const adminRoot = '/app';
 export const searchPath = `${adminRoot}/#`
 export const buyUrl = 'https://1.envato.market/nEyZa'
-//export const apiUrl = 'http://vanleasing.test/api';
+// export const apiUrl = 'http://vanleasing.test/api';
 export const apiUrl = 'https://apivl.piomenosystem.com/api';
 
 export const subHiddenBreakpoint = 1440
@@ -35,13 +35,9 @@ export const firebaseConfig = {
 //   role: UserRole.Admin
 // }
 
-// export const currentUser = {
-//   id: '2',
-//   username: 'username',
-//   img: '/assets/img/profiles/l-1.jpg',
-//   date: 'Last seen today 15:24',
-//   role: UserRole.Admin
-// }
+export const currentUser = {
+  role: UserRole.Admin
+}
 
 export const isAuthGuardActive = true;
 export const themeRadiusStorageKey = 'theme_radius'

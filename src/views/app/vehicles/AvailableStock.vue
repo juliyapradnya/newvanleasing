@@ -79,7 +79,7 @@ export default {
                sortField: "vehicle_registration",
                title: "Vehicle Registration",
                titleClass: "center aligned",
-               dataClass: "text-muted text-uppercase"
+               dataClass: "list-item-heading text-uppercase"
             },
             {
                name: "vehicle_manufactur",

@@ -19,7 +19,9 @@
             pagination-path="data"
             @vuetable:pagination-data="onPaginationData">
             <template slot="status" slot-scope="props">
-               <b-badge pill :variant="(props.rowData.status_next_step === 'Available') ? 'primary': 'light'">{{ props.rowData.status_next_step }}</b-badge>
+               <b-badge v-show="props.rowData.status_next_step === 'Available'" pill variant="primary">{{ props.rowData.status_next_step }}</b-badge>
+               <b-badge v-show="props.rowData.status_next_step === 'Hired'" pill variant="light">{{ props.rowData.status_next_step }}</b-badge>
+               <b-badge v-show="props.rowData.status_next_step === 'Sold'" pill variant="dark">{{ props.rowData.status_next_step }}</b-badge>
             </template>
             <template slot="actions" slot-scope="props">
                <div>

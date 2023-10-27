@@ -12,9 +12,14 @@
           <vuetable ref="vuetable" class="order-with-arrow responsive-table" :api-url="apiBase" :query-params="makeQueryParams"
             :per-page="perPage" :reactive-api-url="true" :fields="fields" data-path="data.data" pagination-path="data"
             @vuetable:pagination-data="onPaginationData">
+            <template slot="price" slot-scope="props">
+              <span>
+                £ {{ props.rowData.sold_price | withcoma }}
+              </span>
+            </template>
             <template slot="date" slot-scope="props">
               <span>
-                {{ props.rowData.contract_start_date | datetime }}
+                {{ props.rowData.vehicle_sold_date | datetime }}
               </span>
             </template> 
             <template slot="action" slot-scope="props">
@@ -34,6 +39,7 @@
   <script>
   import axios from "axios";
   import { apiUrl } from "../../../constants/config";
+  import moment from "moment";
   import Vuetable from "vuetable-2/src/components/Vuetable";
   import VuetablePaginationBootstrap from "../../../components/Common/VuetablePaginationBootstrap";
   import DatatableHeading from "../../datatable/DatatableHeading";
@@ -74,11 +80,11 @@
             sortField: "vehicle_registration",
             title: "Vehicle Registration",
             titleClass: "center aligned",
-            dataClass: "align-middle text-muted",
+            dataClass: "align-middle list-item-heading",
             width: "15%"
           },
           {
-            name: "sold_price",
+            name: "__slot:price",
             sortField: "sold_price",
             title: "Sold Price",
             titleClass: "center aligned",
@@ -86,7 +92,7 @@
             width: "15%"
           },
           {
-            name: "vehicle_sold_date",
+            name: "__slot:date",
             sortField: "vehicle_sold_date",
             title: "Vehicle Sold Date",
             titleClass: "center aligned",
@@ -108,6 +114,14 @@
           }
         ]
       };
+    },
+    filters: {
+      datetime: function(date) {
+        return moment(date).format('LL')
+      },
+      withcoma: function(num) {
+        return Number(num).toLocaleString()
+      }
     },
     methods: {
       fetchDefleet() {

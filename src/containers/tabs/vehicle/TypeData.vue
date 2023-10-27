@@ -33,62 +33,32 @@
     </b-form-group>
     <b-form-group v-show="methodsType === 'hire'"
     :label="$t('vehicle.deposit')"  class="has-top-label">
-      <!-- <b-form-input
-        type="text"
-        v-model.trim="$v.methodsData.deposit.$model"
-        :state="!$v.methodsData.deposit.$error"
-      /> -->
-      <money v-model="$v.methodsData.deposit.$model" v-bind="money" class="form-control" :state="!$v.methodsData.deposit.$error"></money>
+      <currency-field v-model="$v.methodsData.deposit.$model" :options="{ currency: 'GBP'}" :state="!$v.methodsData.deposit.$error" />
       <b-form-invalid-feedback v-if="!$v.methodsData.deposit.numeric">Must be a number</b-form-invalid-feedback>
     </b-form-group>
     <b-form-group v-show="methodsType === 'hire'"
     :label="$t('vehicle.monthly-repayment')"  class="has-top-label">
-      <!-- <b-form-input
-        type="text"
-        v-model.trim="$v.methodsData.monthlyRepay.$model"
-        :state="!$v.methodsData.monthlyRepay.$error"
-      /> -->
-      <money v-model="$v.methodsData.monthlyRepay.$model" v-bind="money" class="form-control" :state="!$v.methodsData.monthlyRepay.$error"></money>
+      <currency-field v-model="$v.methodsData.monthlyRepay.$model" :options="{ currency: 'GBP'}" :state="!$v.methodsData.monthlyRepay.$error" />
       <b-form-invalid-feedback v-if="!$v.methodsData.monthlyRepay.decimal">Must be a number</b-form-invalid-feedback>
     </b-form-group>
     <b-form-group v-show="methodsType === 'hire' || methodsType === 'cash'"
     :label="$t('vehicle.final-payment')"  class="has-top-label">
-      <!-- <b-form-input
-        type="text"
-        v-model.trim="$v.methodsData.finalPay.$model"
-        :state="!$v.methodsData.finalPay.$error"
-      /> -->
-      <money v-model="$v.methodsData.finalPay.$model" v-bind="money" class="form-control" :state="!$v.methodsData.finalPay.$error"></money>
+      <currency-field v-model="$v.methodsData.finalPay.$model" :options="{ currency: 'GBP'}" :state="!$v.methodsData.finalPay.$error" />
       <b-form-invalid-feedback v-if="!$v.methodsData.finalPay.decimal">Must be a number</b-form-invalid-feedback>
     </b-form-group>
     <b-form-group v-show="methodsType === 'hire' || methodsType === 'cash'"
     :label="$t('vehicle.documentation-fee')"  class="has-top-label">
-      <!-- <b-form-input
-        type="text"
-        v-model.trim="$v.methodsData.docFee.$model"
-        :state="!$v.methodsData.docFee.$error"
-      /> -->
-      <money v-model="$v.methodsData.docFee.$model" v-bind="money" class="form-control" :state="!$v.methodsData.docFee.$error"></money>
+      <currency-field v-model="$v.methodsData.docFee.$model" :options="{ currency: 'GBP'}" :state="!$v.methodsData.docFee.$error" />
       <b-form-invalid-feedback v-if="!$v.methodsData.docFee.decimal">Must be a number</b-form-invalid-feedback>
     </b-form-group>
     <b-form-group v-show="methodsType === 'hire' || methodsType === 'cash'"
     :label="$t('vehicle.final-fee')"  class="has-top-label">
-      <!-- <b-form-input
-        type="text"
-        v-model.trim="$v.methodsData.finalFee.$model"
-        :state="!$v.methodsData.finalFee.$error"
-      /> -->
-      <money v-model="$v.methodsData.finalFee.$model" v-bind="money" class="form-control" :state="!$v.methodsData.finalFee.$error"></money>
+      <currency-field v-model="$v.methodsData.finalFee.$model" :options="{ currency: 'GBP'}" :state="!$v.methodsData.finalFee.$error" />
       <b-form-invalid-feedback v-if="!$v.methodsData.finalFee.decimal">Must be a number</b-form-invalid-feedback>
     </b-form-group>
     <b-form-group v-show="methodsType === 'hire' || methodsType === 'cash'"
     :label="$t('vehicle.other-fee')"  class="has-top-label">
-      <!-- <b-form-input
-        type="text"
-        v-model.trim="$v.methodsData.otherFee.$model"
-        :state="!$v.methodsData.otherFee.$error"
-      /> -->
-      <money v-model="$v.methodsData.otherFee.$model" v-bind="money" class="form-control" :state="!$v.methodsData.otherFee.$error"></money>
+      <currency-field v-model="$v.methodsData.otherFee.$model" :options="{ currency: 'GBP'}" :state="!$v.methodsData.otherFee.$error" />
       <b-form-invalid-feedback v-if="!$v.methodsData.otherFee.decimal">Must be a number</b-form-invalid-feedback>
     </b-form-group>
   </div>
@@ -99,11 +69,13 @@ import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 import { getDirection } from "../../../utils";
 import { Money } from 'v-money';
+import CurrencyField from "../../../components/Common/CurrencyField";
 
 export default {
   components: {
     "v-select": vSelect,
-    "money": Money
+    "money": Money,
+    "currency-field": CurrencyField
   },
   inject: ['$v'],
   props: ['methodsData', 'methodsType'],

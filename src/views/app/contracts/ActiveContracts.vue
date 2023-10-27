@@ -56,7 +56,7 @@ export default {
           sortField: "agreement_number",
           title: "Agreement Number",
           titleClass: "center aligned",
-          dataClass: "align-middle text-muted text-uppercase",
+          dataClass: "align-middle list-item-heading text-uppercase",
           width: "8%",
           
         },

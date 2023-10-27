@@ -13,7 +13,9 @@
         :query-params="makeQueryParams" :per-page="perPage" :reactive-api-url="true" :fields="fields"
         data-path="data.data" pagination-path="data" @vuetable:pagination-data="onPaginationData">
         <template slot="status" slot-scope="props">
-          <b-badge pill :variant="(props.rowData.next_step_status_sales === 'Hired') ? 'primary' : 'light'">{{ props.rowData.next_step_status_sales }}</b-badge>
+          <b-badge v-show="props.rowData.next_step_status_sales === 'Hired'" pill variant="primary">{{ props.rowData.next_step_status_sales }}</b-badge>
+          <b-badge v-show="props.rowData.next_step_status_sales === 'Innactive'" pill variant="light">{{ props.rowData.next_step_status_sales }}</b-badge>
+          <b-badge v-show="props.rowData.next_step_status_sales === 'Sold'" pill variant="dark">{{ props.rowData.next_step_status_sales }}</b-badge>
         </template>
         <template slot="actions" slot-scope="props">
           <div v-if="props.rowData.next_step_status_sales !== 'Hired'" >

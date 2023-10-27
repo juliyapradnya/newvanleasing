@@ -14,7 +14,7 @@
             @vuetable:pagination-data="onPaginationData">
             <template slot="date" slot-scope="props">
               <span>
-                {{ props.rowData.contract_start_date | datetime }}
+                {{ props.rowData.vehicle_return_date | datetime }}
               </span>
             </template> 
             <template slot="action" slot-scope="props">
@@ -34,6 +34,7 @@
   <script>
   import axios from "axios";
   import { apiUrl } from "../../../constants/config";
+  import moment from "moment";
   import Vuetable from "vuetable-2/src/components/Vuetable";
   import VuetablePaginationBootstrap from "../../../components/Common/VuetablePaginationBootstrap";
   import DatatableHeading from "../../datatable/DatatableHeading";
@@ -74,7 +75,7 @@
             sortField: "vehicle_registration",
             title: "Vehicle Registration",
             titleClass: "center aligned",
-            dataClass: "align-middle text-muted",
+            dataClass: "align-middle list-item-heading",
             width: "15%"
           },
           {
@@ -94,7 +95,7 @@
             width: "15%"
           },
           {
-            name: "vehicle_return_date",
+            name: "__slot:date",
             sortField: "vehicle_return_date",
             title: "Vehicle Return Date",
             titleClass: "center aligned",
@@ -116,6 +117,11 @@
           }
         ]
       };
+    },
+    filters: {
+      datetime: function(date) {
+        return moment(date).format('LL')
+      }
     },
     methods: {
       fetchRehiring() {
