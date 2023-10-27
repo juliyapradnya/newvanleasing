@@ -1,5 +1,5 @@
 <template>
-   <b-modal id="modallg" ref="modallg" size="lg" :title="$t('vehicle.add-new')" hide-footer>
+   <b-modal id="modallg" ref="modallg" size="lg" scrollable :title="$t('vehicle.add-new')" hide-footer>
       <div class="wizard wizard-default">
          <tab-vehicle-info @add-modal-hide="hideModal('modallg')"/>
       </div>

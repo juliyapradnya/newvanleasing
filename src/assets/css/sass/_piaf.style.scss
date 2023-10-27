@@ -42,6 +42,7 @@ Table of Contents
 37.Videojs
 38.Tables
 39.Invoice Print
+40.Placeholder
 
 */
 
@@ -156,7 +157,7 @@ body {
 }
 
 .fixed-background {
-  background: url("/assets/img/login/balloon-lg.jpg") no-repeat center center fixed;
+  background: url("/assets/img/login/login-lg.jpg") no-repeat center center fixed;
   background-size: cover;
   width: 100%;
   height: 100%;
@@ -1281,6 +1282,13 @@ button {
   &.small-icon {
     font-size: 12px;
     line-height: 32px;
+  }
+}
+
+.placeholder-button {
+  color: #4e3594;
+  &:hover {
+    color: #3c1e8e;
   }
 }
 
@@ -3110,6 +3118,10 @@ body.default-transition main {
   border: initial;
   background: initial;
   padding-top: 0;
+}
+
+.card-placeholder {
+  background-color: #4e3594;
 }
 
 /* 17.Dashboard*/
@@ -5141,6 +5153,8 @@ input:-webkit-autofill {
 .auth-card {
   display: flex;
   flex-direction: row;
+  max-width: 40%;
+  margin-left: auto;
   @include depth(1);
 
   .image-side {
@@ -5155,12 +5169,13 @@ input:-webkit-autofill {
   }
 
   .form-side {
-    width: 60%;
+    width: 100%;
     padding: 80px;
   }
 
   @include respond-below(md) {
     flex-direction: column;
+    max-width: unset;
 
     .image-side {
       width: 100%;

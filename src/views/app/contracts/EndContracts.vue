@@ -8,13 +8,13 @@
   >
     <b-tab>
       <template #title>
-        <p>{{ $t('contract.return') }} <b-badge :variant="(tabIndex == 0)?'secondary':'light'" class="ml-2">{{ returnCount }}</b-badge></p>
+        <p class="mb-2">{{ $t('contract.return') }} <b-badge :variant="(tabIndex == 0)?'secondary':'light'" class="ml-2">{{ returnCount }}</b-badge></p>
       </template>
       <tab-contract-return @mounted-return-tab="getReturnCount"/>
     </b-tab>
     <b-tab>
       <template #title>
-        <p>{{ $t('contract.sold') }} <b-badge :variant="(tabIndex == 1)?'secondary':'light'" class="ml-2">{{ soldCount }}</b-badge></p>
+        <p class="mb-2">{{ $t('contract.sold') }} <b-badge :variant="(tabIndex == 1)?'secondary':'light'" class="ml-2">{{ soldCount }}</b-badge></p>
       </template>
       <tab-contract-sold @mounted-sold-tab="getSoldCount"/>
     </b-tab>

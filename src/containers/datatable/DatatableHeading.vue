@@ -1,5 +1,5 @@
 <template>
-  <b-colxx xxs="12">
+  <b-colxx xxs="12" class="mb-5">
     <h1>{{ title }}</h1>
     <slot></slot>
     <piaf-breadcrumb v-show="!noBreadcrumbs"  />
@@ -37,7 +37,7 @@
         </div>
       </b-collapse>
     </div>
-    <div v-show="separator" class="separator mb-5" />
+    <!-- <div v-show="separator" class="separator mb-5" /> -->
   </b-colxx>
 </template>
 <script>

@@ -1,9 +1,9 @@
 <template>
    <div>
       <b-row>
-         <b-colxx xxs="12">
+         <b-colxx xxs="12" class="mb-4">
             <piaf-breadcrumb :heading="$t('additional.header')" />
-            <div class="separator mb-5"></div>
+            <!-- <div class="separator mb-5"></div> -->
          </b-colxx>
       </b-row>
       <b-row>
@@ -21,9 +21,21 @@
                      <div class="position-absolute card-top-buttons">
                         <b-button @click.prevent="getTab('tab-additional-cost')"
                         v-b-modal.modalothercost variant="secondary" size="xl" class="icon-button">
-                           <svg class="mt-n1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#ffffff">
-                              <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title></title> <g id="Complete"> <g data-name="add" id="add-2"> <g> <line fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="12" x2="12" y1="19" y2="5"></line> <line fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="5" x2="19" y1="12" y2="12"></line> </g> </g> </g> </g>
-                           </svg>
+                        <svg data-v-63191ed2="" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#ffffff" class="mt-n1 text-primary">
+                           <g data-v-63191ed2="" id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                           <g data-v-63191ed2="" id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                           <g data-v-63191ed2="" id="SVGRepo_iconCarrier">
+                              <title data-v-63191ed2=""></title>
+                              <g data-v-63191ed2="" id="Complete">
+                                 <g data-v-63191ed2="" data-name="add" id="add-2">
+                                 <g data-v-63191ed2="">
+                                    <line data-v-63191ed2="" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="12" x2="12" y1="19" y2="5"></line>
+                                    <line data-v-63191ed2="" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="5" x2="19" y1="12" y2="12"></line>
+                                 </g>
+                                 </g>
+                              </g>
+                           </g>
+                        </svg>
                         </b-button>
                      </div>
                   </card-with-button>
@@ -40,8 +52,20 @@
                      <div class="position-absolute card-top-buttons">
                         <b-button @click.prevent="getTab('tab-additional-income')"
                         v-b-modal.modalotherincome variant="secondary" size="xl" class="icon-button">
-                           <svg class="mt-n1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#ffffff">
-                              <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title></title> <g id="Complete"> <g data-name="add" id="add-2"> <g> <line fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="12" x2="12" y1="19" y2="5"></line> <line fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="5" x2="19" y1="12" y2="12"></line> </g> </g> </g> </g>
+                           <svg class="mt-n1 text-primary" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#ffffff">
+                              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                              <g id="SVGRepo_iconCarrier">
+                                 <title></title>
+                                 <g id="Complete">
+                                    <g data-name="add" id="add-2">
+                                    <g>
+                                       <line fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="12" x2="12" y1="19" y2="5"></line>
+                                       <line fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="5" x2="19" y1="12" y2="12"></line>
+                                    </g>
+                                    </g>
+                                 </g>
+                              </g>
                            </svg>
                         </b-button>
                      </div>

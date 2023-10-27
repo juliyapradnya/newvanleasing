@@ -4,6 +4,7 @@
          :searchChange="searchChange" :from="from" :to="to" :total="total" :perPage="perPage" :separator="true">
          <div class="top-right-button-container">
             <b-button
+               v-show="isLoad"
                v-b-modal.modallg
                variant="primary"
                size="lg"
@@ -12,12 +13,14 @@
          </div>
          <add-new-vehicle @added-data-table="updateTableRow"/>
       </datatable-heading>
-      <b-colxx xxs="12">
+      <b-colxx xxs="12" v-if="isLoad">
          <vuetable ref="vuetable" class="table-divided order-with-arrow responsive-table" :api-url="apiBase"
             :query-params="makeQueryParams" :per-page="perPage" :reactive-api-url="true" :fields="fields"
             data-path="data.data"
             pagination-path="data"
-            @vuetable:pagination-data="onPaginationData">
+            displayEmptyDataRow
+            @vuetable:pagination-data="onPaginationData"
+            @vuetable:load-error="checkUpdate">
             <template slot="status" slot-scope="props">
                <b-badge v-show="props.rowData.status_next_step === 'Available'" pill variant="primary">{{ props.rowData.status_next_step }}</b-badge>
                <b-badge v-show="props.rowData.status_next_step === 'Hired'" pill variant="light">{{ props.rowData.status_next_step }}</b-badge>
@@ -40,14 +43,31 @@
          <vuetable-pagination-bootstrap class="mt-4" ref="pagination" @vuetable-pagination:change-page="onChangePage" />
          <delete-item-modal :selectedItem="selectedItem" :endpoint="'/purchaseorder/'" @delete-modal-hide="updateTableRow"></delete-item-modal>
       </b-colxx>
+      <b-colxx xxs="12" v-else>
+         <b-card class="card-placeholder align-items-center">
+            <b-row>
+               <b-colxx md="4">
+                  <img src="/assets/img/cards/big-1.png" alt="No items" class="img-fluid">
+               </b-colxx>
+               <b-colxx md="6" class="text-white d-flex flex-column justify-content-center">
+                  <div class="px-md-5 mt-3 mt-md-0">
+                     <h2 class="font-weight-bold align-text-bottom lead">No vehicles found!</h2>
+                     <p class="mb-5">Start adding your first vehicle</p>
+                     <b-button v-b-modal.modallg size="xl" variant="light default" class="placeholder-button">{{ $t('vehicle.add-new') }}</b-button>
+                  </div>
+               </b-colxx>
+            </b-row>
+         </b-card>
+      </b-colxx>
    </b-row>
 </template>
 <script>
+import axios from "axios";
 import Vuetable from "vuetable-2/src/components/Vuetable";
 import VuetablePaginationBootstrap from "../../../components/Common/VuetablePaginationBootstrap";
 import { apiUrl } from "../../../constants/config";
 import DatatableHeading from "../../../containers/datatable/DatatableHeading";
-import AddNewVehicle from "../../../containers/pages/AddNewVehicle.vue";
+import AddNewVehicle from "../../../containers/pages/AddNewVehicle";
 import DeleteItemModal from "../../../containers/pages/DeleteItemModal";
 
 export default {
@@ -133,6 +153,23 @@ export default {
       };
    },
    methods: {
+      fetchData() {
+         let url = apiUrl + "/purchaseorderall"
+         axios
+         .get(url)
+         .then(r => r.data)
+         .then(res => {
+            if(res.data.data.length > 0){
+               this.isLoad = true
+            }
+         })
+         .catch(err => {
+            this.isLoad = false
+         })
+      },
+      checkUpdate(obj) {
+         console.log(obj)
+      },
       makeQueryParams(sortOrder, currentPage, perPage) {
          this.isLoading = false;
          return sortOrder[0]
@@ -161,6 +198,11 @@ export default {
          this.total = paginationData.total;
          this.lastPage = paginationData.last_page;
          this.items = paginationData.data;
+         if(this.items.length > 0) {
+            this.isLoad = true
+         } else if(this.items.length == 0) {
+            this.isLoad = false
+         }
          this.$refs.pagination.setPaginationData(paginationData);
       },
       onChangePage(page) {
@@ -187,8 +229,12 @@ export default {
          this.selectedItem = id;
       },
       updateTableRow() {
+         this.fetchData()
          this.$refs.vuetable.refresh();
       }
+   },
+   mounted() {
+      this.fetchData()
    }
 };
 </script>

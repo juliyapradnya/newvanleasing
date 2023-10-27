@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-row>
-      <b-colxx xxs="12">
+      <b-colxx xxs="12" class="mb-4">
         <piaf-breadcrumb :heading="$t('performance.header')" />
         <div class="d-flex justify-content-stretch align-items-center top-right-button-container">
           <i class="h5 simple-icon-calendar mb-0 mr-2" />
@@ -17,7 +17,7 @@
             v-model="endDate"
           ></datepicker>
         </div>
-        <div class="separator mb-5"></div>
+        <!-- <div class="separator mb-5"></div> -->
       </b-colxx>
     </b-row>
     <!-- <b-row >
@@ -32,7 +32,7 @@
         </b-card>
       </b-colxx>
     </b-row> -->
-    <b-row v-show="items.length > 0">
+    <b-row>
       <b-colxx sm="12" lg="4" class="mb-4">
         <gradient-with-radial-progress-card
           icon="iconsminds-inbox-out"
@@ -79,14 +79,14 @@
           :detail="$t('performance.loan-outstanding')"
         />
       </b-colxx>
-    </b-row>
-    <b-row>
       <b-colxx sm="12" md="6" class="mb-4">
         <sold-vehicle-chart-card></sold-vehicle-chart-card>
       </b-colxx>
       <b-colxx sm="12" md="6" class="mb-4">
         <hired-vehicle-chart-card :data="items"></hired-vehicle-chart-card>
       </b-colxx>
+    </b-row>
+    <b-row>
       <b-colxx xxs="12" class="mb-4">
         <b-card :title="$t('performance.top-hired')">
           <vuetable ref="vuetable" class="responsive-table" :api-url="apiBase" :query-params="makeQueryParams"
@@ -349,8 +349,8 @@ export default {
     },
     loanOutstanding() {
       var arr = this.items.map((x) => {
-        const remaining = this.getMonthDifference(new Date(x.contract_start_date), this.endDate, x.term_months)
-        return (remaining > 0) ? (x.term_months - remaining) * x.regular_monthly_payment : 0
+        const remaining = this.getMonthDifference(new Date(x.contract_start_date), this.endDate, x.hp_term)
+        return (remaining > 0) ? (x.hp_term - remaining) * x.regular_monthly_payment : 0
       })
       return arr.reduce(this.getSum, 0)
       // var arr = this.items.map(x => (

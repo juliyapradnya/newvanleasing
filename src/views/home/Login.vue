@@ -1,15 +1,15 @@
 <template>
     <b-row class="h-100">
-        <b-colxx xxs="12" md="10" class="mx-auto my-auto">
+        <b-colxx xxs="12" md="11" class="mx-auto my-auto">
             <b-card class="auth-card" no-body>
-                <div class="position-relative image-side">
+                <!-- <div class="position-relative image-side">
                     <p class="text-white h2">{{ $t('dashboards.magic-is-in-the-details') }}</p>
                     <p class="white mb-0">
                         Please use your credentials to login.
                         <br />If you are not a member, please
                         <router-link to="/user/register" class="white">register</router-link>.
                     </p>
-                </div>
+                </div> -->
                 <div class="form-side">
                     <router-link to="/">
                         <span class="logo-single" />
@@ -59,9 +59,9 @@
             </b-card>
         </b-colxx>
     </b-row>
-    </template>
+</template>
     
-    <script>
+<script>
     import {
         mapGetters,
         mapActions
@@ -83,7 +83,7 @@
                 form: {
                     // email: "test@coloredstrategies.com",
                     username: "",
-                    password: "11111111"
+                    password: ""
                 },
             };
         },
