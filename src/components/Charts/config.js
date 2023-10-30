@@ -81,10 +81,13 @@ export const areaChartOptions = {
         },
         ticks: {
           beginAtZero: true,
-          stepSize: 10,
-          min: 40,
-          max: 70,
-          padding: 20
+          stepSize: 3000,
+          min: 0,
+          max: 9000,
+          padding: 20,
+          callback: function(value, index, ticks) {
+            return '£' + value;
+          }
         }
       }
     ],
