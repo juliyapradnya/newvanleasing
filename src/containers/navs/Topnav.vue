@@ -191,7 +191,6 @@ import {
   searchPath,
   menuHiddenBreakpoint,
   localeOptions,
-  buyUrl,
   adminRoot
 } from "../../constants/config";
 import { getDirection, setDirection, getThemeColor, setThemeColor } from "../../utils";
@@ -210,7 +209,6 @@ export default {
       menuHiddenBreakpoint,
       searchPath,
       localeOptions,
-      buyUrl,
       notifications,
       isDarkActive: false,
       adminRoot

@@ -157,8 +157,8 @@ body {
 }
 
 .fixed-background {
-  background: url("/assets/img/login/login-lg.jpg") no-repeat center center fixed;
-  background-size: cover;
+  background: url("/assets/img/login/login-van.png") no-repeat center center fixed;
+  background-size: 100%;
   width: 100%;
   height: 100%;
   position: fixed;
@@ -715,6 +715,9 @@ p {
 .white {
   color: $button-text-color !important;
 }
+.opacity-0 {
+  opacity: 0;
+}
 
 .opacity-25 {
   opacity: 0.25;
@@ -726,6 +729,10 @@ p {
 
 .opacity-75 {
   opacity: 0.75;
+}
+
+.opacity-100 {
+  opacity: 1;
 }
 
 /* 02.Buttons */
@@ -3122,6 +3129,12 @@ body.default-transition main {
 
 .card-placeholder {
   background-color: #4e3594;
+  opacity: 0;
+  transition: opacity 500ms ease;
+  &.show {
+    opacity: 1;
+    transition: opacity 500ms ease;
+  }
 }
 
 /* 17.Dashboard*/

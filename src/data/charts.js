@@ -43,16 +43,15 @@ export const areaChartData = {
       label: '',
       data: [54, 63, 60, 65, 60, 68, 60],
       borderColor: colors.themeColor1,
-      pointBackgroundColor: colors.foregroundColor,
       pointBorderColor: colors.themeColor1,
       pointHoverBackgroundColor: colors.themeColor1,
-      pointHoverBorderColor: colors.foregroundColor,
-      pointRadius: 4,
-      pointBorderWidth: 2,
-      pointHoverRadius: 5,
+      pointHoverBorderColor: colors.themeColor1,
+      pointRadius: 2,
+      pointBorderWidth: 3,
+      pointHoverRadius: 2,
       fill: true,
-      borderWidth: 2,
-      backgroundColor: colors.themeColor1_10
+      borderWidth: 3,
+      backgroundColor: colors.themeColor2_10
     }
   ]
 }

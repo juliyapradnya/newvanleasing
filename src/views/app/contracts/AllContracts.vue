@@ -3,12 +3,12 @@
     <datatable-heading :title="$t('menu.all-contracts')" :changePageSize="changePageSize" :searchChange="searchChange"
       :from="from" :to="to" :total="total" :perPage="perPage" :separator="true">
       <div class="top-right-button-container">
-        <b-button v-b-modal.modalright variant="primary" size="lg" class="top-right-button text-uppercase">{{ $t('contract.add-new')
+        <b-button v-show="isLoad" v-b-modal.modalright variant="primary" size="lg" class="top-right-button text-uppercase">{{ $t('contract.add-new')
         }}</b-button>
       </div>
       <add-new-contract @added-data-table="onAddedDataTable" :key="componentKey"/>
     </datatable-heading>
-    <b-colxx xxs="12">
+    <b-colxx v-show="isLoad" xxs="12">
       <vuetable ref="vuetable" class="table-divided order-with-arrow responsive-table" :api-url="apiBase"
         :query-params="makeQueryParams" :per-page="perPage" :reactive-api-url="true" :fields="fields"
         data-path="data.data" pagination-path="data" @vuetable:pagination-data="onPaginationData">
@@ -32,12 +32,29 @@
       <delete-item-modal :selectedItem="selectedItem" :endpoint="'/salesorder/'" @delete-modal-hide="updateTableRow"></delete-item-modal>
       <view-rehire-contract ref="rehireModal" @added-data-table="onAddedDataTable" :key="componentKey"/>
     </b-colxx>
+    <b-colxx v-if="fullyLoaded" xxs="12">
+      <b-card class="card-placeholder align-items-center" :class="(isLoad)?'':'show'">
+        <b-row>
+            <b-colxx md="4">
+              <img src="/assets/img/cards/big-2.png" alt="No items" class="img-fluid">
+            </b-colxx>
+            <b-colxx md="6" class="text-white d-flex flex-column justify-content-center">
+              <div class="px-md-5 mt-3 mt-md-0">
+                  <h2 class="font-weight-bold align-text-bottom lead">No contracts found!</h2>
+                  <p class="mb-5">Start adding your first contract</p>
+                  <b-button v-b-modal.modalright size="xl" variant="light default" class="placeholder-button">{{ $t('contract.add-new') }}</b-button>
+              </div>
+            </b-colxx>
+        </b-row>
+      </b-card>
+    </b-colxx>
   </b-row>
 </template>
 <script>
+import axios  from "axios";
+import { apiUrl } from "../../../constants/config";
 import Vuetable from "vuetable-2/src/components/Vuetable";
 import VuetablePaginationBootstrap from "../../../components/Common/VuetablePaginationBootstrap";
-import { apiUrl } from "../../../constants/config";
 import DatatableHeading from "../../../containers/datatable/DatatableHeading";
 import AddNewContract from "../../../containers/pages/AddNewContract";
 import ViewRehireContract from "../../../containers/pages/ViewRehireContract";
@@ -56,6 +73,7 @@ export default {
   data() {
     return {
       isLoad: false,
+      fullyLoaded: false,
       apiBase: apiUrl + "/salesorder",
       sort: "",
       order: "",
@@ -136,6 +154,23 @@ export default {
     };
   },
   methods: {
+    fetchData() {
+      let url = apiUrl + "/salesorder?per_page=1"
+      axios
+        .get(url)
+        .then(r => r.data)
+        .then(res => {
+          if(res.data.data.length > 0){
+            this.isLoad = true
+          }
+        })
+        .catch(err => {
+          this.isLoad = false
+          setTimeout(() => {
+            this.fullyLoaded = true
+          }, 300)
+        })
+    },
     makeQueryParams(sortOrder, currentPage, perPage) {
       this.selectedItems = [];
       this.isLoading = false;
@@ -197,8 +232,12 @@ export default {
       this.selectedItem = id;
     },
     updateTableRow() {
+      this.fetchData()
       this.$refs.vuetable.refresh();
     }
+  },
+  mounted() {
+    this.fetchData()
   }
 };
 </script>

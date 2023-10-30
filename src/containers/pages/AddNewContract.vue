@@ -320,7 +320,7 @@ export default {
           this.message = "Your data was saved!";
           setTimeout(() => {
             this.hideModal('modalright');
-          }, 2000)
+          }, 1000)
         }).catch(_error => {
           this.status = "fail";
           this.message = "The agreement number has already been taken, please use different number";
@@ -337,7 +337,7 @@ export default {
       this.$refs[refname].hide()
       setTimeout(() => {
         this.$emit('added-data-table')
-      }, 2000)
+      }, 1000)
     }
   },
   computed: {

@@ -155,7 +155,7 @@ import "vue-select/dist/vue-select.css";
 import { getDirection } from "../../utils";
 import { Money } from 'v-money';
 import Datepicker from "vuejs-datepicker";
-import CurrencyField from '../../components/Common/CurrencyField.vue';
+import CurrencyField from '../../components/Common/CurrencyField';
 import {
   validationMixin
 } from "vuelidate";

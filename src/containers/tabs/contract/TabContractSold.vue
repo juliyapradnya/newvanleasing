@@ -125,17 +125,18 @@
     },
     methods: {
       fetchDefleet() {
-        let url = apiUrl + "/showagreementnumberinvehiclesold";
+        let url = apiUrl + "/showagreementnumberinvehiclesold?per_page=8";
         axios
           .get(url)
           .then(r => r.data)
           .then(res =>  {
-            let defleet = res.data.filter(x => (x.status_next_step !== 'Hired'))
-            if(defleet.length > 1) {
-              this.noDefleet = false
-            } else {
-              this.noDefleet = true
-            }
+            this.noDefleet = false
+            // let defleet = res.data.filter(x => (x.status_next_step !== 'Hired'))
+            // if(defleet.length > 1) {
+            //   this.noDefleet = false
+            // } else {
+            //   this.noDefleet = true
+            // }
           }).catch(_error => {
             this.noDefleet = true
             console.log("Can't add data!")
@@ -197,6 +198,7 @@
         this.$refs.vuetable.refresh();
       },
       updateTableRow() {
+        this.fetchDefleet()
         this.$refs.vuetable.refresh();
       }
     },

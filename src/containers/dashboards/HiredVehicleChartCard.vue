@@ -3,11 +3,11 @@
     <b-card-body>
       <div class="float-left float-none-xs">
         <div class="d-inline-block">
-          <h5 class="d-inline">{{ $t('performance.chart-2') }}</h5>
-          <span class="text-muted text-small d-block">{{ $t('dashboards.per-session') }}</span>
+          <h5 class="d-inline">{{ $t('performance.monthly-rental-income') }}</h5>
+          <span class="text-muted text-small d-block">{{ $t('performance.chart-2') }}</span>
         </div>
       </div>
-      <b-dropdown
+      <!-- <b-dropdown
         id="ddown5"
         :text="$t('dashboards.this-week')"
         size="xs"
@@ -16,10 +16,10 @@
       >
         <b-dropdown-item>{{ $t('dashboards.last-week') }}</b-dropdown-item>
         <b-dropdown-item>{{ $t('dashboards.this-month') }}</b-dropdown-item>
-      </b-dropdown>
+      </b-dropdown> -->
     </b-card-body>
     <div class="chart card-body pt-0">
-      <area-chart :data="areaChartData" container-class="chart" shadow />
+      <area-chart :data="charData" container-class="chart" shadow :key="chartkey" />
     </div>
   </b-card>
 </template>
@@ -40,35 +40,48 @@ export default {
   data() {
     return {
       areaChartData,
-      cars: []
+      cars: [],
+      chartkey: 0,
+      datasets: {
+        data: []
+      }
     };
   },
   methods: {
     formatDate(date) {
-      return moment(new Date(date)).format('MMM YY')
+      return moment(new Date(date)).format('MMM, YYYY')
     },
-    fetchCars() {
-      let url = apiUrl + "/purchaseorderall";
-      axios
-        .get(url)
-        .then(r => r.data)
-        .then(res =>  {
-          this.cars = res.data.data
-        }).catch(_error => {
-          console.log(_error)
-        })
+    refreshCart(val) {
+      this.datasets.data = val
+      this.chartkey++
     }
   },
   computed: {
+    filtered() {
+      return this.data.filter(x => x.status_next_step == 'Hired')
+    },
+    dataRental: {
+      get(){
+        // let hire = this.data.map(x => (Number(x.id)))
+        // return this.data.map(x => (Number(x.final_fees)))
+        // console.log(hire.length)
+        return this.filtered.map(x => (Number(x.rental_income)))
+      },
+      set(newVal){
+        return newVal
+      } 
+    },
+    dataLabel() {
+      // return [...new Map(this.data.map((x) => [x.id, this.formatDate(x.hire_purchase_starting_date)])).values()]
+      return this.filtered.map(x => (this.formatDate(x.contract_start_date)))
+    },
     charData() {
-      const dataRental = this.data.map(x => (Number(x.rental_income))),
-      dataLabel = this.data.map(x => (this.formatDate(x.hire_purchase_starting_date))),
-      hired = {
-        labels: ['jun', 'jul', 'aug', 'sep'],
+      const hired = {
+        labels: this.dataLabel,
         datasets: [
           {
             label: '',
-            data: this.cars.map(x => (Number(x.rental_income))),
+            data: this.datasets.data,
             borderColor: colors.themeColor1,
             pointBorderColor: colors.themeColor1,
             pointHoverBackgroundColor: colors.themeColor1,
@@ -85,8 +98,10 @@ export default {
       return hired
     }
   },
-  mounted() {
-    // this.fetchCars()
+  watch: {
+    dataRental(newVal, oldVal) {
+      this.refreshCart(newVal)
+    },
   }
 };
 </script>

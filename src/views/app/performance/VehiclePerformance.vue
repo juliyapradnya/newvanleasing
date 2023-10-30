@@ -55,7 +55,7 @@
       <b-colxx xs="6" lg="2" class="mb-3">
         <gradient-with-growth-progress-card
           icon="iconsminds-billing"
-          :title="`${totalCost}`"
+          :title="`${theCost}`"
           :status="costStatus"
           :prefix="'£'"
           :detail="$t('performance.total-cost')"
@@ -80,10 +80,10 @@
         />
       </b-colxx>
       <b-colxx sm="12" md="6" class="mb-4">
-        <sold-vehicle-chart-card></sold-vehicle-chart-card>
+        <hired-vehicle-chart-card :data="items"></hired-vehicle-chart-card>
       </b-colxx>
       <b-colxx sm="12" md="6" class="mb-4">
-        <hired-vehicle-chart-card :data="items"></hired-vehicle-chart-card>
+        <sold-vehicle-chart-card></sold-vehicle-chart-card>
       </b-colxx>
     </b-row>
     <b-row>
@@ -92,6 +92,9 @@
           <vuetable ref="vuetable" class="responsive-table" :api-url="apiBase" :query-params="makeQueryParams"
             :per-page="perPage" :reactive-api-url="true" :fields="fields" data-path="data.data" pagination-path="data"
             @vuetable:pagination-data="onPaginationData">
+            <template slot="vehicle" slot-scope="props">
+              <span>{{props.rowData.vehicle_manufactur}} {{props.rowData.vehicle_model}}</span>
+            </template>
             <template slot="action" slot-scope="props">
               <div>
                 <b-button :to="{ path: `/app/performance/${props.rowData.id}` }" variant="light" class="mr-1" size="sm"><i class="simple-icon-magnifier mr-1" /> View details</b-button>
@@ -158,9 +161,9 @@ export default {
           width: "15%"
         },
         {
-          name: "vehicle_manufactur",
+          name: "__slot:vehicle",
           sortField: "vehicle_manufactur",
-          title: "Manufacture",
+          title: "Vehicles",
           titleClass: "center aligned",
           dataClass: "text-muted",
           width: "15%"
@@ -192,6 +195,7 @@ export default {
       sortOrder: [
         {
           field: 'updated_at',
+          sortField: 'updated_at',
           direction: 'desc'
         }
       ]
@@ -268,7 +272,7 @@ export default {
             ? sortOrder[0].direction
             : "",
           sort: sortOrder[0]
-            ? sortOrder[0].field
+            ? sortOrder[0].sortField
             : "",
           page: currentPage,
           per_page: this.perPage,
@@ -278,7 +282,7 @@ export default {
           page: currentPage,
           per_page: this.perPage,
           order: this.sortOrder[0].direction,
-          sort: this.sortOrder[0].field,
+          sort: this.sortOrder[0].sortField,
           search: this.search
         };
     },
@@ -336,8 +340,16 @@ export default {
       return old.reduce(this.getSum, 0)
     },
     totalCost() {
-      let total = this.items.map(x => x.total_cost)
-      return total.reduce(this.getSum, 0)
+      // let total = this.items.map(x => x.total_cost)
+      let costs = [...new Map(this.items.map((x) => [x.id, x.total_cost])).values()];
+      return costs.reduce(this.getSum, 0)
+    },
+    otherCost() {
+      let oc = this.items.map(x => x.amount_oc)
+      return oc.reduce(this.getSum, 0)
+    },
+    theCost() {
+      return this.totalCost + this.otherCost
     },
     potentialIncome() {
       var arr = this.items.map((x) => {

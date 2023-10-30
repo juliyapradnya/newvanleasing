@@ -13,14 +13,13 @@
          </div>
          <add-new-vehicle @added-data-table="updateTableRow"/>
       </datatable-heading>
-      <b-colxx xxs="12" v-if="isLoad">
+      <b-colxx v-show="isLoad" xxs="12">
          <vuetable ref="vuetable" class="table-divided order-with-arrow responsive-table" :api-url="apiBase"
             :query-params="makeQueryParams" :per-page="perPage" :reactive-api-url="true" :fields="fields"
             data-path="data.data"
             pagination-path="data"
             displayEmptyDataRow
-            @vuetable:pagination-data="onPaginationData"
-            @vuetable:load-error="checkUpdate">
+            @vuetable:pagination-data="onPaginationData">
             <template slot="status" slot-scope="props">
                <b-badge v-show="props.rowData.status_next_step === 'Available'" pill variant="primary">{{ props.rowData.status_next_step }}</b-badge>
                <b-badge v-show="props.rowData.status_next_step === 'Hired'" pill variant="light">{{ props.rowData.status_next_step }}</b-badge>
@@ -43,8 +42,8 @@
          <vuetable-pagination-bootstrap class="mt-4" ref="pagination" @vuetable-pagination:change-page="onChangePage" />
          <delete-item-modal :selectedItem="selectedItem" :endpoint="'/purchaseorder/'" @delete-modal-hide="updateTableRow"></delete-item-modal>
       </b-colxx>
-      <b-colxx xxs="12" v-else>
-         <b-card class="card-placeholder align-items-center">
+      <b-colxx xxs="12" v-show="fullyLoaded">
+         <b-card class="card-placeholder align-items-center" :class="(isLoad)?'':'show'">
             <b-row>
                <b-colxx md="4">
                   <img src="/assets/img/cards/big-1.png" alt="No items" class="img-fluid">
@@ -82,6 +81,7 @@ export default {
    data() {
       return {
          isLoad: false,
+         fullyLoaded: false,
          apiBase: apiUrl + "/purchaseorderall",
          sort: "",
          order: "",
@@ -154,7 +154,7 @@ export default {
    },
    methods: {
       fetchData() {
-         let url = apiUrl + "/purchaseorderall"
+         let url = apiUrl + "/purchaseorderall?per_page=1"
          axios
          .get(url)
          .then(r => r.data)
@@ -165,10 +165,10 @@ export default {
          })
          .catch(err => {
             this.isLoad = false
+            setTimeout(() => {
+               this.fullyLoaded = true
+            }, 300)
          })
-      },
-      checkUpdate(obj) {
-         console.log(obj)
       },
       makeQueryParams(sortOrder, currentPage, perPage) {
          this.isLoading = false;
@@ -198,11 +198,6 @@ export default {
          this.total = paginationData.total;
          this.lastPage = paginationData.last_page;
          this.items = paginationData.data;
-         if(this.items.length > 0) {
-            this.isLoad = true
-         } else if(this.items.length == 0) {
-            this.isLoad = false
-         }
          this.$refs.pagination.setPaginationData(paginationData);
       },
       onChangePage(page) {

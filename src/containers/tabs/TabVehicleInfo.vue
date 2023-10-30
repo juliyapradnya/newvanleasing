@@ -260,11 +260,11 @@ export default {
             model: "",
             variant: "",
             colour: "",
-            listPrice: "",
-            otrPrice: "",
-            minContract10k: "",
-            minContract18k: "",
-            serviceMaintenance: "",
+            listPrice: 0,
+            otrPrice: 0,
+            minContract10k: 0,
+            minContract18k: 0,
+            serviceMaintenance: 0,
             motDate: null,
             rflDate: null,
             serviceMiles: 0,
@@ -275,19 +275,19 @@ export default {
          purchaseForm: {
             purchaseDate: null,
             fundingMethods: null,
-            residualValue: ""
+            residualValue: 0
          },
          methodsData: {
             funder: "",
             interestType: null,
-            interestRate: "",
+            interestRate: 0,
             terms: "",
-            deposit: "",
-            monthlyRepay: "",
-            finalPay: "",
-            docFee: "",
-            finalFee: "",
-            otherFee: ""
+            deposit: 0,
+            monthlyRepay: 0,
+            finalPay: 0,
+            docFee: 0,
+            finalFee: 0,
+            otherFee: 0
          },
          fundingMethodData: [
             { label: "Hire Purchase", value: "hire" },
