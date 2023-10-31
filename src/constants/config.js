@@ -5,7 +5,7 @@ export const adminRoot = '/app';
 export const searchPath = `${adminRoot}/#`
 export const buyUrl = 'https://1.envato.market/nEyZa'
 //export const apiUrl = 'http://vanleasing.test/api';
-export const apiUrl = 'https://apivl.piomenosystem.com/api';
+export const apiUrl = 'https://apivl.piumenosystem.com/api';
 
 export const subHiddenBreakpoint = 1440
 export const menuHiddenBreakpoint = 768
