@@ -84,7 +84,7 @@
           </div>
           <b-form-row>
             <b-colxx sm="6">
-              <b-form-group :label="$t('contract.mileage')">
+              <b-form-group :label="$t('contract.mileage')" class="has-top-label">
                 <b-input-group>
                   <money v-model="$v.contractForm.annualMileage.$model" v-bind="miles" class="form-control" :state="!$v.contractForm.annualMileage.$error"></money>
                   <!-- <b-form-input
@@ -99,7 +99,7 @@
               </b-form-group>
             </b-colxx>
             <b-colxx sm="6">
-              <b-form-group :label="$t('contract.doc-fee')">
+              <b-form-group :label="$t('contract.doc-fee')" class="has-top-label">
                 <b-input-group>
                   <currency-field v-model="$v.contractForm.docFee.$model" :options="{ currency: 'GBP'}" :state="!$v.contractForm.docFee.$error" />
                 </b-input-group>
@@ -111,7 +111,7 @@
           </b-form-row>
           <b-form-row>
             <b-colxx sm="4">
-              <b-form-group :label="$t('contract.initial-rental')">
+              <b-form-group :label="$t('contract.initial-rental')" class="has-top-label">
                 <b-input-group>
                   <currency-field v-model="$v.contractForm.initialRental.$model" :options="{ currency: 'GBP'}" :state="!$v.contractForm.initialRental.$error" />
                 </b-input-group>
@@ -121,7 +121,7 @@
               </b-form-group>
             </b-colxx>
             <b-colxx sm="4">
-              <b-form-group :label="$t('contract.monthly-rental')">
+              <b-form-group :label="$t('contract.monthly-rental')" class="has-top-label">
                 <b-input-group>
                   <currency-field v-model="$v.contractForm.monthlyRental.$model" :options="{ currency: 'GBP'}" :state="!$v.contractForm.monthlyRental.$error" />
                 </b-input-group>
@@ -131,7 +131,7 @@
               </b-form-group>
             </b-colxx>
             <b-colxx sm="4">
-              <b-form-group :label="$t('contract.delivery-charge')">
+              <b-form-group :label="$t('contract.delivery-charge')" class="has-top-label">
                 <b-input-group>
                   <currency-field v-model="$v.contractForm.otherIncome.$model" :options="{ currency: 'GBP'}" :state="!$v.contractForm.otherIncome.$error" />
                 </b-input-group>
