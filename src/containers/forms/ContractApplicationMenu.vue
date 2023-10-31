@@ -46,9 +46,9 @@ export default {
    props: ["vehicle"],
    filters: {
       datetime: function (date) {
-         // return moment(date).calendar();
+         return moment(new Date(date)).calendar();
          // return moment(new Date(date)).format('MMM, YYYY')
-         return moment(date).startOf('day').fromNow()
+         // return moment(date).startOf('day').fromNow()
       },
       withcoma: function(num) {
          return Number(num).toLocaleString()
