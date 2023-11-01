@@ -13,7 +13,7 @@ export default (to, from, next) => {
         }
       } else {
         setCurrentUser(null);
-        next('/user/login')
+        next('/login')
       }
     } else {
       next();

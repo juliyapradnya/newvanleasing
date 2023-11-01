@@ -1,20 +1,12 @@
 <template>
     <b-row class="h-100">
-        <b-colxx xxs="12" md="11" class="mx-auto my-auto">
-            <b-card class="auth-card" no-body>
-                <!-- <div class="position-relative image-side">
-                    <p class="text-white h2">{{ $t('dashboards.magic-is-in-the-details') }}</p>
-                    <p class="white mb-0">
-                        Please use your credentials to login.
-                        <br />If you are not a member, please
-                        <router-link to="/user/register" class="white">register</router-link>.
-                    </p>
-                </div> -->
-                <div class="form-side">
+        <b-colxx xxs="12" md="4" class="login-form d-flex justify-content-center align-items-center min-vh-100 ml-auto my-auto">
+            <div class="form-side w-100 px-5">
                     <router-link to="/">
                         <span class="logo-single" />
                     </router-link>
-                    <h6 class="mb-4">{{ $t('user.login-title')}}</h6>
+                    <!-- <h6 class="mb-4">{{ $t('user.login-title')}}</h6> -->
+                    <h6 class="mb-4">{{ $t('user.login-desc')}}</h6>
     
                     <b-form @submit.prevent="formSubmit" class="av-tooltip tooltip-label-bottom">
                         <!-- <b-form-group :label="$t('user.email')" class="has-float-label mb-4">
@@ -24,12 +16,12 @@
                             <b-form-invalid-feedback v-else-if="!$v.form.email.minLength">Your email must be minimum 4 characters</b-form-invalid-feedback>
                         </b-form-group> -->
 
-                        <b-form-group :label="$t('user.username')" class="has-float-label mb-4">
+                        <b-form-group :label="$t('user.username')" class="has-top-label mb-4">
                             <b-form-input type="text" v-model="$v.form.username.$model" :state="!$v.form.username.$error" />
                             <b-form-invalid-feedback v-if="!$v.form.username.required">Please enter your username</b-form-invalid-feedback>
                         </b-form-group>
     
-                        <b-form-group :label="$t('user.password')" class="has-float-label mb-4">
+                        <b-form-group :label="$t('user.password')" class="has-top-label mb-4">
                             <b-form-input type="password" v-model="$v.form.password.$model" :state="!$v.form.password.$error" />
                             <b-form-invalid-feedback v-if="!$v.form.password.required">Please enter your password</b-form-invalid-feedback>
                             <b-form-invalid-feedback v-else-if="!$v.form.password.minLength || !$v.form.password.maxLength">Your password must be between 4 and 16 characters</b-form-invalid-feedback>
@@ -56,7 +48,6 @@
                         </div>
                     </b-form>
                 </div>
-            </b-card>
         </b-colxx>
     </b-row>
 </template>

@@ -36,7 +36,7 @@
             &.day-header {
                 line-height: 2.3rem !important;
                 font-size: 0.8rem !important;
-                color: $separator-color !important;
+                color: $button-text-color !important;
             }
             &:not(.blank):not(.disabled).day:hover,
             &:not(.blank):not(.disabled).month:hover,
@@ -46,6 +46,12 @@
             &.selected, &.highlighted {
                 background: $theme-color-1 !important;
                 color: $button-text-color !important;
+            }
+            &.disabled {
+                color: $separator-color !important;
+            }
+            &.today {
+                background: $theme-color-2;
             }
         }
     }

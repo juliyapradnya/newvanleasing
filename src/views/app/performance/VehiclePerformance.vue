@@ -37,10 +37,10 @@
         <gradient-with-radial-progress-card
           icon="iconsminds-inbox-out"
           :title="`${totalHiredVehicle}`"
-          :detail="`Out of ${cars.length} vehicles`"
+          :detail="`Total Vehicles: ${cars.length}`"
           :suffix="'Hire Contract'"
           :percent="`${totalHiredVehicle}`*100/`${cars.length}`"
-          :progressText="`${hirePercentage} %`"
+          :progressText="`${hirePercentage}%`"
         />
       </b-colxx>
       <b-colxx xs="6" lg="2" class="mb-3">
@@ -132,6 +132,8 @@ export default {
     return {
       cars: [],
       items: [],
+      soldCars: [],
+      hiredCars: [],
       apiBase: apiUrl + "/showvehiclenumberexceptsold",
       sort: "",
       order: "",
@@ -419,8 +421,8 @@ export default {
     }
   },
   mounted() {
-    this.fetchCars()
     this.fetchData()
+    this.fetchCars()
   }
 }
 </script>

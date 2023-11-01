@@ -19,7 +19,7 @@
       </b-dropdown> -->
     </b-card-body>
     <div class="chart card-body pt-0">
-      <area-chart :data="charData" container-class="chart" shadow :key="chartkey" />
+      <area-chart :data="charData" :options="areaChartOptions" container-class="chart" shadow :key="chartkey" />
     </div>
   </b-card>
 </template>
@@ -28,6 +28,7 @@ import axios from 'axios'
 import { apiUrl } from "../../constants/config";
 import moment from 'moment'
 import AreaChart from "../../components/Charts/Area"
+import { areaChartOptions } from "../../components/Charts/config";
 import { areaChartData } from "../../data/charts"
 import { ThemeColors } from '../../utils'
 const colors = ThemeColors()
@@ -39,7 +40,7 @@ export default {
   },
   data() {
     return {
-      areaChartData,
+      areaChartOptions,
       cars: [],
       chartkey: 0,
       datasets: {

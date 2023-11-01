@@ -101,6 +101,41 @@ export const areaChartOptions = {
   }
 }
 
+export const soldChartOptions = {
+  legend: {
+    display: false
+  },
+  responsive: true,
+  maintainAspectRatio: false,
+  tooltips: chartTooltip,
+  scales: {
+    yAxes: [
+      {
+        gridLines: {
+          display: true,
+          lineWidth: 1,
+          color: 'rgba(0,0,0,0.1)',
+          drawBorder: false
+        },
+        ticks: {
+          beginAtZero: true,
+          stepSize: 5,
+          min: 0,
+          max: 15,
+          padding: 20,
+        }
+      }
+    ],
+    xAxes: [
+      {
+        gridLines: {
+          display: false
+        }
+      }
+    ]
+  }
+}
+
 export const scatterChartOptions = {
   legend: {
     position: 'bottom',

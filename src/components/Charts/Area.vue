@@ -19,6 +19,9 @@ export default {
     shadow: {
       type: Boolean,
       default: false
+    },
+    options: {
+      type: Object
     }
   },
   mounted() {
@@ -44,7 +47,7 @@ export default {
     const myChart = new Chart(ctx, {
       type: this.shadow ? "lineWithShadow" : "line",
       data: this.data,
-      options: areaChartOptions
+      options: this.options
     });
   }
 };

@@ -14,11 +14,11 @@ export const chartTooltip = {
   xPadding: 15,
   yPadding: 15,
   cornerRadius: 0.15,
-  callbacks: {
-    label: function(tooltipItems, data) { 
-      return '£' + tooltipItems.yLabel;
-    }
-  }
+  // callbacks: {
+  //   label: function(tooltipItems, data) { 
+  //     return '£' + tooltipItems.yLabel;
+  //   }
+  // }
 }
 
 
@@ -55,7 +55,7 @@ export const centerTextPlugin = {
         : activePercentage
     }
 
-    ctx.font = '36px Nunito, sans-serif'
+    ctx.font = '36px Poppins, sans-serif'
     ctx.fillStyle = colors.primaryColor
     ctx.textBaseline = 'middle'
 
@@ -64,7 +64,7 @@ export const centerTextPlugin = {
     var textY = height / 2
     ctx.fillText(text, textX, textY)
 
-    ctx.font = '14px Nunito, sans-serif'
+    ctx.font = '14px Poppins, sans-serif'
     ctx.textBaseline = 'middle'
 
     var text2 = activeLabel

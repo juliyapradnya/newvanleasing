@@ -6,9 +6,9 @@
           <b-row class="h-100">
             <b-colxx xxs="12" md="10" class="mx-auto my-auto">
               <b-card class="auth-card" no-body>
-                <div class="position-relative image-side">
-                  <p class="text-white h2">MAGIC IS IN THE DETAILS</p>
-                  <p class="white mb-0">Yes, it is indeed!</p>
+                <div class="position-relative image-side bg-light">
+                  <!-- <p class="text-white h2">MAGIC IS IN THE DETAILS</p>
+                  <p class="white mb-0">Yes, it is indeed!</p> -->
                 </div>
                 <div class="form-side">
                   <router-link to="/">
