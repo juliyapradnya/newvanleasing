@@ -8,6 +8,7 @@
   },
   "user": {
     "login-title": "Login",
+    "login-desc": "Hi there, welcome back.",
     "register": "Register",
     "forgot-password": "Forgot Password",
     "email": "E-mail",

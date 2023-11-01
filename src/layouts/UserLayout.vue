@@ -2,7 +2,7 @@
   <div id="root">
     <div class="fixed-background"></div>
     <main>
-      <div class="container">
+      <div class="container-fluid">
         <slot></slot>
       </div>
     </main>
