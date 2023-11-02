@@ -199,7 +199,7 @@ export default {
       miles: {
         decimal: '.',
         thousands: ',',
-        suffix: ' km',
+        suffix: ' miles',
         precision: 0,
         masked: false
       },

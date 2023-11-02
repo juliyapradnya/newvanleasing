@@ -22,15 +22,15 @@
     <p class="list-heading text-uppercase mb-4">{{ $t("vehicle.service-maintenance") }}</p>
     <p class="font-weight-semibold mb-3">
       <span class="text-muted text-small font-weight-light mr-1">{{ $t("vehicle.service-intervals") }}
-      </span>{{ vehicle.service_maintenance | withcoma }} km
+      </span>{{ vehicle.service_maintenance | withcoma }} miles
     </p>
     <p class="font-weight-semibold mb-3">
       <span class="text-muted text-small font-weight-light mr-1">{{ $t("vehicle.service-last") }}
-      </span>{{ vehicle.last_service_mileage | withcoma }} km
+      </span>{{ vehicle.last_service_mileage | withcoma }} miles
     </p>
     <p class="font-weight-semibold mb-3">
       <span class="text-muted text-small font-weight-light mr-1">{{ $t("vehicle.service-due") }}
-      </span>{{ vehicle.service_schedule_miles | withcoma }} km
+      </span>{{ vehicle.service_schedule_miles | withcoma }} miles
     </p>
     <p class="font-weight-semibold mb-3">
       <span class="text-muted text-small font-weight-light mr-1">{{ $t("vehicle.mot-date") }}

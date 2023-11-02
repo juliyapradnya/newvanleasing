@@ -26,7 +26,7 @@
         <span v-show="props.rowData.term_months">{{ props.rowData.term_months }} months</span>
       </template>
       <template slot="mileage" slot-scope="props">
-        <span v-show="props.rowData.annual_mileage">{{ props.rowData.annual_mileage }} km</span>
+        <span v-show="props.rowData.annual_mileage">{{ props.rowData.annual_mileage }} miles</span>
       </template>
       <template slot="date" slot-scope="props">
         <span v-show="props.rowData.contract_start_date">{{ props.rowData.contract_start_date | datetime }}</span>
