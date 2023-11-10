@@ -1,9 +1,9 @@
 <template>
   <b-card class="mb-4 text-center">
-    <i :class="icon"/>
-    <p class="card-text mb-2">{{ title }}</p>
+    <i :class="icon" class="mb-2"/>
     <p v-show="isComa" class="lead text-center">£ {{ count | addComa }}</p>
     <p v-show="!isComa" class="lead text-center">£ {{ count }}</p>
+    <p class="card-text mt-2 text-extra-small text-uppercase">{{ title }}</p>
   </b-card>
 </template>
 <script>
