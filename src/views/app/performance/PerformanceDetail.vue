@@ -1,13 +1,13 @@
 <template>
   <div v-if="isLoading" class="loading" key="itemLoading"></div>
   <div v-else>
-    <b-row>
+    <b-row class="mb-3">
       <b-colxx xxs="12">
         <b-link @click.prevent="$router.go(-1)" class="heading-icon baseline">
           <i class="simple-icon-arrow-left" />
         </b-link>
         <piaf-breadcrumb :heading="vehicle.vehicle_registration" />
-        <div class="separator mb-5"></div>
+        <!-- <div class="separator mb-5"></div> -->
       </b-colxx>
     </b-row>
     <b-row>
@@ -26,7 +26,7 @@
       </b-colxx>
       <b-colxx xxs="12" lg="6" class="mb-4">
         <b-card class="mb-lg-3" no-body>
-          <contract-history-card v-if="vehicle" :id="vehicle.id" />
+          <contract-history-card v-if="vehicle" :id="$route.params.id" />
         </b-card>
       </b-colxx>
     </b-row>
@@ -56,7 +56,7 @@ export default {
   },
   methods: {
     fetchCar(id) {
-      let url = apiUrl + "/listcostincard/" + id
+      let url = apiUrl + "/listvehicleinvehiclecard/" + id
       axios
       .get(url)
         .then(r => r.data)

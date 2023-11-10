@@ -98,7 +98,7 @@ export default {
         // },
         {
           name: "__slot:date",
-          title: "End Date",
+          title: "Start Date",
           titleClass: "center aligned",
           dataClass: "text-muted",
         },

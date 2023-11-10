@@ -3316,9 +3316,10 @@ body.default-transition main {
   }
 
   .card-text {
-    color: $secondary-color;
+    color: $theme-color-2;
     height: 30px;
     line-height: 26px;
+    letter-spacing: 2px;
   }
 
   .lead {
@@ -3335,6 +3336,21 @@ body.default-transition main {
   .card {
     transition: box-shadow $animation-time-long;
     cursor: pointer;
+  }
+
+  &.invert {
+    .card-text {
+      color: $foreground-color;
+    }
+    .lead {
+      color: $theme-color-2;
+    }
+    i {
+      color: $theme-color-2;
+    }
+    .card {
+      background-color: $theme-color-1;
+    }
   }
 
   @include respond-below(xl) {

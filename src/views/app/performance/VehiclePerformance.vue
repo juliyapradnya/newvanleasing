@@ -134,7 +134,7 @@ export default {
       items: [],
       soldCars: [],
       hiredCars: [],
-      apiBase: apiUrl + "/showvehiclenumberexceptsold",
+      apiBase: apiUrl + "/purchaseorderall",
       sort: "",
       order: "",
       page: 1,
@@ -364,7 +364,7 @@ export default {
     loanOutstanding() {
       var arr = this.items.map((x) => {
         const remaining = this.getMonthDifference(new Date(x.contract_start_date), this.endDate, x.hp_term)
-        return (remaining > 0) ? (x.hp_term - remaining) * x.regular_monthly_payment : 0
+        return (remaining > 0) ? (x.hp_term - remaining) * x.monthly_payment : 0
       })
       return arr.reduce(this.getSum, 0)
       // var arr = this.items.map(x => (

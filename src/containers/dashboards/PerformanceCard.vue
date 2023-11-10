@@ -1,54 +1,112 @@
 <template>
-  <b-row class="icon-cards-row d-flex justify-content-stretch">
-    <b-colxx>
-      <icon-card
-        :title="$t('performance.income')"
-        icon="iconsminds-financial"
-        :isComa="true"
-        :value="Number(theIncome)"
-      />
-    </b-colxx>
-    <b-colxx>
-      <icon-card
-        :title="$t('performance.cost')"
-        icon="iconsminds-billing"
-        :isComa="true"
-        :value="Number(theCost)"
-      />
-    </b-colxx>
-    <b-colxx>
-      <icon-card
-        :title="$t('performance.margin')"
-        icon="iconsminds-scale"
-        :isComa="true"
-        :value="Number(theMargin)"
-      />
-    </b-colxx>
-    <b-colxx>
-      <icon-card
-        :title="$t('performance.residual')"
-        icon="iconsminds-money-bag"
-        :isComa="true"
-        :value="Number(residualValue)"
-      />
-    </b-colxx>
-    <b-colxx v-show="!isSold">
-      <icon-card
-        :title="$t('performance.rental-income')"
-        icon="iconsminds-pricing"
-        :isComa="true"
-        :value="Number(rentalIncome)"
-      />
-    </b-colxx>
-    <b-colxx v-show="isSold">
-      <icon-card
-        :title="$t('performance.sold-price')"
-        icon="iconsminds-pricing"
-        :isComa="true"
-        :value="Number(soldPrice)"
-      />
-    </b-colxx>
-  </b-row>
+  <div>
+    <b-row class="icon-cards-row invert d-flex justify-content-stretch">
+      <b-colxx xxs="12" class="px-3">
+        <h3 v-if="vehicle.next_step_status_sales !== 'Sold'" class="list-heading mb-3">Projection Value</h3>
+      </b-colxx>
+      <b-colxx>
+        <icon-card
+          :title="$t('performance.income')"
+          icon="iconsminds-financial"
+          :isComa="true"
+          :value="Number(theIncome)"
+        />
+      </b-colxx>
+      <b-colxx>
+        <icon-card
+          :title="$t('performance.cost')"
+          icon="iconsminds-billing"
+          :isComa="true"
+          :value="Number(theCost)"
+        />
+      </b-colxx>
+      <b-colxx>
+        <icon-card
+          :title="$t('performance.margin')"
+          icon="iconsminds-scale"
+          :isComa="true"
+          :value="Number(theMargin)"
+        />
+      </b-colxx>
+      <b-colxx v-show="!isSold">
+        <icon-card
+          :title="$t('performance.residual')"
+          icon="iconsminds-money-bag"
+          :isComa="true"
+          :value="Number(residualValue)"
+        />
+      </b-colxx>
+      <b-colxx v-show="isSold">
+        <icon-card
+          :title="$t('performance.sold-price')"
+          icon="iconsminds-pricing"
+          :isComa="true"
+          :value="Number(soldPrice)"
+        />
+      </b-colxx>
+      <b-colxx>
+        <icon-card
+          :title="$t('performance.rental-income')"
+          icon="iconsminds-pricing"
+          :isComa="true"
+          :value="Number(rentalIncome)"
+        />
+      </b-colxx>
+    </b-row>
+    <b-row v-if="vehicle.next_step_status_sales !== 'Sold'" class="icon-cards-row d-flex justify-content-stretch">
+      <b-colxx xxs="12" class="px-3">
+        <h3 class="list-heading mb-3">Actual Value</h3>
+      </b-colxx>
+      <b-colxx>
+        <icon-card
+          :title="$t('performance.income')"
+          icon="iconsminds-financial"
+          :isComa="true"
+          :value="Number(actualIncome)"
+        />
+      </b-colxx>
+      <b-colxx>
+        <icon-card
+          :title="$t('performance.cost')"
+          icon="iconsminds-billing"
+          :isComa="true"
+          :value="Number(actualCost)"
+        />
+      </b-colxx>
+      <b-colxx>
+        <icon-card
+          :title="$t('performance.margin')"
+          icon="iconsminds-scale"
+          :isComa="true"
+          :value="Number(actualMargin)"
+        />
+      </b-colxx>
+      <b-colxx v-show="!isSold">
+        <icon-card
+          :title="$t('performance.residual')"
+          icon="iconsminds-money-bag"
+          :isComa="true"
+          :value="Number(residualValue)"
+        />
+      </b-colxx>
+      <b-colxx v-show="isSold">
+        <icon-card
+          :title="$t('performance.sold-price')"
+          icon="iconsminds-pricing"
+          :isComa="true"
+          :value="Number(soldPrice)"
+        />
+      </b-colxx>
+      <b-colxx>
+        <icon-card
+          :title="$t('performance.rental-income')"
+          icon="iconsminds-pricing"
+          :isComa="true"
+          :value="Number(rentalIncome)"
+        />
+      </b-colxx>
+    </b-row>
+  </div>
 </template>
 <script>
 import axios from 'axios';
@@ -68,10 +126,20 @@ export default {
       residualValue: 0,
       rentalIncome: 0,
       soldPrice: 0,
+      activeSales: '',
       isSold: false
     }
   },
   methods: {
+    getSum(total, num) {
+      return total + Math.round(num);
+    },
+    getMonthDifference(startDate, endDate) {
+      let outstanding = endDate.getMonth() -
+          startDate.getMonth() +
+          12 * (endDate.getFullYear() - startDate.getFullYear());
+      return outstanding
+    },
     async getTotalIncome(id) {
       let url = apiUrl + "/listtotalincome/" + id
       axios
@@ -152,16 +220,33 @@ export default {
     },
     theMargin() {
       return Number(this.theIncome) - Number(this.theCost)
+    },
+    actualIncome() {
+      const ongoing = this.getMonthDifference(new Date(this.vehicle.contract_start_date), new Date()) - 1
+      // console.log(ongoing)
+      return (ongoing > 0 && ongoing <= this.vehicle.term_months) ? ongoing * this.vehicle.monthly_rental + this.vehicle.first_payment : this.theIncome
+    },
+    actualCost() {
+      let v = this.vehicle
+      let subTotal = v.vehicle_tracking + v.monthly_payment
+      let sumCost = (this.otherCost !== null) ? v.sum_docdepoth + v.penalty_early_settlement + v.final_fees + this.otherCost
+      : v.sum_docdepoth + v.penalty_early_settlement + v.final_fees
+      const ongoing = this.getMonthDifference(new Date(v.hire_purchase_starting_date), new Date())
+      return (ongoing > 0 && ongoing !== v.hp_term) ? ongoing * subTotal + sumCost : 0
+    },
+    actualMargin() {
+      return this.actualIncome - this.actualCost
     }
   },
   mounted() {
-    this.getTotalIncome(this.vehicle.id)
-    this.getOtherIncome(this.vehicle.id)
-    this.getTotalCost(this.vehicle.id)
-    this.getOtherCost(this.vehicle.id)
-    this.getResidualValue(this.vehicle.id)
-    this.getRentalIncome(this.vehicle.id)
-    this.getSoldPrice(this.vehicle.id)
+    this.getTotalIncome(this.$route.params.id)
+    this.getOtherIncome(this.$route.params.id)
+    this.getTotalCost(this.$route.params.id)
+    this.getOtherCost(this.$route.params.id)
+    this.getResidualValue(this.$route.params.id)
+    this.getRentalIncome(this.$route.params.id)
+    this.getSoldPrice(this.$route.params.id)
+    // this.getActiveSales(this.vehicle.id)
   }
 }
 </script>

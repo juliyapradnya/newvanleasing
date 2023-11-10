@@ -126,7 +126,7 @@ export default {
     }
   },
   mounted() {
-    this.getOtherCost(this.vehicle.id)
+    this.getOtherCost(this.$route.params.id)
   }
 };
 </script>
