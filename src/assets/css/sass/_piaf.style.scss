@@ -3340,13 +3340,13 @@ body.default-transition main {
 
   &.invert {
     .card-text {
-      color: $foreground-color;
+      color: $theme-color-2;
     }
     .lead {
-      color: $theme-color-2;
+      color: $foreground-color;
     }
     i {
-      color: $theme-color-2;
+      color: $foreground-color;
     }
     .card {
       background-color: $theme-color-1;
