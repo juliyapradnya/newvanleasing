@@ -2,7 +2,7 @@
   <b-card>
     <p class="list-heading text-uppercase mb-4">{{ $t("performance.contract-history") }}</p>
     <vuetable
-      table-height="320px"
+      table-height="350px"
       ref="vuetable-scrollable"
       :api-url="apiBase"
       :fields="fields"
@@ -22,14 +22,15 @@
       <template slot="income" slot-scope="props">
         <span v-show="props.rowData.total_income">£ {{ props.rowData.total_income | withcoma }}</span>
       </template>
-      <template slot="term" slot-scope="props">
-        <span v-show="props.rowData.term_months">{{ props.rowData.term_months }} months</span>
-      </template>
       <template slot="mileage" slot-scope="props">
         <span v-show="props.rowData.annual_mileage">{{ props.rowData.annual_mileage }} miles</span>
       </template>
       <template slot="date" slot-scope="props">
         <span v-show="props.rowData.contract_start_date">{{ props.rowData.contract_start_date | datetime }}</span>
+      </template>
+      <template slot="end" slot-scope="props">
+        <span v-if="props.rowData.vehicle_return_date">{{ props.rowData.vehicle_return_date | datetime }}</span>
+        <span v-else>-</span>
       </template>
     </vuetable>
     <view-performance-details ref="performanceDetail"/>
@@ -84,12 +85,6 @@ export default {
           titleClass: "center aligned",
           dataClass: "text-muted",
         },
-        {
-          name: "__slot:term",
-          title: "Contract Length",
-          titleClass: "center aligned",
-          dataClass: "text-muted",
-        },
         // {
         //   name: "__slot:mileage",
         //   title: "Mileage",
@@ -99,6 +94,12 @@ export default {
         {
           name: "__slot:date",
           title: "Start Date",
+          titleClass: "center aligned",
+          dataClass: "text-muted",
+        },
+        {
+          name: "__slot:end",
+          title: "Return Date",
           titleClass: "center aligned",
           dataClass: "text-muted",
         },
@@ -121,7 +122,7 @@ export default {
   },
   filters: {
     datetime: function(date) {
-      return moment(date).format('MMMM Do YYYY')
+      return moment(date).format('LL')
     },
     withcoma: function(num) {
       return Number(num).toLocaleString()
