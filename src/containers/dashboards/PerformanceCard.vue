@@ -228,8 +228,8 @@ export default {
     },
     actualCost() {
       let v = this.vehicle
-      let year = v.hp_term / 12
-      let interest = v.hp_interest_per_annum / year
+      // let year = v.hp_term / 12
+      let interest = 1 + (v.hp_interest_per_annum / 100)
       let subTotal = v.monthly_payment * interest
 
       // let subTotal = v.vehicle_tracking + v.monthly_payment
