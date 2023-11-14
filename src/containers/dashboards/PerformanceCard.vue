@@ -116,7 +116,7 @@ export default {
   components: {
       'icon-card': IconCard
   },
-  props: ['vehicle'],
+  props: ['vehicle', 'subTotal'],
   data() {
     return {
       totalIncome: 0,
@@ -222,9 +222,9 @@ export default {
       return Number(this.theIncome) - Number(this.theCost)
     },
     actualIncome() {
-      const ongoing = this.getMonthDifference(new Date(this.vehicle.contract_start_date), new Date()) - 1
+      const ongoing = this.getMonthDifference(new Date(this.vehicle.contract_start_date), new Date())
       // console.log(ongoing)
-      return (ongoing > 0 && ongoing <= this.vehicle.term_months) ? ongoing * this.vehicle.monthly_rental + this.vehicle.first_payment : this.theIncome
+      return (ongoing > 0 && ongoing <= this.vehicle.term_months) ? ongoing * this.vehicle.monthly_rental + this.vehicle.first_payment + this.subTotal : this.theIncome
     },
     actualCost() {
       let v = this.vehicle
@@ -232,7 +232,7 @@ export default {
       let sumCost = (this.otherCost !== null) ? v.sum_docdepoth + v.penalty_early_settlement + v.final_fees + this.otherCost
       : v.sum_docdepoth + v.penalty_early_settlement + v.final_fees
       const ongoing = this.getMonthDifference(new Date(v.hire_purchase_starting_date), new Date())
-      return (ongoing > 0 && ongoing !== v.hp_term) ? ongoing * subTotal + sumCost : 0
+      return (ongoing > 0 && ongoing <= v.hp_term) ? ongoing * subTotal + sumCost : this.theCost
     },
     actualMargin() {
       return this.actualIncome - this.actualCost

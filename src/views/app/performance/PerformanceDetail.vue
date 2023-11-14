@@ -12,7 +12,7 @@
     </b-row>
     <b-row>
       <b-colxx xxs="12" lg="12">
-        <performance-card :vehicle="vehicle" />
+        <performance-card :vehicle="vehicle" :subTotal="subTotal" />
       </b-colxx>
       <b-colxx xxs="6" lg="3" class="mb-4">
         <b-card class="mb-lg-3" no-body>
@@ -50,11 +50,15 @@ export default {
   data() {
   return {
     isLoading: true,
+    subTotal: 0,
     vehicle: [],
     report: []
   }
   },
   methods: {
+    getSum(total, num) {
+      return total + Math.round(num);
+    },
     fetchCar(id) {
       let url = apiUrl + "/listvehicleinvehiclecard/" + id
       axios
@@ -62,6 +66,8 @@ export default {
         .then(r => r.data)
         .then(res => {
           this.isLoading = false
+          let subTotal = res.data.filter(x => x.next_step_status_sales !== "Hired").map(x => x.total_income)
+          this.subTotal = subTotal.reduce(this.getSum, 0)
           this.vehicle = res.data.pop()
         })
         .catch(err => {
