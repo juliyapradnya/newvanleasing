@@ -228,7 +228,11 @@ export default {
     },
     actualCost() {
       let v = this.vehicle
-      let subTotal = v.vehicle_tracking + v.monthly_payment
+      let year = v.hp_term / 12
+      let interest = v.hp_interest_per_annum / year
+      let subTotal = v.monthly_payment * interest
+
+      // let subTotal = v.vehicle_tracking + v.monthly_payment
       let sumCost = (this.otherCost !== null) ? v.sum_docdepoth + v.penalty_early_settlement + v.final_fees + this.otherCost
       : v.sum_docdepoth + v.penalty_early_settlement + v.final_fees
       const ongoing = this.getMonthDifference(new Date(v.hire_purchase_starting_date), new Date())
