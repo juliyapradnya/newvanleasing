@@ -67,7 +67,11 @@ export default {
         .then(res => {
           this.isLoading = false
           let subTotal = res.data.filter(x => x.next_step_status_sales !== "Hired").map(x => x.total_income)
-          this.subTotal = subTotal.reduce(this.getSum, 0)
+          if(subTotal.length > 1) {
+            this.subTotal = subTotal.reduce(this.getSum, 0)
+          } else {
+            this.subTotal = 0
+          }
           this.vehicle = res.data.pop()
         })
         .catch(err => {
