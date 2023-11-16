@@ -1,6 +1,7 @@
 <template>
   <b-card-body>
-    <ul class="list-unstyled mb-4">
+    <p class="list-heading text-uppercase mb-4">{{ $t("vehicle.step-name-1") }}</p>
+    <!-- <ul class="list-unstyled mb-4">
       <li class="nav-item">
         <p class="d-inline-block list-heading text-uppercase mb-0">{{ $t("vehicle.step-name-1") }}</p>
         <span class="d-flex align-items-center text-muted text-small font-weight-light float-right">{{ $t("pages.status") }}
@@ -12,8 +13,8 @@
             class="font-weight-normal ml-2">{{ vehicle.status_next_step }}</b-badge>
         </span>
       </li>
-    </ul>
-    <p class="font-weight-medium lead mb-3">{{ vehicle.vehicle_manufactur }} {{ vehicle.vehicle_model }}</p>
+    </ul> -->
+    <h2 class="font-weight-medium mb-5">{{ vehicle.vehicle_manufactur }} {{ vehicle.vehicle_model }}</h2>
     <p class="text-muted text-small font-weight-light mb-2">{{ $t("vehicle.variant") }}</p>
     <p class="mb-3">{{ vehicle.vehicle_variant }}</p>
     <p class="text-muted text-small font-weight-light mb-2">{{ $t("vehicle.colour") }}</p>
@@ -48,7 +49,7 @@ export default {
   props: ["vehicle"],
   filters: {
     datetime: function(date) {
-      return moment(date).format('MMMM Do YYYY')
+      return moment(date).format('ll')
     },
     withcoma: function(num) {
       return Number(num).toLocaleString()

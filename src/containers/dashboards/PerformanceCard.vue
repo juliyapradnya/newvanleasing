@@ -2,7 +2,8 @@
   <div>
     <b-row class="icon-cards-row invert d-flex justify-content-stretch">
       <b-colxx xxs="12" class="px-3">
-        <h3 v-if="vehicle.next_step_status_sales !== 'Sold'" class="list-heading mb-3">Projection Value</h3>
+        <h3 v-if="vehicle.next_step_status_sales == 'Sold'" class="list-heading mb-3">Actual Value</h3>
+        <h3 v-else class="list-heading mb-3">Projection Value</h3>
       </b-colxx>
       <b-colxx>
         <icon-card
@@ -211,8 +212,13 @@ export default {
   },
   computed: {
     theIncome() {
-      return (this.otherIncome !== null) ? Math.abs(Number(this.totalIncome) + Number(this.otherIncome))
-      : this.totalIncome
+      if(this.isSold == true) {
+        return (this.otherIncome !== null) ? Math.abs(Number(this.totalIncome) + Number(this.otherIncome))
+        : Number(this.totalIncome)
+      } else {
+        return (this.otherIncome !== null) ? Math.abs(Number(this.totalIncome) + Number(this.otherIncome) + Number(this.residualValue))
+        : Math.abs(Number(this.totalIncome) + Number(this.residualValue))
+      }
     },
     theCost() {
       return (this.otherCost !== null) ? Math.abs(Number(this.totalCost) + Number(this.otherCost))
@@ -224,19 +230,20 @@ export default {
     actualIncome() {
       const ongoing = this.getMonthDifference(new Date(this.vehicle.contract_start_date), new Date()) -1
       // console.log(ongoing)
-      return (ongoing > 0 && ongoing <= this.vehicle.term_months) ? ongoing * this.vehicle.monthly_rental + this.vehicle.first_payment + this.subTotal : this.theIncome
+      return (ongoing > 0 && ongoing <= this.vehicle.term_months) ? ongoing * this.vehicle.monthly_rental + this.vehicle.first_payment + this.subTotal
+      : this.theIncome - this.residualValue
     },
     actualCost() {
       let v = this.vehicle
-      // let year = v.hp_term / 12
-      let interest = 1 + (v.hp_interest_per_annum / 100)
-      let subTotal = v.monthly_payment * interest
-
-      // let subTotal = v.vehicle_tracking + v.monthly_payment
+      // let interest = 1 + (v.hp_interest_per_annum / 100)
+      // let subTotal = v.monthly_payment * interest
+      let subTotal = v.regular_monthly_payment + v.vehicle_tracking
       let sumCost = (this.otherCost !== null) ? v.sum_docdepoth + v.penalty_early_settlement + v.final_fees + this.otherCost
       : v.sum_docdepoth + v.penalty_early_settlement + v.final_fees
+      
+      
       const ongoing = this.getMonthDifference(new Date(v.hire_purchase_starting_date), new Date())
-      return (ongoing > 0 && ongoing <= v.hp_term) ? ongoing * subTotal + sumCost : this.theCost
+      return (ongoing > 0 && ongoing <= v.hp_term) ? (ongoing * subTotal) + sumCost : this.theCost
     },
     actualMargin() {
       return this.actualIncome - this.actualCost

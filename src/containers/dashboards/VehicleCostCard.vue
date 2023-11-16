@@ -80,7 +80,7 @@ export default {
   },
   filters: {
     datetime: function(date) {
-      return moment(date).format('MMMM Do YYYY')
+      return moment(date).format('ll')
     },
     withcoma: function(num) {
       return Number(num).toLocaleString()

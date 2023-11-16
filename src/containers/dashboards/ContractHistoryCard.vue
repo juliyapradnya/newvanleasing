@@ -16,9 +16,6 @@
       <template slot="customer" slot-scope="props">
         <span v-show="props.rowData.cust_name" @click.prevent="showPerformanceModal(props.rowData)" class="cursor-pointer">{{ props.rowData.cust_name }}</span>
       </template>
-      <template slot="status" slot-scope="props">
-        <b-badge v-show="props.rowData.next_step_status_sales" :variant="(props.rowData.next_step_status_sales === 'Hired') ? 'primary' : 'light'">{{ props.rowData.next_step_status_sales }}</b-badge>
-      </template>
       <template slot="income" slot-scope="props">
         <span v-show="props.rowData.total_income">£ {{ props.rowData.total_income | withcoma }}</span>
       </template>
@@ -31,6 +28,11 @@
       <template slot="end" slot-scope="props">
         <span v-if="props.rowData.vehicle_return_date">{{ props.rowData.vehicle_return_date | datetime }}</span>
         <span v-else>-</span>
+      </template>
+      <template slot="status" slot-scope="props">
+        <b-badge v-show="props.rowData.next_step_status_sales === 'Hired'" variant="primary">{{ props.rowData.next_step_status_sales }}</b-badge>
+        <b-badge v-show="props.rowData.next_step_status_sales === 'Innactive'" variant="light">{{ props.rowData.next_step_status_sales }}</b-badge>
+        <b-badge v-show="props.rowData.next_step_status_sales === 'Sold'" variant="dark">{{ props.rowData.next_step_status_sales }}</b-badge>
       </template>
     </vuetable>
     <view-performance-details ref="performanceDetail"/>
@@ -72,12 +74,7 @@ export default {
           title: "Customer",
           titleClass: "center aligned",
           dataClass: "enter aligned",
-        },
-        {
-          name: "__slot:status",
-          title: "Status",
-          titleClass: "center aligned text-center",
-          dataClass: "center aligned text-center",
+          width: "22%"
         },
         {
           name: "__slot:income",
@@ -103,6 +100,12 @@ export default {
           titleClass: "center aligned",
           dataClass: "text-muted",
         },
+        {
+          name: "__slot:status",
+          title: "Status",
+          titleClass: "center aligned text-center",
+          dataClass: "center aligned text-center",
+        },
         // {
         //   name: "__slot:action",
         //   title: "",
@@ -122,7 +125,7 @@ export default {
   },
   filters: {
     datetime: function(date) {
-      return moment(date).format('LL')
+      return moment(date).format('ll')
     },
     withcoma: function(num) {
       return Number(num).toLocaleString()
