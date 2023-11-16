@@ -33,6 +33,7 @@
     "all-vehicles": "All Vehicles",
     "all-contracts": "All Contracts",
     "end-contracts": "Return & Defleet",
+    "base-interest": "Base Interest",
     "additional": "Cost & Income (Additional)",
     "performance": "Performance",
     "all": "All",
@@ -334,6 +335,12 @@
     "assign-to": "Assigned to",
     "sold-price": "Sold Price"
   },
+  "interest": {
+    "header": "All Base Interest",
+    "add-interest": "Add Base Interest",
+    "start-date": "Starting from",
+    "value": "Base Interest Value"
+  },
   "additional": {
     "header": "Additonal Cost & Income",
     "has-found": "Has been found.",
@@ -379,6 +386,8 @@
     "contract-history": "Contract History",
     "contract-details": "Contract Details",
     "tooltip-cost": "(p*r*t)/100. Amount (p), interest rate (r) and time period (t).",
+    "tooltip-margin": "Annual Margin Percentage.",
+    "tooltip-margin-2": "Margin Percentage.",
     "nso": "Original Sales Order Number",
     "customer-name": "Customer Name",
     "contract-status": "Contract Status",
