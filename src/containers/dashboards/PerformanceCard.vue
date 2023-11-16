@@ -27,7 +27,12 @@
           icon="iconsminds-scale"
           :isComa="true"
           :value="Number(theMargin)"
-        />
+        >
+        <h6 class="position-absolute font-weight-normal card-top-buttons text-white">
+          <b-badge v-show="isComputed" pill id="annual-margin">{{annualMargin}}%</b-badge>
+          <b-tooltip target="annual-margin" placement="bottom" :title="$t('performance.tooltip-margin')"/>
+        </h6>
+        </icon-card>
       </b-colxx>
       <b-colxx v-show="!isSold">
         <icon-card
@@ -80,7 +85,12 @@
           icon="iconsminds-scale"
           :isComa="true"
           :value="Number(actualMargin)"
-        />
+        >
+          <h6 class="position-absolute font-weight-normal card-top-buttons text-white">
+            <b-badge v-show="isComputed" pill id="annual-actualmargin">{{marginPercentage}}%</b-badge>
+            <b-tooltip target="annual-actualmargin" placement="bottom" :title="$t('performance.tooltip-margin-2')"/>
+          </h6>
+        </icon-card>
       </b-colxx>
       <b-colxx v-show="!isSold">
         <icon-card
@@ -128,7 +138,8 @@ export default {
       rentalIncome: 0,
       soldPrice: 0,
       activeSales: '',
-      isSold: false
+      isSold: false,
+      isComputed: false
     }
   },
   methods: {
@@ -238,15 +249,18 @@ export default {
       // let interest = 1 + (v.hp_interest_per_annum / 100)
       // let subTotal = v.monthly_payment * interest
       let subTotal = v.regular_monthly_payment + v.vehicle_tracking
-      let sumCost = (this.otherCost !== null) ? v.sum_docdepoth + v.penalty_early_settlement + v.final_fees + this.otherCost
-      : v.sum_docdepoth + v.penalty_early_settlement + v.final_fees
-      
-      
+
       const ongoing = this.getMonthDifference(new Date(v.hire_purchase_starting_date), new Date())
-      return (ongoing > 0 && ongoing <= v.hp_term) ? (ongoing * subTotal) + sumCost : this.theCost
+      return (ongoing > 0 && ongoing <= v.hp_term) ? (ongoing * subTotal) + v.hp_deposit_amount : this.theCost
     },
     actualMargin() {
       return this.actualIncome - this.actualCost
+    },
+    annualMargin() {
+      return parseFloat(this.theMargin / this.rentalIncome * 100).toFixed(2);
+    },
+    marginPercentage() {
+      return parseFloat(this.actualMargin / this.rentalIncome * 100).toFixed(2);
     }
   },
   mounted() {
@@ -257,6 +271,9 @@ export default {
     this.getResidualValue(this.$route.params.id)
     this.getRentalIncome(this.$route.params.id)
     this.getSoldPrice(this.$route.params.id)
+    setTimeout(() => {
+      this.isComputed = true
+    }, 1500);
     // this.getActiveSales(this.vehicle.id)
   }
 }

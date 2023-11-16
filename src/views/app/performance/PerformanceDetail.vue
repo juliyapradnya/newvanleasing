@@ -11,11 +11,11 @@
           <h4 class="d-flex align-items-center">
             <span class="text-muted font-weight-light text-small">{{ $t("pages.status") }}</span>
             <b-badge v-if="vehicle.status_next_step == 'Available'" pill variant="success"
-              class="font-weight-normal ml-2">{{ vehicle.status_next_step }}</b-badge>
+              class="ml-2">{{ vehicle.status_next_step }}</b-badge>
             <b-badge v-else-if="vehicle.status_next_step == 'Hired'" pill variant="primary"
-              class="font-weight-normal ml-2">{{ vehicle.status_next_step }}</b-badge>
+              class="ml-2">{{ vehicle.status_next_step }}</b-badge>
             <b-badge v-else pill variant="dark"
-              class="font-weight-normal ml-2">{{ vehicle.status_next_step }}</b-badge>
+              class="ml-2">{{ vehicle.status_next_step }}</b-badge>
           </h4>
         </div>
         <!-- <div class="separator mb-5"></div> -->

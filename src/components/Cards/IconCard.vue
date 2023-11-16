@@ -1,5 +1,6 @@
 <template>
   <b-card class="mb-4 text-center">
+    <slot/>
     <i :class="icon" class="mb-2"/>
     <p v-show="isComa" class="lead text-center">£ {{ count | addComa }}</p>
     <p v-show="!isComa" class="lead text-center">£ {{ count }}</p>
