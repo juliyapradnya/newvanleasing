@@ -224,11 +224,11 @@ export default {
   computed: {
     theIncome() {
       if(this.isSold == true) {
-        return (this.otherIncome !== null) ? Math.abs(Number(this.totalIncome) + Number(this.otherIncome))
-        : Number(this.totalIncome)
+        return (this.otherIncome !== null) ? Math.abs(Number(this.rentalIncome) + Number(this.soldPrice) + Number(this.otherIncome))
+        : Math.abs(Number(this.rentalIncome) + Number(this.soldPrice))
       } else {
-        return (this.otherIncome !== null) ? Math.abs(Number(this.totalIncome) + Number(this.otherIncome) + Number(this.residualValue))
-        : Math.abs(Number(this.totalIncome) + Number(this.residualValue))
+        return (this.otherIncome !== null) ? Math.abs(Number(this.rentalIncome) + Number(this.otherIncome) + Number(this.residualValue))
+        : Math.abs(Number(this.rentalIncome) + Number(this.residualValue))
       }
     },
     theCost() {
