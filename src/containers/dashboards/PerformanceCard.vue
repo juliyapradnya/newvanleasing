@@ -29,7 +29,7 @@
           :value="Number(theMargin)"
         >
         <h6 class="position-absolute font-weight-normal card-top-buttons text-white">
-          <b-badge v-show="isComputed" pill id="annual-margin">{{annualMargin}}%</b-badge>
+          <b-badge v-show="isComputed && theMargin > 0" pill id="annual-margin">{{annualMargin}}%</b-badge>
           <b-tooltip target="annual-margin" placement="bottom" :title="$t('performance.tooltip-margin')"/>
         </h6>
         </icon-card>
@@ -87,7 +87,7 @@
           :value="Number(actualMargin)"
         >
           <h6 class="position-absolute font-weight-normal card-top-buttons text-white">
-            <b-badge v-show="isComputed" pill id="annual-actualmargin">{{marginPercentage}}%</b-badge>
+            <b-badge v-show="isComputed && actualMargin > 0" pill id="annual-actualmargin">{{marginPercentage}}%</b-badge>
             <b-tooltip target="annual-actualmargin" placement="bottom" :title="$t('performance.tooltip-margin-2')"/>
           </h6>
         </icon-card>
@@ -130,6 +130,7 @@ export default {
   props: ['vehicle', 'subTotal'],
   data() {
     return {
+      baseInterest: 0,
       totalIncome: 0,
       otherIncome: 0,
       totalCost: 0,
@@ -151,6 +152,15 @@ export default {
           startDate.getMonth() +
           12 * (endDate.getFullYear() - startDate.getFullYear());
       return outstanding
+    },
+    async getBaseInterest(id) {
+      let url = apiUrl + "/sumtotalbaseinterest/" + id
+      axios
+      .get(url)
+        .then(r => r.data)
+        .then(res => {
+          this.baseInterest = (res.data.sum_total_base_interest == null) ? 0 : res.data.sum_total_base_interest
+        })
     },
     async getTotalIncome(id) {
       let url = apiUrl + "/listtotalincome/" + id
@@ -232,8 +242,8 @@ export default {
       }
     },
     theCost() {
-      return (this.otherCost !== null) ? Math.abs(Number(this.totalCost) + Number(this.otherCost))
-      : this.totalCost
+      return (this.otherCost !== null) ? Math.abs(Number(this.totalCost) + Number(this.otherCost) + Number(this.baseInterest))
+      : this.totalCost + this.baseInterest
     },
     theMargin() {
       return Number(this.theIncome) - Number(this.theCost)
@@ -251,7 +261,7 @@ export default {
       let subTotal = v.regular_monthly_payment + v.vehicle_tracking
 
       const ongoing = this.getMonthDifference(new Date(v.hire_purchase_starting_date), new Date())
-      return (ongoing > 0 && ongoing <= v.hp_term) ? (ongoing * subTotal) + v.hp_deposit_amount : this.theCost
+      return (ongoing > 0 && ongoing <= v.hp_term) ? (ongoing * subTotal) + v.hp_deposit_amount + this.baseInterest : this.theCost + this.baseInterest
     },
     actualMargin() {
       return this.actualIncome - this.actualCost
@@ -264,6 +274,7 @@ export default {
     }
   },
   mounted() {
+    this.getBaseInterest(this.$route.params.id)
     this.getTotalIncome(this.$route.params.id)
     this.getOtherIncome(this.$route.params.id)
     this.getTotalCost(this.$route.params.id)
