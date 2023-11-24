@@ -29,7 +29,7 @@
           :value="Number(theMargin)"
         >
         <h6 class="position-absolute font-weight-normal card-top-buttons text-white">
-          <b-badge v-show="isComputed && theMargin > 0" pill id="annual-margin">{{annualMargin}}%</b-badge>
+          <b-badge v-show="isComputed && rentalIncome > 0" pill id="annual-margin">{{annualMargin}}%</b-badge>
           <b-tooltip target="annual-margin" placement="bottom" :title="$t('performance.tooltip-margin')"/>
         </h6>
         </icon-card>
@@ -87,7 +87,7 @@
           :value="Number(actualMargin)"
         >
           <h6 class="position-absolute font-weight-normal card-top-buttons text-white">
-            <b-badge v-show="isComputed && actualMargin > 0" pill id="annual-actualmargin">{{marginPercentage}}%</b-badge>
+            <b-badge v-show="isComputed && rentalIncome > 0" pill id="annual-actualmargin">{{marginPercentage}}%</b-badge>
             <b-tooltip target="annual-actualmargin" placement="bottom" :title="$t('performance.tooltip-margin-2')"/>
           </h6>
         </icon-card>
