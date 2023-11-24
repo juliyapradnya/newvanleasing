@@ -202,7 +202,8 @@
          <div class="wizard-basic-step text-center pt-3">
             <div v-if="isProcessing">
                <b-spinner variant="primary" label="Spinning" class="mb-1"></b-spinner>
-               <p>{{$t('wizard.async')}}</p>
+               <!-- <p>{{$t('wizard.async')}}</p> -->
+               <p>{{message}}</p>
             </div>
             <div v-else>
                <h2 class="mb-2">{{status}}</h2>
@@ -214,7 +215,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from 'axios';
 import { apiUrl } from "../../constants/config";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
@@ -254,6 +255,8 @@ export default {
          status: "",
          message: "",
          isProcessing: true,
+         interestCollection: [],
+         activeInterest: [],
          vehicleForm: {
             vehicleRegistration: "",
             manufacture: "",
@@ -365,7 +368,56 @@ export default {
          let newDate = new Date(date);
          return moment(newDate).format("Y-MM-DD");
       },
-      submitForm() {
+      getActiveInterest() {
+         let url = `${apiUrl}/findbaseinterest`;
+         axios
+            .get(url)
+            .then(r => r.data)
+            .then(res => {
+               this.activeInterest = res.data.pop()
+            })
+      },
+      async addInterest(pid) {
+         let date1 = new Date(this.purchaseForm.purchaseDate).getTime();
+         let date2 = new Date(this.activeInterest.start_date).getTime();
+         let url = `${apiUrl}/baseinterestdetail`;
+         this.message = "Calculating Bank interest..";
+         const interests = this.interestCollection;
+         const responses = [];
+         if(date1 > date2) {
+            await axios.post(url, {
+               id_base_interest : this.activeInterest.id,
+               id_purchase_order : pid
+            })
+         } else {
+            for (let i = 0; i < interests.length; i++) {
+               responses.push(await axios.post(url, {
+                  id_base_interest : interests[i].id,
+                  id_purchase_order : pid
+               }));
+            }
+         }
+         // if(interests.length === 0) {
+         //    return
+         // }
+      },
+      async getInterest(newDate) {
+         let startDate = this.formatDate(this.purchaseForm.purchaseDate)
+         let url = `${apiUrl}/showbaseinterest/${startDate},${newDate}`;
+         if(startDate === null && newDate === null) {
+            return
+         }
+         axios
+            .get(url)
+            .then(r => r.data)
+            .then(res => {
+               this.interestCollection = res.data
+            })
+            .catch(error => {
+               this.interestCollection = []
+            })
+      },
+      async createVehicle() {
          const form = {
             vehicle_registration: this.vehicleForm.vehicleRegistration,
             vehicle_manufactur: this.vehicleForm.manufacture,
@@ -397,36 +449,68 @@ export default {
             other_fees: this.methodsData.otherFee
          };
          let url = apiUrl + "/purchaseorder";
-         this.status = "processing";
-         
-         axios
+         this.message = "Creating Vehicle..";
+         // const data = {
+         //    id: 281,
+         //    purchase_method: 'Hire Purchase'
+         // }
+         const data = axios
             .post(url, form)
             .then(r => r.data)
             .then(res => {
-               this.isProcessing = false;
-               this.status = "Great!";
-               this.message = "Your data was saved!";
-               setTimeout(() => {
-                  this.isProcessing = false;
-                  this.$emit('add-modal-hide');
-               }, 2000)
+               return res.data
             }).catch(_error => {
-               this.isProcessing = false;
-               this.status = "Oops!";
-               this.message = "An error occured while saving the data. Please try again later.";
                // this.addNotification(this.status, this.status, this.message);
-            })
+            });
+         return data
+      },
+      async submitForm() {
+         this.status = "processing";
+         const vehicle = await this.createVehicle()
+         if(vehicle) {
+            if(vehicle.purchase_method === 'Hire Purchase') {
+               await this.addInterest(vehicle.id)
+            }
+            this.isProcessing = false;
+            this.status = "Great!";
+            this.message = "Your data was saved!";
+            setTimeout(() => {
+               this.isProcessing = false;
+               this.$emit('add-modal-hide');
+            }, 2000)
+         } else {
+            this.isProcessing = false;
+            this.status = "Oops!";
+            this.message = "An error occured while saving the data. Please try again later.";
+         }
       },
       addNotification(type, title , message) {
          this.$notify(type, title, message, { duration: 1000, permanent: false });
       }
+   },
+   watch: {
+      endDate(newdate) {
+         if(newdate) {
+            this.getInterest(newdate)
+         }
+      },
    },
    computed: {
       component() {
          if (this.purchaseForm.fundingMethods !== null) {
             return this.purchaseForm.fundingMethods.value;
          }
+      },
+      endDate() {
+         let startDate = new Date(this.purchaseForm.purchaseDate);
+         let terms = Number(this.methodsData.terms);
+         if (this.component === 'hire' && terms > 0) {
+            return this.formatDate(startDate.setMonth(startDate.getMonth() + terms));
+         }
       }
+   },
+   mounted() {
+      this.getActiveInterest()
    }
 };
 </script>
