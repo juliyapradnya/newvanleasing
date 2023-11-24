@@ -261,7 +261,7 @@ export default {
       let subTotal = v.regular_monthly_payment + v.vehicle_tracking
 
       const ongoing = this.getMonthDifference(new Date(v.hire_purchase_starting_date), new Date())
-      return (ongoing > 0 && ongoing <= v.hp_term) ? (ongoing * subTotal) + v.hp_deposit_amount + this.baseInterest : this.theCost + this.baseInterest
+      return (ongoing > 0 && ongoing <= v.hp_term) ? (ongoing * subTotal) + v.hp_deposit_amount + this.baseInterest : this.theCost
     },
     actualMargin() {
       return this.actualIncome - this.actualCost
