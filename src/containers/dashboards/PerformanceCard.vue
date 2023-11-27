@@ -242,7 +242,8 @@ export default {
       return Number(this.theIncome) - Number(this.theCost)
     },
     actualIncome() {
-      const ongoing = this.getMonthDifference(new Date(this.vehicle.contract_start_date), new Date()) -1
+      // const ongoing = this.getMonthDifference(new Date(this.vehicle.contract_start_date), new Date()) -1
+      const ongoing = this.getMonthDifference(new Date(this.vehicle.contract_start_date), new Date())
       // console.log(ongoing)
       return (ongoing > 0 && ongoing <= this.vehicle.term_months) ? ongoing * this.vehicle.monthly_rental + this.vehicle.first_payment + this.subTotal
       : this.theIncome - this.residualValue
@@ -260,10 +261,10 @@ export default {
       return this.actualIncome - this.actualCost
     },
     annualMargin() {
-      return parseFloat(this.theMargin / this.rentalIncome * 100).toFixed(2);
+      return parseFloat(this.theMargin / this.theIncome * 100).toFixed(2);
     },
     marginPercentage() {
-      return parseFloat(this.actualMargin / this.rentalIncome * 100).toFixed(2);
+      return parseFloat(this.actualMargin / this.actualIncome * 100).toFixed(2);
     }
   },
   mounted() {
