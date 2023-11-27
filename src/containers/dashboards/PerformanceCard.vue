@@ -29,7 +29,7 @@
           :value="Number(theMargin)"
         >
         <h6 class="position-absolute font-weight-normal card-top-buttons text-white">
-          <b-badge v-show="isComputed && rentalIncome > 0" pill id="annual-margin">{{annualMargin}}%</b-badge>
+          <b-badge v-show="isComputed && theMargin > 0" pill id="annual-margin">{{annualMargin}}%</b-badge>
           <b-tooltip target="annual-margin" placement="bottom" :title="$t('performance.tooltip-margin')"/>
         </h6>
         </icon-card>
@@ -87,7 +87,7 @@
           :value="Number(actualMargin)"
         >
           <h6 class="position-absolute font-weight-normal card-top-buttons text-white">
-            <b-badge v-show="isComputed && rentalIncome > 0" pill id="annual-actualmargin">{{marginPercentage}}%</b-badge>
+            <b-badge v-show="isComputed && actualMargin > 0" pill id="annual-actualmargin">{{marginPercentage}}%</b-badge>
             <b-tooltip target="annual-actualmargin" placement="bottom" :title="$t('performance.tooltip-margin-2')"/>
           </h6>
         </icon-card>
@@ -108,14 +108,7 @@
           :value="Number(soldPrice)"
         />
       </b-colxx>
-      <b-colxx>
-        <icon-card
-          :title="$t('performance.rental-income')"
-          icon="iconsminds-pricing"
-          :isComa="true"
-          :value="Number(rentalIncome)"
-        />
-      </b-colxx>
+      
     </b-row>
   </div>
 </template>
@@ -261,7 +254,7 @@ export default {
       let subTotal = v.regular_monthly_payment + v.vehicle_tracking
 
       const ongoing = this.getMonthDifference(new Date(v.hire_purchase_starting_date), new Date())
-      return (ongoing > 0 && ongoing <= v.hp_term) ? (ongoing * subTotal) + v.hp_deposit_amount + this.baseInterest : this.theCost
+      return (ongoing > 0 && ongoing < v.hp_term) ? (ongoing * subTotal) + v.hp_deposit_amount + this.baseInterest : this.theCost
     },
     actualMargin() {
       return this.actualIncome - this.actualCost
